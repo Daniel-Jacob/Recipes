@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Recipesss</string>
+    <string name="facebook_app_id">689581484499993</string>
+    <string name="fb_login_protocol_scheme">fb689581484499993</string>
+    <string name="open">open</string>
+    <string name="closed">closed</string>
+</resources>

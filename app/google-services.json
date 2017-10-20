@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "818367032142",
+    "firebase_url": "https://recipes4you-c15ab.firebaseio.com",
+    "project_id": "recipes4you-c15ab",
+    "storage_bucket": "recipes4you-c15ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818367032142:android:d516c2750f604d01",
+        "android_client_info": {
+          "package_name": "com.example.daniel.recipesss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818367032142-70v5hqccuns591dicbkqfsb4sksk90g3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.recipesss",
+            "certificate_hash": "50d4ff914f162f046cc88706d173b775fe78a8d9"
+          }
+        },
+        {
+          "client_id": "818367032142-kjv7mqeb242bdvq35jg3v5cnblelke7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSw0w9PNcYRutyZKkGOtJCmnaHRrsV188"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "818367032142-kjv7mqeb242bdvq35jg3v5cnblelke7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

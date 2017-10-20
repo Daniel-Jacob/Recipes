@@ -1,0 +1,128 @@
+/*
+ * Copyright (C) 2015 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.example.daniel.recipesss;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import static android.widget.Toast.LENGTH_SHORT;
+
+/**
+ * registers and signs user in. */
+public class EmailSignIn extends Activity {
+
+    // global variables
+    Context context;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    SharedPreferences preferences;
+    FirebaseUser user;
+    // constructor
+    public EmailSignIn(Context context) {
+        this.context = context;
+    }
+    // authentication listener
+    FirebaseAuth.AuthStateListener listener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                Log.d("TAG", "onAuthStateChanged:signed_in:" + user.getUid());
+            } else {
+                // User is signed out
+                Log.d("TAG", "onAuthStateChanged:signed_out");
+            }
+        }
+    };
+
+    /** creates user account with emailaddress and password */
+    public void createAccount(final String email, final String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("TAG", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        // display message if task failed
+                        if (!task.isSuccessful()) {
+                            System.out.print(task.getException());
+                            Toast.makeText(context, "Authentication failed...",
+                                    LENGTH_SHORT).show();
+                        }
+                        // adds sign in type to shared preferences
+                        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        // signs user in and tracks sign in type
+                        preferences.edit().putInt("signintype", 3).commit();
+                        // sign user in
+                        signInWithEmailAndPassword(email, password);
+
+                    }
+                });
+    }
+
+    /** gets userdata */
+    public FirebaseUser getUserData() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+            String uid = user.getUid();
+        }
+        return user;
+    }
+
+    /** signs user in with email and password */
+    public void signInWithEmailAndPassword(String email, final String password) {
+        // get current user
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // if user is authenticated sign in
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("TAG", "signInWithEmail:onComplete:" + task.isSuccessful());
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            // save sign in type
+                            preferences.edit().putInt("signintype", 3).commit();
+                            // redirect
+                            Intent intent = new Intent(context, RecipeActivity.class);
+                            context.startActivity(intent);
+                            // sign in failed
+                            if (!task.isSuccessful()) {
+                                Log.w("Tag", "signInWithEmail:failed", task.getException());
+                                Toast.makeText(context, "Authentication failed",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+}

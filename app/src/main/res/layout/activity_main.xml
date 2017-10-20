@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.daniel.recipesss.MainActivity"
+    android:id="@+id/drawerlayoutt">
+
+
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="209dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="15dp"
+            android:id="@+id/loginButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
+
+
+        </com.facebook.login.widget.LoginButton>
+
+        <com.google.android.gms.common.SignInButton
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="63dp"
+            android:id="@+id/signInButton"
+            android:onClick="onClick"
+            android:layout_alignTop="@+id/loginButton"
+            android:layout_alignParentStart="true"
+            />
+
+
+        <Button
+            android:id="@+id/emailsignin"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:text="Connect with E-mail"
+            android:layout_below="@+id/signInButton"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="6dp"
+            android:onClick="Submit"
+            />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Continue searching recipes without personalization"
+            android:textSize="18sp"
+            android:layout_marginTop="22dp"
+            android:layout_marginStart="30dp"
+            android:layout_below="@+id/emailsignin"
+            android:layout_alignParentStart="true"
+            android:clickable="true"
+            android:onClick=""
+            />
+
+
+</RelativeLayout>
