@@ -116,6 +116,7 @@ public class Utils extends Activity implements  View.OnClickListener {
      * the user was in before the app
      * was closed
      */
+    /*
     public void redirectUserToCorrectActivity() {
 
         int activity = preferences.getInt("Activity", 0);
@@ -151,6 +152,7 @@ public class Utils extends Activity implements  View.OnClickListener {
                 break;
         }
     }
+*/
 
 
     @Override

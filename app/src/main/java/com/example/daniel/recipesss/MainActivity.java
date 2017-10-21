@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         auth = FirebaseAuth.getInstance();
         // redirect user to correct activity
         Utils utilities = new Utils(this);
-        utilities.redirectUserToCorrectActivity();
+       // utilities.redirectUserToCorrectActivity();
         // builds api client
         initializeGoogleUser = new GoogleSignIn(this);
         initializeGoogleUser.buildApiClient();
