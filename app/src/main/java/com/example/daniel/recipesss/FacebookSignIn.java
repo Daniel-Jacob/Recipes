@@ -100,17 +100,9 @@ public class FacebookSignIn extends AppCompatActivity {
             @Override
             // grabs user data
             public void onSuccess(final LoginResult loginResult) {
-                preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 // sets permissions
                 facebookLogin.setReadPermissions(Arrays.asList("public_profile", "user_friends", "email", "about_me"));
-                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            // autenticates user with firebase
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-                                handleFacebookAccessToken(loginResult.getAccessToken());
-                            }
-                        });
+                GraphRequest request = submitGraphRequest(loginResult);
                 // async task to facebook api
                 executeFacebookAsyncTask(request);
             }
@@ -166,5 +158,16 @@ public class FacebookSignIn extends AppCompatActivity {
         request.setParameters(parameters);
         handleFacebookAccessToken(request.getAccessToken());
         request.executeAsync();
+    }
+    public GraphRequest submitGraphRequest(final LoginResult result){
+        GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    // autenticates user with firebase
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        handleFacebookAccessToken(result.getAccessToken());
+                    }
+                });
+        return request;
     }
 }
