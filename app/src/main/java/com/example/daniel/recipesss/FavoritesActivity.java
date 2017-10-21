@@ -67,7 +67,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         recipes = new Recipes();
         FavoritesHelper helper = new FavoritesHelper(this);
         recipes = helper.recipesUser(signInType);
-        helper.onItemClick(this, recipes);
+        helper.onItemClick(recipes);
         helper.listensForLongClickUIThread(this, recipes);
         // gets firebase user
         arrayAdapter = new RecipeAdapter(this, R.layout.simple_list_itemmm, recipes);

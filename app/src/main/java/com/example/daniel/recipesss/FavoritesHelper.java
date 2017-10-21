@@ -41,6 +41,8 @@ public class FavoritesHelper {
     SharedPreferences preferences;
     int signInType;
     Recipes recipesLongClick;
+    Activity myActivity;
+    ListView listView;
 
     public FavoritesHelper(Context context) {
         this.context = context;
@@ -53,8 +55,8 @@ public class FavoritesHelper {
         recipes = new Recipes();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         signInType = utils.getSignInType();
-
-
+        this.myActivity = (FavoritesActivity)context;
+        listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
     }
 
     public void fetchFavorites(final Recipes recipes) {
@@ -101,10 +103,8 @@ public class FavoritesHelper {
         return recipes;
     }
 
-    public void onItemClick(Activity activity, Recipes recipess) {
-        Activity myActivity = activity;
+    public void onItemClick(Recipes recipess) {
         this.recipes = recipess;
-        ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -117,10 +117,9 @@ public class FavoritesHelper {
                                 Recipe recipe = s.getValue(Recipe.class);
                                 // sends the recipe to detailsactivity
                                 findRecipe(recipe, recipes, position);
-                                toDetailsActivity();
+                                toDetailsActivity(signInType, position);
                             }
                         }
-
                         @Override
                         /** an error occured while grabbing the recipe */
                         public void onCancelled(DatabaseError databaseError) {
@@ -130,13 +129,7 @@ public class FavoritesHelper {
                     });
 
                 } else {
-                    FavoritesHelper helper = new FavoritesHelper(context);
-                    recipes = helper.recipesUser(signInType);
-                    recipe = recipes.getRecipes().get(position);
-                    Intent intent = new Intent(context, DetailsActivity.class);
-                    intent.putExtra("Recipe", recipe);
-                    context.startActivity(intent);
-
+                    toDetailsActivity(signInType, position);
                 }
             }
 
@@ -144,8 +137,7 @@ public class FavoritesHelper {
     }
 
     public void listensForLongClickUIThread(Activity activity, final Recipes recipesLongClick) {
-        this.recipesLongClick = recipes;
-        Activity myActivity = activity;
+        this.recipesLongClick = recipes;Activity myActivity = activity;
         ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -183,13 +175,14 @@ public class FavoritesHelper {
 
     }
 
-    public Recipe findRecipe(Recipe recipe, Recipes recipes, int position) {
+    public boolean findRecipe(Recipe recipe, Recipes recipes, int position) {
         if (recipe != null && recipe.getTitle().equals(recipes.getRecipes().get(position).getTitle())
                 && recipe.getImage().equals(recipes.getRecipes().get(position).getImage())
                 && recipe.getIngredients().equals(recipes.getRecipes().get(position).getIngredients())
                 && recipe.getAttributes().equals(recipes.getRecipes().get(position).getAttributes())) {
+            return true;
         }
-        return recipe;
+        return false;
     }
 
     public void removeRecipeFromDB(final int position){
@@ -202,6 +195,7 @@ public class FavoritesHelper {
                     findRecipe(recipe, recipesLongClick, position);
                     s.getRef().removeValue();
                     recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
+                     break;
                 }
                 setAdapter((FavoritesActivity) context, recipesLongClick);
 
@@ -213,10 +207,19 @@ public class FavoritesHelper {
             }
         });
     }
-    public void toDetailsActivity(){
-        Intent intent = new Intent(context, DetailsActivity.class);
-        intent.putExtra("Recipe", recipe);
-        context.startActivity(intent);
+    public void toDetailsActivity(int signInType, int position) {
+        if (signInType != 4) {
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("Recipe", recipe);
+            context.startActivity(intent);
+        } else {
+            FavoritesHelper helper = new FavoritesHelper(context);
+            recipes = helper.recipesUser(signInType);
+            recipe = recipes.getRecipes().get(position);
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("Recipe", recipe);
+            context.startActivity(intent);
+        }
     }
 
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
