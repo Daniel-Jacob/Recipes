@@ -207,59 +207,51 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     public void addRecipesToDB() {
-        try {
-            reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
 
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (user != null) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (user != null) {
 
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                            reference.child("Users").child(user.getUid()).child("Recipes").push().setValue((recipe)
-                                    , new DatabaseReference.CompletionListener() {
+                        reference.child("Users").child(user.getUid()).child("Recipes").push().setValue((recipe)
+                                , new DatabaseReference.CompletionListener() {
 
-                                        @Override
-                                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                            System.out.print("Added");
-                                            Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        System.out.print("Added");
+                                        Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
-
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void addRecipesToSharedPreferences() {
-        try {
-            String json = preferences.getString("recipeLocalUser", "");
-            if (!json.isEmpty()) {
-                Gson gson = new Gson();
-                Type type = new TypeToken<Recipes>() {
-                }.getType();
-                recipes = gson.fromJson(json, type);
-            } else {
-                recipes = new Recipes();
             }
-            recipes.getRecipes().add(recipe);
-            Gson gson = new Gson();
-            String jsonData = gson.toJson(recipes);
-            preferences.edit().putString("recipeLocalUser", jsonData).commit();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
+    public void addRecipesToSharedPreferences(){
+        String json = preferences.getString("recipeLocalUser", "");
+        if(!json.isEmpty()) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<Recipes>() {
+            }.getType();
+            recipes = gson.fromJson(json, type);
+        }
+        else{
+            recipes = new Recipes();
+        }
+        recipes.getRecipes().add(recipe);
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(recipes);
+        preferences.edit().putString("recipeLocalUser", jsonData).commit();
+    }
 
     @Override
     protected void onResume() {
