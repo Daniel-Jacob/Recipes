@@ -132,53 +132,12 @@ public class DetailsActivity extends AppCompatActivity {
         reference = database.getReference();
         int signInType = preferences.getInt("signintype", 0);
         if (signInType != 4 && signInType != 0) {
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (user != null) {
-
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                                reference.child("Users").child(user.getUid()).child("Recipes").push().setValue((recipe)
-                                        , new DatabaseReference.CompletionListener() {
-
-                                    @Override
-                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                        System.out.print("Added");
-                                        Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
-
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        System.out.print(databaseError);
-
-                    }
-                });
+              addRecipesToDB();
 
         } else {
-
-            String json = preferences.getString("recipeLocalUser", "");
-            if(!json.isEmpty()) {
-                int checkDuplicates = 0;
-                Gson gson = new Gson();
-                Type type = new TypeToken<Recipes>() {
-                }.getType();
-                recipes = gson.fromJson(json, type);
-            }
-            else{
-                recipes = new Recipes();
-            }
-            recipes.getRecipes().add(recipe);
-            Gson gson = new Gson();
-            String jsonData = gson.toJson(recipes);
-            preferences.edit().putString("recipeLocalUser", jsonData).commit();
-                }
-            }
+            addRecipesToSharedPreferences();
+        }
+    }
 
 
     /**
@@ -246,6 +205,53 @@ public class DetailsActivity extends AppCompatActivity {
             recipe = gson.fromJson(json, type);
         }
         return recipe;
+    }
+
+    public void addRecipesToDB() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (user != null) {
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                        reference.child("Users").child(user.getUid()).child("Recipes").push().setValue((recipe)
+                                , new DatabaseReference.CompletionListener() {
+
+                                    @Override
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        System.out.print("Added");
+                                        Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void addRecipesToSharedPreferences(){
+        String json = preferences.getString("recipeLocalUser", "");
+        if(!json.isEmpty()) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<Recipes>() {
+            }.getType();
+            recipes = gson.fromJson(json, type);
+        }
+        else{
+            recipes = new Recipes();
+        }
+        recipes.getRecipes().add(recipe);
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(recipes);
+        preferences.edit().putString("recipeLocalUser", jsonData).commit();
     }
 
     @Override
