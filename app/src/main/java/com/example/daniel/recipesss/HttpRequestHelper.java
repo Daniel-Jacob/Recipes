@@ -46,14 +46,7 @@ public class HttpRequestHelper {
         int activity = preferences.getInt("Activity", 0);
         // gets correct url
         url = HttpRequestHelper.returnCorrectUrl(activity, params[0]);
-        URL urlObject = null;
-        try {
-            // creates url object
-            urlObject = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
+        URL urlObject = createUrlObject(url);
         HttpURLConnection connection;
         if (url != null) {
             // make connection to endpoint
@@ -112,5 +105,15 @@ public class HttpRequestHelper {
         }
         return url;
 
+    }
+    public static URL createUrlObject(String url){
+        URL urlObject = null;
+        try {
+            // creates url object
+            urlObject = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return urlObject;
     }
 }
