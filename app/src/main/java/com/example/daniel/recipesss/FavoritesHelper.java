@@ -117,11 +117,8 @@ public class FavoritesHelper {
                                 Recipe recipe = s.getValue(Recipe.class);
                                 // sends the recipe to detailsactivity
                                 findRecipe(recipe, recipes, position);
-                                Intent intent = new Intent(context, DetailsActivity.class);
-                                intent.putExtra("Recipe", recipe);
-                                context.startActivity(intent);
+                                toDetailsActivity();
                             }
-
                         }
 
                         @Override
@@ -215,6 +212,11 @@ public class FavoritesHelper {
 
             }
         });
+    }
+    public void toDetailsActivity(){
+        Intent intent = new Intent(context, DetailsActivity.class);
+        intent.putExtra("Recipe", recipe);
+        context.startActivity(intent);
     }
 
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
