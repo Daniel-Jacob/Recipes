@@ -90,7 +90,6 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
     /** returns recipes object */
     public Recipes initializeRecipes(JSONArray array) {
         Recipes recipes = new Recipes();
-
         for (int i = 0; i < array.length(); i++) {
             try {
                 // gets a recipe

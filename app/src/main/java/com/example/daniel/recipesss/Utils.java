@@ -117,6 +117,7 @@ public class Utils extends Activity implements  View.OnClickListener {
      * was closed
      */
     public void redirectUserToCorrectActivity() {
+
         int activity = preferences.getInt("Activity", 0);
         switch (activity) {
 

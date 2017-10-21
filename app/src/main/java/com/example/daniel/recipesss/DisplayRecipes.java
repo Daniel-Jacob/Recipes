@@ -57,6 +57,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         addOrFetchRecipes();
         // tracks activity
         preferences.edit().putInt("Activity", 5).commit();
+        preferences.edit().putString("DisplayRecipes", "").commit();
         elements = new ArrayList<>();
         // initializes gridview and listview
         gv = (GridView) findViewById(R.id.gridview);
