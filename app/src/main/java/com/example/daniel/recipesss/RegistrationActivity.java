@@ -72,7 +72,11 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
     /* signs user in with email and password */
-    public void logMeIn(View view) {emailSignIn.signInWithEmailAndPassword(emailAddress, password);}
+    public void logMeIn(View view) {
+        // grabs text of email and password
+        emailAddress = email.getText().toString();
+        password = passwrd.getText().toString();
+        emailSignIn.signInWithEmailAndPassword(emailAddress, password);}
 
     @Override
     protected void onStart() {

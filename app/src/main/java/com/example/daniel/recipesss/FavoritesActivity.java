@@ -20,9 +20,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,9 +44,9 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     FirebaseUser user;
     FirebaseAuth auth;
     int signInType;
-    ArrayAdapter arrayAdapter;
     ProgressBar progressBar;
     Recipes recipes;
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,17 +64,25 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         // tracks activity
         preferences.edit().putInt("Activity", 8);
         recipes = new Recipes();
+        recipesIsEmpty(recipes);
         // creates favoriteshelper
         FavoritesHelper helper = new FavoritesHelper(this);
         // gets recipes of user
         recipes = helper.recipesUser(signInType);
-        // listens for click on favorites item
-        helper.onItemClick(recipes);
-        // listens for a long click on favorites item
-        helper.listensForLongClickUIThread(this, recipes);
-        // sets adapter on listview
-        arrayAdapter = new RecipeAdapter(this, R.layout.simple_list_itemmm, recipes);
-        listView.setAdapter(arrayAdapter);
+        if(recipes == null){
+            recreate();
+        }
+            // listens for click on favorites item
+            helper.onItemClick(recipes);
+            // listens for a long click on favorites item
+            helper.listensForLongClickUIThread(this, recipes);
+    }
+    public void recipesIsEmpty(Recipes recipes){
+        if(recipes.getRecipes().isEmpty()){
+            listView.setEmptyView(findViewById(R.id.empty_text_view));
+            textView = (TextView)findViewById(R.id.Favorites);
+            textView.setVisibility(View.INVISIBLE);
+        }
     }
     @Override
     // connection has failed

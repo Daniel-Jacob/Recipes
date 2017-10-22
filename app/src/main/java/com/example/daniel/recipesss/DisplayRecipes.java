@@ -106,6 +106,17 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             recipes = gson.fromJson(json, type);
         }
     }
+    /* send recipes to titleActivity */
+    public void listTitles(View view) {
+        Intent intent = new Intent(this, TitleActivity.class);
+        intent.putExtra("titles", recipes);
+        startActivity(intent);
+    }
+    /* goes to favoritesActivity */
+    public void goToFavoritesActivity(View view) {
+        Intent intent = new Intent(this, FavoritesActivity.class);
+        startActivity(intent);
+    }
     @Override
     /* something went wrong */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

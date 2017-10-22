@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /** activity that lets user search for general recipes */
@@ -110,6 +111,7 @@ public class RecipeActivity extends AppCompatActivity
     @Override
     /* displays message according to signintype */
     public void onBackPressed() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
        // gets sign in type
         int signInType = utilities.getSignInType();
         // user is signed in

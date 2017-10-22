@@ -59,6 +59,7 @@ public class DetailsActivity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseDatabase database;
     int signInType;
+    int comparison;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +82,8 @@ public class DetailsActivity extends AppCompatActivity {
         final int requestCode = getIntent().getIntExtra("activity", 0);
         // returns recipe from previous activity
         recipe = recipeReturned(requestCode);
-        if(recipe != null){
-           Gson gson = new Gson();
+        if (recipe != null) {
+            Gson gson = new Gson();
             String json = gson.toJson(recipe);
             preferences.edit().putString("recipe", json).commit();
         }
@@ -93,6 +94,7 @@ public class DetailsActivity extends AppCompatActivity {
         // sets up view with recipe
         setupDetails(recipe);
     }
+
     /* loads image into imageview */
     public void initializeImage(String url, ImageView imageView) {
         Picasso.with(getApplicationContext()).load(url).into(imageView, new Callback() {
@@ -100,6 +102,7 @@ public class DetailsActivity extends AppCompatActivity {
             public void onSuccess() {
                 Log.d("Tag", "Success");
             }
+
             @Override
             /* load failed */
             public void onError() {
@@ -108,6 +111,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
+
     /* adds a given recipe to favorites list */
     public void goToFavorites(View view) {
         database = FirebaseDatabase.getInstance();
@@ -115,12 +119,13 @@ public class DetailsActivity extends AppCompatActivity {
         int signInType = preferences.getInt("signintype", 0);
         // adds recipe to database
         if (signInType != 4 && signInType != 0) {
-              addRecipesToDB();
-          // adds recipe to shared preferences
+            addRecipesToDB();
+            // adds recipe to shared preferences
         } else {
             addRecipesToSharedPreferences();
         }
     }
+
     /* returns the recipe that has been clicked in the previous activity */
     public Recipe recipeReturned(int requestCode) {
         if (requestCode == 0) {
@@ -161,8 +166,9 @@ public class DetailsActivity extends AppCompatActivity {
         ingredientView.setText("Ingredients: " + Arrays.toString(ingredientsArray).replace("[", "")
                 .replace("]", "").replace("\"", ""));
     }
+
     /* if recipe exists add to shared preferences. if it doesn't exist then add it */
-    public Recipe getRecipeFromPreviousUsage(){
+    public Recipe getRecipeFromPreviousUsage() {
         Gson gson = new Gson();
         if (recipe != null) {
             gson = new Gson();
@@ -173,44 +179,79 @@ public class DetailsActivity extends AppCompatActivity {
             setupDetails(recipe);
         } else {
             // gets type
-            Type type = new TypeToken<Recipe>() {}.getType();
+            Type type = new TypeToken<Recipe>() {
+            }.getType();
             // gets recipe
             String json = preferences.getString("recipe", "");
             recipe = gson.fromJson(json, type);
         }
         return recipe;
     }
+
+    public void addRecipeToFavorites(){
+        Gson gson = new Gson();
+        RecipeCompare compare = new RecipeCompare();
+        int recipeCompare = 0;
+        for (Recipe r : recipes.getRecipes()) {
+            recipeCompare = compare.compare(recipe, r);
+        }
+        if (recipeCompare == 0) {
+            // adds recipe to recipes object
+            recipes.getRecipes().add(recipe);
+            // put recipes in shared preferences
+            String jsonData = gson.toJson(recipes);
+            preferences.edit().putString("recipeLocalUser", jsonData).commit();
+            Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Item exists", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /* adds recipe to database */
     public void addRecipesToDB() {
+        reference = database.getReference().child("Users").child(user.getUid()).child("Recipes");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (user != null) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        reference.child("Users").child(user.getUid()).child("Recipes").push().setValue((recipe)
-                                , new DatabaseReference.CompletionListener() {
-
-                                    @Override
-                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                        Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                    RecipeCompare compare = new RecipeCompare();
+                    Recipe recipeDatabase = new Recipe();
+                    for (DataSnapshot s : dataSnapshot.getChildren()) {
+                        recipeDatabase = s.getValue(Recipe.class);
+                        comparison = compare.compare(recipeDatabase, recipe);
                     }
                 }
+                    if(comparison == 0){
+
+                            reference.push().setValue((recipe)
+                                    , new DatabaseReference.CompletionListener() {
+
+                                        @Override
+                                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                            Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                        else{
+                        Toast.makeText(getApplicationContext(), "Item exists", Toast.LENGTH_SHORT).show();
+                    }
             }
 
-            @Override
+
+                                    @Override
             /* adding to database failed */
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("Tag", "An error of type" + databaseError + "occured");
-            }
-        });
-    }
-    /** adds recipe for local user to shared preferences */
-    public void addRecipesToSharedPreferences(){
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.d("Tag", "An error of type" + databaseError + "occured");
+                                    }
+                                });
+                }
+    /**
+     * adds recipe for local user to shared preferences
+     */
+    public void addRecipesToSharedPreferences() {
         String json = preferences.getString("recipeLocalUser", "");
         // if recipes exist get them first
-        if(!json.isEmpty()) {
+        if (!json.isEmpty()) {
             Gson gson = new Gson();
             Type type = new TypeToken<Recipes>() {
             }.getType();
@@ -220,14 +261,8 @@ public class DetailsActivity extends AppCompatActivity {
         else {
             recipes = new Recipes();
         }
-        // adds recipe to recipes object
-        recipes.getRecipes().add(recipe);
-        // put recipes in shared preferences
-        Gson gson = new Gson();
-        String jsonData = gson.toJson(recipes);
-        preferences.edit().putString("recipeLocalUser", jsonData).commit();
+        addRecipeToFavorites();
     }
-
     @Override
     protected void onResume(){
         super.onResume();

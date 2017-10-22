@@ -43,6 +43,7 @@ public class EmailSignIn extends Activity {
     // constructor
     public EmailSignIn(Context context) {
         this.context = context;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
     // authentication listener
     FirebaseAuth.AuthStateListener listener = new FirebaseAuth.AuthStateListener() {
@@ -68,15 +69,17 @@ public class EmailSignIn extends Activity {
                         // display message if task failed
                         if (!task.isSuccessful()) {
                             Log.w("Tag", "Create account:failed", task.getException());
-                            Toast.makeText(context, "Authentication failed...",
+                            Toast.makeText(context, task.getException().getMessage(),
                                     LENGTH_SHORT).show();
                         }
-                        // adds sign in type to shared preferences
-                        preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                        // signs user in and tracks sign in type
-                        preferences.edit().putInt("signintype", 3).commit();
-                        // sign user in
-                        signInWithEmailAndPassword(email, password);
+                        else {
+                            // adds sign in type to shared preferences
+                            preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                            // signs user in and tracks sign in type
+                            preferences.edit().putInt("signintype", 3).commit();
+                            // sign user in
+                            signInWithEmailAndPassword(email, password);
+                        }
 
                     }
                 });
@@ -96,9 +99,9 @@ public class EmailSignIn extends Activity {
 
     /* signs user in with email and password */
     public void signInWithEmailAndPassword(String email, final String password) {
+
         // get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
             // if user is authenticated sign in
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
@@ -109,17 +112,17 @@ public class EmailSignIn extends Activity {
                             user = FirebaseAuth.getInstance().getCurrentUser();
                             // save sign in type
                             preferences.edit().putInt("signintype", 3).commit();
-                            // redirect
-                            Intent intent = new Intent(context, RecipeActivity.class);
-                            context.startActivity(intent);
-                            // sign in failed
                             if (!task.isSuccessful()) {
                                 Log.w("Tag", "signInWithEmail:failed", task.getException());
-                                Toast.makeText(context, "Authentication failed",
+                                Toast.makeText(context, "Sign in failed. You don't have an account " +
+                                                "or the password is invalid",
                                         Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Intent intent = new Intent(context, RecipeActivity.class);
+                                context.startActivity(intent);
                             }
                         }
                     });
         }
     }
-}

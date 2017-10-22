@@ -106,7 +106,7 @@ public class FavoritesHelper {
         return recipes;
     }
     /* listens for click on favorites item */
-    public void onItemClick(Recipes recipess) {
+    public void onItemClick(final Recipes recipess) {
         this.recipes = recipess;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -179,7 +179,7 @@ public class FavoritesHelper {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
                     Recipe recipe = s.getValue(Recipe.class);
-                    findRecipe(recipe, recipes, position);
+                   // findRecipe(recipe, recipes, position);
                     toDetailsActivity(signInType, position);
                 }
             }
@@ -216,7 +216,7 @@ public class FavoritesHelper {
     public void toDetailsActivity(int signInType, int position) {
         if (signInType != 4) {
             Intent intent = new Intent(context, DetailsActivity.class);
-            intent.putExtra("Recipe", recipe);
+            intent.putExtra("Recipe", recipes.getRecipes().get(position));
             context.startActivity(intent);
         } else {
             FavoritesHelper helper = new FavoritesHelper(context);

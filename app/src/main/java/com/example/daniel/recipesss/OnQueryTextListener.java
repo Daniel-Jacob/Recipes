@@ -67,6 +67,7 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
                 counter += 1;
                 Toast.makeText(context,
                         "Search contains a non-alphabetical character", Toast.LENGTH_LONG).show();
+                ((Activity)context).recreate();
                 break;
             }
         }

@@ -90,9 +90,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
                 initializeFacebookUser.manager.onActivityResult(requestCode, resultCode, data);
                 // adds sign in type to sharedpreferences
                 preferences.edit().putInt("signintype", 2).commit();
-                // redirect
-                Intent intent = new Intent(this, RecipeActivity.class);
-                startActivity(intent);
             }
         } catch (Exception e) {
             e.printStackTrace();

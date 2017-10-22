@@ -17,6 +17,7 @@ package com.example.daniel.recipesss;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -119,13 +120,11 @@ public class FacebookSignIn extends AppCompatActivity {
                 Toast.makeText(context, "An error occured.. Try again and if " +
                         "the problem persists try later", Toast.LENGTH_LONG).show();
             }
-
         });
-
     }
     /* authenticates user with firebase */
     public void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         // signs facebook user in
         auth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -151,6 +150,8 @@ public class FacebookSignIn extends AppCompatActivity {
         request.setParameters(parameters);
         handleFacebookAccessToken(request.getAccessToken());
         request.executeAsync();
+        Intent intent = new Intent(context, RecipeActivity.class);
+        context.startActivity(intent);
     }
     /* submits a graph request for facebook user */
     public GraphRequest submitGraphRequest(final LoginResult result){

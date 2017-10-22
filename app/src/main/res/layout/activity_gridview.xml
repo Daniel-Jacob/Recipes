@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/gridview" />
     <GridView
         android:id="@+id/gridview"
         android:layout_width="wrap_content"
@@ -26,18 +27,31 @@
         android:numColumns="3"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp"
+        android:layout_marginTop="45dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/listtitles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="List titles"
+            android:onClick="listTitles"
+            />
+
+        <Button
+            android:id="@+id/gotofavoritesactivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="Favorites"
+            android:onClick="goToFavoritesActivity"
+            />
 
     </RelativeLayout>
 
 
-
-<android.support.design.widget.NavigationView
-    android:id="@+id/navigation"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:clickable="true"
-    app:menu="@menu/nav" />
 </android.support.v4.widget.DrawerLayout>
