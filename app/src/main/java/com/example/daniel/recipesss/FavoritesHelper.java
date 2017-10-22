@@ -131,7 +131,7 @@ public class FavoritesHelper {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 // removes item from database
                 if (signInType != 4) {
-                    removeRecipeFromDB(position);
+                    removeRecipeFromDB(position, recipesLongClick.getRecipes().get(position));
                 }
                 // local user, so remove from shared preferences
                 else {
@@ -142,7 +142,8 @@ public class FavoritesHelper {
         });
     }
     /* sets recipe adapter on listview and sets up progressbar */
-    public void setAdapter(final FavoritesActivity activity, final Recipes recipes) {
+    public void setAdapter(FavoritesActivity activity, Recipes recipesForAdapter) {
+        this.recipes = recipesForAdapter;
         final Activity myActivity = activity;
         new Thread(new Runnable() {
             @Override
@@ -161,16 +162,6 @@ public class FavoritesHelper {
                 });
             }
         }).start();
-    }
-    /* finds recipe if it exactly matches the clicked recipe */
-    public boolean findRecipe(Recipe recipe, Recipes recipes, int position) {
-        if (recipe != null && recipe.getTitle().equals(recipes.getRecipes().get(position).getTitle())
-                && recipe.getImage().equals(recipes.getRecipes().get(position).getImage())
-                && recipe.getIngredients().equals(recipes.getRecipes().get(position).getIngredients())
-                && recipe.getAttributes().equals(recipes.getRecipes().get(position).getAttributes())) {
-            return true;
-        }
-        return false;
     }
 
     public void recipeDBbToDetailsActivity(final int position, final Recipes recipes){
@@ -192,16 +183,18 @@ public class FavoritesHelper {
     }
 
 
-    public void removeRecipeFromDB(final int position){
+    public void removeRecipeFromDB(final int position, final Recipe recipeRemoved){
+        final RecipeCompare compare = new RecipeCompare();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                  for(DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
                     Recipe recipe = s.getValue(Recipe.class);
-                    findRecipe(recipe, recipesLongClick, position);
-                    s.getRef().removeValue();
-                    recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
-                     break;
+                     int compareRecipes = compare.compare(recipe, recipeRemoved);
+                     if(compareRecipes == 1){
+                         s.getRef().removeValue();
+                         recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
+                     }
                 }
                 setAdapter((FavoritesActivity) context, recipesLongClick);
 
@@ -217,12 +210,14 @@ public class FavoritesHelper {
         if (signInType != 4) {
             Intent intent = new Intent(context, DetailsActivity.class);
             intent.putExtra("Recipe", recipes.getRecipes().get(position));
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(intent);
         } else {
             FavoritesHelper helper = new FavoritesHelper(context);
             recipes = helper.recipesUser(signInType);
             recipe = recipes.getRecipes().get(position);
             Intent intent = new Intent(context, DetailsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.putExtra("Recipe", recipe);
             context.startActivity(intent);
         }

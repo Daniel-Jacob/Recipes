@@ -64,18 +64,15 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         // tracks activity
         preferences.edit().putInt("Activity", 8);
         recipes = new Recipes();
-        recipesIsEmpty(recipes);
         // creates favoriteshelper
         FavoritesHelper helper = new FavoritesHelper(this);
         // gets recipes of user
         recipes = helper.recipesUser(signInType);
-        if(recipes == null){
-            recreate();
-        }
             // listens for click on favorites item
             helper.onItemClick(recipes);
             // listens for a long click on favorites item
             helper.listensForLongClickUIThread(this, recipes);
+        recipesIsEmpty(recipes);
     }
     public void recipesIsEmpty(Recipes recipes){
         if(recipes.getRecipes().isEmpty()){

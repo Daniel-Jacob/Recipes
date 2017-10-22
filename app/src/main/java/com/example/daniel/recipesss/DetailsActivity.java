@@ -66,7 +66,6 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailsactivity);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        recipes = new Recipes();
         // tracks activity
         preferences.edit().putInt("Activity", 7).commit();
         // gets current user
@@ -269,5 +268,16 @@ public class DetailsActivity extends AppCompatActivity {
         // gets sign in type
         Utils utils = new Utils(this);
         signInType = utils.getSignInType();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
