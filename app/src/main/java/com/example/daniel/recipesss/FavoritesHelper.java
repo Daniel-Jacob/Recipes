@@ -109,25 +109,7 @@ public class FavoritesHelper {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (signInType != 4) {
-                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        // fetches favorites
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
-                                Recipe recipe = s.getValue(Recipe.class);
-                                // sends the recipe to detailsactivity
-                                findRecipe(recipe, recipes, position);
-                                toDetailsActivity(signInType, position);
-                            }
-                        }
-                        @Override
-                        /** an error occured while grabbing the recipe */
-                        public void onCancelled(DatabaseError databaseError) {
-                            Toast.makeText(context, "A database error of type" +
-                                    databaseError + "occured", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+                  recipeDBbToDetailsActivity(position, recipes);
                 } else {
                     toDetailsActivity(signInType, position);
                 }
@@ -185,13 +167,31 @@ public class FavoritesHelper {
         return false;
     }
 
+    public void recipeDBbToDetailsActivity(final int position, final Recipes recipes){
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
+                    Recipe recipe = s.getValue(Recipe.class);
+                    findRecipe(recipe, recipes, position);
+                    toDetailsActivity(signInType, position);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "A database error of type" +
+                        databaseError + "occured", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     public void removeRecipeFromDB(final int position){
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                  for(DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
                     Recipe recipe = s.getValue(Recipe.class);
-                    // remove title from database
                     findRecipe(recipe, recipesLongClick, position);
                     s.getRef().removeValue();
                     recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
