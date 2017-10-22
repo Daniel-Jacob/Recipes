@@ -55,3 +55,15 @@ day 15/16: Problemen gehad met de logica als de gebruiker de app wilt gebruiken 
 day 17: gewerkt aan de lokale gebruiker. Data wordt in sharedpreferences gezet. Verder empty textview geimplementeerd als favorites lijst leeg is. 
 
 day 18: extra code toegevoegd zodat bij een restart van de app de gebruiker verdergaat waar hij of zij begonnen is. Daarnaast bugs weggewerkt: na een druk op de back button zag ik dat de progressbar nog verder draaide en ik geen nieuwe query kon doen. Dit opgelost door een recreate van de activity. 
+
+day 19/24:
+ 
+gewerkt aan de codekwaliteit. Deze dagen bijeen gezet, omdat ik mijn commits kwijt ben geraakt omdat mijn repository corrupt werd en dit moest herinitializeren. Problemen waar ik tegenaan liep bij het verbeteren van de codekwaliteit:
+
+1. Wat stop je in welke class: Ik wilde eerst alle code die ik meer dan één keer gebruikte in een utilities class zetten. Dit leidde echter tot een slechter cijfer op better code hub, omdat de class niet specifiek genoeg was waardor hij bijna in elke activity werd aangeroepen. Op basis daarvan een favoriteshelper en onClickListener en onQueryClickListener classes gemaakt
+
+2. Vervolgens geprobeerd progressbar in class te zetten. Ik wist dat dit moest gebeuren door de run functie te overriden maar wist niet dat er een aparte thread aangemaakt moest worden. Toen ik dit codeerde werkte het. 
+
+3. Grote functies geprobeerd in te korten door er kleinere functies van te maken. In plaats van een grote onitemclick functie heb ik de functie opgedeeld in een deel dat het recept vindt in sharedpreferences of de database, en een functie om dat recept naar de volgende activity te brengen. Hetzelfde gedaan voor de longclick om removeFromDB en removeFromSharedPreferences functies aan te maken. 
+
+4. Voor het setten van de adapter realiseerde ik mij dat het onnodig was om eerst de recepten objecten te krijgen, dan deze naar een arraylist van strings om te zetten om vervolgens de arrayAdapter te initializeren. Daarom heb ik besloten om alsnog een recipe adapter te implementeren, waardoor de objecten gewoon in de adapter kunnen worden gezet. 
