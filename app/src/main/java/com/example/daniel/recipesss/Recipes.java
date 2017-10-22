@@ -19,15 +19,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * modelclass for recipes */
+/* modelclass for recipes */
 public class Recipes extends Recipe implements Serializable {
 
     List<Recipe> Recipes = new ArrayList<Recipe>();
-    // constructor
-    public Recipes(){
-
-    }
     // getters and setters
     public void setRecipes(List<Recipe> recipes) {
         this.Recipes = recipes;

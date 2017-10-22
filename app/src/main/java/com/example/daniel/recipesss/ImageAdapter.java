@@ -16,46 +16,44 @@
 package com.example.daniel.recipesss;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-/**
- * sets images that are grabbed from yummly API into a gridview
- */
+/* sets images that are grabbed from yummly API into a gridview */
 public class ImageAdapter extends BaseAdapter {
     // global variables
     private Context context;
     ArrayList<Recipe> data;
     String url;
     int layout;
-
     // constructor
     public ImageAdapter(Context c, int gridItemLayout, ArrayList<Recipe> data) {
         context = c;
         this.data = data;
         this.layout = gridItemLayout;
-        ImageView imageView;
     }
-    /** gets number of items */
+    /* gets number of items */
     public int getCount() {
         return data.size();
     }
-    /** gets item an given position */
+    /* gets item an given position */
     public Object getItem(int position) {
         return data.get(position);
     }
-    /** gets item id */
+    /* gets item id */
     public long getItemId(int position) {
         return position;
     }
-    /** create a new ImageView for each item referenced by the Adapter */
+    /* create a new ImageView for each item referenced by the Adapter */
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {
@@ -72,6 +70,7 @@ public class ImageAdapter extends BaseAdapter {
         loadImageData(url, imageView);
         return imageView;
     }
+    /* loads image data into imageview */
     public void loadImageData(String url, ImageView imageView){
         if (url != null) {
             Picasso.with(context)
@@ -79,15 +78,14 @@ public class ImageAdapter extends BaseAdapter {
                     .into(imageView, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
-                            System.out.print("image downloaded successfully");
+                            Log.d("Succes", "image succesfully loaded");
                         }
-
                         @Override
                         public void onError() {
+                            Log.d("Error:", "Error loading image");
+                            Toast.makeText(context, "image could not be loaded", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
-
-
     }
 }

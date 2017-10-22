@@ -26,9 +26,7 @@ import android.widget.Toast;
 
 
 
-/**
- * listener for queries done in searchview
- */
+/* listener for queries done in searchview */
 public class OnQueryTextListener implements SearchView.OnQueryTextListener {
     SharedPreferences preferences;
     int counter;
@@ -53,14 +51,12 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
         search(query);
         return false;
     }
-
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
     }
 
-    /** method to do error checking
-     * on query and execute asynctask */
+    /* method to do error checking on query and execute asynctask */
     public boolean search(String query){
         // convert query to array of characters
         char[] characters = query.toCharArray();
@@ -74,17 +70,15 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
                 break;
             }
         }
-        /** make sure asynctask
-         is only executed once */
+        // make sure asynctask is executed once
         if (counter == 0) {
             counter = counter + 1;
             // creates an asyntask
             new AsyncWithInterface((AsyncWithInterface.AsyncResponse) context).execute(query);
             Utils utils = new Utils(context);
+            // progressbar
             utils.runOnUiThread((Activity) context);
-
         }
         return false;
     }
-
 }

@@ -22,20 +22,12 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-/**
- * Created by daniel on 26-9-2017.
- */
-/*
-class to get the context when in a static environment.
-Also helps to access googleapiclient globally
-Code used from https://stackoverflow.com/questions/2002288/
-static-way-to-get-context-on-android
- */
+    /* class to get the context when in a static environment. Also helps to access googleapiclient
+    globally Code used from https://stackoverflow.com/questions/2002288/static-way-to-get-
+    context-on-android */
     public class MyApplication extends Application {
     // google api client
     GoogleApiClient googleApiClient;
-
-
         private static Context context;
 
         public void onCreate() {
@@ -50,9 +42,7 @@ static-way-to-get-context-on-android
             googleApiClient = new GoogleApiClient.Builder(context)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
-
         }
-
         public static Context getAppContext() {
             return MyApplication.context;
         }

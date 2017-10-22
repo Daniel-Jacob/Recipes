@@ -26,13 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-/*
-activity to register
-or login user through
-email
- */
+/* activity to register or login user through email */
 public class RegistrationActivity extends AppCompatActivity {
-
     // global variables
     FirebaseDatabase database;
     DatabaseReference reference;
@@ -43,8 +38,6 @@ public class RegistrationActivity extends AppCompatActivity {
     FirebaseUser user;
     String emailAddress;
     String password;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +56,8 @@ public class RegistrationActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         passwrd = (EditText) findViewById(R.id.password);
     }
-    /** registers user */
+    /* registers user */
     public void submit(View view) {
-
         // grabs text of email and password
         emailAddress = email.getText().toString();
         password = passwrd.getText().toString();
@@ -79,8 +71,7 @@ public class RegistrationActivity extends AppCompatActivity {
             reference.child("Users").child(userId).setValue(emailSignIn.getUserData());
         }
     }
-
-    /** signs user in with email and password */
+    /* signs user in with email and password */
     public void logMeIn(View view) {emailSignIn.signInWithEmailAndPassword(emailAddress, password);}
 
     @Override
@@ -89,7 +80,6 @@ public class RegistrationActivity extends AppCompatActivity {
         // add authentication listener
         emailSignIn.mAuth.addAuthStateListener(emailSignIn.listener);
     }
-
     @Override
     protected void onPause() {
         super.onPause();

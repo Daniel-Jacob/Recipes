@@ -33,23 +33,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-/** Utilities class that includes searches
- *  onclickeventlisteners and signout
- *  options that occur more than once */
+/* Utilities class that includes searches onclickeventlisteners and signout options that occur
+ more than once */
 public class Utils extends Activity implements  View.OnClickListener {
+    // global variables
     Context context;
     View view;
     int activity;
     SharedPreferences preferences;
-    RecipeAdapter adapter;
     int signInType;
     DatabaseReference reference;
     FirebaseDatabase database;
     FirebaseUser user;
     Recipe recipe;
     Recipes recipes;
-    Recipes recipesLongClick;
-
     // constructor
     public Utils(Context context) {
         this.context = context;
@@ -59,25 +56,19 @@ public class Utils extends Activity implements  View.OnClickListener {
         reference = database.getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
-
+    /* gets sign in type */
     public int getSignInType() {
         int signInType = preferences.getInt("signintype", 0);
         return signInType;
     }
-
-
-    /**
-     * sends recipes to gridview
-     */
+    /* sends recipes to gridview */
     public void ToGridview(Recipes recipes) {
         Intent intent = new Intent(context, DisplayRecipes.class);
         intent.putExtra("Data", recipes);
         context.startActivity(intent);
     }
 
-    /**
-     * signs user out of facebook, email or goes to sign up screen
-     */
+    /* signs user out of facebook, email or goes to sign up screen */
     public void signoutOrSignUp() {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         int signInType = preferences.getInt("signintype", 0);
@@ -99,7 +90,7 @@ public class Utils extends Activity implements  View.OnClickListener {
             context.startActivity(intent);
         }
     }
-
+    /* sends recipes to gridview */
     public void returnRecipesToGridview(Recipes output) {
         if (output.getRecipes().size() > 0) {
             ToGridview(output);
@@ -108,55 +99,9 @@ public class Utils extends Activity implements  View.OnClickListener {
             Toast.makeText(context, "No recipes found", Toast.LENGTH_LONG).show();
             ((Activity) context).recreate();
         }
-
     }
-
-    /**
-     * redirects user to the activity
-     * the user was in before the app
-     * was closed
-     */
-    /*
-    public void redirectUserToCorrectActivity() {
-
-        int activity = preferences.getInt("Activity", 0);
-        switch (activity) {
-
-            case 2:
-                Intent registrationIntent = new Intent(context, RegistrationActivity.class);
-                context.startActivity(registrationIntent);
-                break;
-            case 3:
-                Intent recipeActivity = new Intent(context, RecipeActivity.class);
-                context.startActivity(recipeActivity);
-                break;
-            case 4:
-                Intent recipeByIngredient = new Intent(context, RecipeByIngredient.class);
-                context.startActivity(recipeByIngredient);
-                break;
-            case 5:
-                Intent displayRecipes = new Intent(context, DisplayRecipes.class);
-                context.startActivity(displayRecipes);
-                break;
-            case 6:
-                Intent titleActivity = new Intent(context, TitleActivity.class);
-                context.startActivity(titleActivity);
-                break;
-            case 7:
-                Intent detailsActivity = new Intent(context, DetailsActivity.class);
-                context.startActivity(detailsActivity);
-                break;
-            case 8:
-                Intent favorites = new Intent(context, FavoritesActivity.class);
-                context.startActivity(favorites);
-                break;
-        }
-    }
-*/
-
-
     @Override
-    /** listens button clicks of sign in options */
+    /* listens button clicks of sign in options */
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.signInButton:
@@ -179,10 +124,7 @@ public class Utils extends Activity implements  View.OnClickListener {
                 startActivity(localUser);
         }
     }
-
-    /* checks if user is logged in or signed out
-    if the user is logged in login is displayed
-    in the button and otherwise signup is displayed */
+    /* checks if user is logged in or signed out and displays message accordingly. */
     public void setLogoutOrSignOutButton(Button button) {
         inflateLayout();
         int signInType = preferences.getInt("signintype", 0);
@@ -193,7 +135,7 @@ public class Utils extends Activity implements  View.OnClickListener {
             button.setText("Log out");
         }
     }
-
+    /* inflates layout */
     public void inflateLayout() {
         int activity = preferences.getInt("Activity", 0);
         switch (activity) {
@@ -215,14 +157,11 @@ public class Utils extends Activity implements  View.OnClickListener {
             case 8:
                 view = LayoutInflater.from(context).inflate(R.layout.activity_favorites, null);
                 break;
-
         }
-
     }
-
+    /* sets up logut or sign up button and progressbar */
     public void runOnUiThread(Activity activity) {
         final Activity myActivity = activity;
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -236,11 +175,8 @@ public class Utils extends Activity implements  View.OnClickListener {
                         myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
                         Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
                         setLogoutOrSignOutButton(button);
-
-
                     }
                 });
-
             }
         }).start();
     }

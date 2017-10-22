@@ -31,9 +31,6 @@ import java.net.URL;
  * yummly api endpoint
  */
 public class HttpRequestHelper {
-
-
-
     /** downloads recipes from yummly api */
     protected static synchronized String downloadFromServer(String... params) {
         String result = "";
@@ -46,16 +43,13 @@ public class HttpRequestHelper {
         int activity = preferences.getInt("Activity", 0);
         // gets correct url
         url = HttpRequestHelper.returnCorrectUrl(activity, params[0]);
+        // creates url object
         URL urlObject = createUrlObject(url);
+        // returns json data from yummly
         result = getJsonDataFromApi(urlObject);
         return result;
-
     }
-
-    /** returns correct url that needs
-     * to be requested from api based
-     *  on what activity the user is in
-      */
+    /* returns correct url that needs to be requested from api based on what activity the user is in */
     public static String returnCorrectUrl(int activity, String query){
         String url = "";
         String[] elements;
@@ -72,7 +66,6 @@ public class HttpRequestHelper {
             for (int i = 0; i < elements.length; i++) {
                 // adds allowedingredient and appends word of query
                 elements[i] = allowedIngredient + elements[i];
-
             }
             // creates string from elements array
             onComplete = "";
@@ -84,19 +77,18 @@ public class HttpRequestHelper {
                     "_app_key=63ef2eaf3a8986a3a1e3d5872857c2fa&q=" + query + onComplete + "&maxResult=40" + "&requirePictures=true";
         }
         return url;
-
     }
+    /* creates an url object */
     public static URL createUrlObject(String url){
         URL urlObject = null;
         try {
-            // creates url object
             urlObject = new URL(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return urlObject;
     }
-
+    /* gets json data from yummly endpoint */
     public static String getJsonDataFromApi(URL url){
         String result = "";
         HttpURLConnection connection;
@@ -114,9 +106,7 @@ public class HttpRequestHelper {
                     while ((data = reader.readLine()) != null) {
                         result += data;
                     }
-
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

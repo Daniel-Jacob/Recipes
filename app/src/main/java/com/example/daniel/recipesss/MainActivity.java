@@ -34,14 +34,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /*
-Starting screen that
-provides google and
-facebook sign in
-options
- */
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener {
-
+Starting screen that provides google and facebook sign in options */
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.
+        OnConnectionFailedListener, View.OnClickListener {
     // global variables
     private static final int RESULT = 1;
     SharedPreferences preferences;
@@ -50,17 +45,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     GoogleApiClient googleApiClient;
     FirebaseAuth auth;
     FirebaseUser user;
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // creates sharedpreferences instance
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         auth = FirebaseAuth.getInstance();
-        // redirect user to correct activity
-        Utils utilities = new Utils(this);
-       // utilities.redirectUserToCorrectActivity();
         // builds api client
         initializeGoogleUser = new GoogleSignIn(this);
         initializeGoogleUser.buildApiClient();
@@ -68,33 +58,25 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // creates callback to facebook API
         initializeFacebookUser = new FacebookSignIn(this);
         initializeFacebookUser.createCallBack();
-        // listener for login buttons
+        // listeners for login buttons
         OnClickListener listener = new OnClickListener(this);
         findViewById(R.id.signInButton).setOnClickListener(this);
-        // listener for email button
         findViewById(R.id.emailsignin).setOnClickListener(listener);
-        // listener for local user button
         findViewById(R.id.textView).setOnClickListener(listener);
         // update activity
         preferences.edit().putInt("Activity", 1).commit();
     }
-
     @Override
-    /* signs user into google
-    other sign in methods
-    handled elsewhere in utils
-    class  */
+    /* signs user into google other sign in methods handled elsewhere in utils class  */
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.signInButton:
                 signIn();
                 break;
         }
     }
-
     @Override
-    /** checks result of authentication */
+    /* checks result of authentication */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
@@ -116,42 +98,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             e.printStackTrace();
         }
     }
-    /** sign in method for google */
+    /* sign in method for google */
     public void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         this.startActivityForResult(signInIntent, RESULT);
     }
-
     @Override
-    /** google connection has failed */
+    /* google connection has failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("Connection", "The connection had" + connectionResult + "error");
         Toast.makeText(this, "An error occured... Try to sign in again or try later...",
                 Toast.LENGTH_SHORT).show();
     }
-
     @Override
-    /** connects google api client */
+    /* connects google api client */
     protected void onStart() {
         super.onStart();
         googleApiClient.connect();
-
     }
-
     @Override
     protected void onResume() {
         super.onResume();
+        // gets current user
         auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                user = firebaseAuth.getCurrentUser();
-
             }
         });
     }
-
     @Override
-    /** disconnects google api client */
+    /* disconnects google api client */
     protected void onStop() {
         super.onStop();
         googleApiClient.stopAutoManage(this);

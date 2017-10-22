@@ -54,7 +54,6 @@ import java.util.Arrays;
 /**
  * Signs in facebook user */
 public class FacebookSignIn extends AppCompatActivity {
-
     // global variables
     CallbackManager manager;
     LoginButton facebookLogin;
@@ -80,9 +79,7 @@ public class FacebookSignIn extends AppCompatActivity {
     }
 
 
-    /**
-     * logs user in through facebook
-     */
+    /* logs user in through facebook */
     public void createCallBack() {
         // creates callback manager
         manager = CallbackManager.Factory.create();
@@ -94,7 +91,7 @@ public class FacebookSignIn extends AppCompatActivity {
         // executes facebook async task
         registerCallBack();
     }
-    /** executes asynctask to facebook api */
+    /* executes asynctask to facebook api */
     public void registerCallBack() {
         facebookLogin.registerCallback(manager, new FacebookCallback<LoginResult>() {
             @Override
@@ -102,21 +99,21 @@ public class FacebookSignIn extends AppCompatActivity {
             public void onSuccess(final LoginResult loginResult) {
                 // sets permissions
                 facebookLogin.setReadPermissions(Arrays.asList("public_profile", "user_friends", "email", "about_me"));
+                // performs a graph request to get user data
                 GraphRequest request = submitGraphRequest(loginResult);
                 // async task to facebook api
                 executeFacebookAsyncTask(request);
             }
 
-
             @Override
-            /** request was cancelled */
+            /* request was cancelled */
             public void onCancel() {
                 Log.d("Tag", "Authentication cancelled");
                 Toast.makeText(context, "Authentication was cancelled...", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            /** an error occured */
+            /* an error occured */
             public void onError(FacebookException error) {
                 Log.d("Tag", "An error occured" + error);
                 Toast.makeText(context, "An error occured.. Try again and if " +
@@ -126,39 +123,36 @@ public class FacebookSignIn extends AppCompatActivity {
         });
 
     }
-    /** authenticates user with firebase */
+    /* authenticates user with firebase */
     public void handleFacebookAccessToken(AccessToken token) {
-        System.out.print(reference);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        // signs facebook user in
         auth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, get firebase user
                             user = auth.getCurrentUser();
-
-
-
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-
                         }
-
                     }
                 });
     }
     /** executes asynctask */
     public void executeFacebookAsyncTask(GraphRequest request){
         Bundle parameters = new Bundle();
+        // put user info in bundle
         parameters.putString("fields", "id,name,link");
+        // use user info to execute async task
         request.setParameters(parameters);
         handleFacebookAccessToken(request.getAccessToken());
         request.executeAsync();
     }
+    /* submits a graph request for facebook user */
     public GraphRequest submitGraphRequest(final LoginResult result){
         GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {

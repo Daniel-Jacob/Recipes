@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -33,11 +34,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-/**
- * Grabs recipes from asynctask
- * and populates them in a gridview
- */
+/* Grabs recipes from asynctask and populates them in a gridview */
 public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener{
     // global variables
     ArrayList<Recipe> elements;
@@ -45,8 +42,6 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     ListView listView;
     GridView gv;
     SharedPreferences preferences;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +74,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             }
         });
     }
-    /** sets image adapter */
+    /* sets image adapter */
     public void setImageAdapter(Recipes recipes){
         for (int i = 0; i < recipes.getRecipes().size(); i++) {
             // grabs all the image links from the objects
@@ -92,10 +87,8 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         adapter.notifyDataSetChanged();
     }
 
-    /** checks if user came from a previous
-     * activity or user shut down application
-     * and needs to be redirected
-      */
+    /* checks if user came from a previous activity or user shut down application and needs to be
+    redirected */
     public void addOrFetchRecipes() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // add recipes to sharedpreferences
@@ -114,8 +107,8 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         }
     }
     @Override
-    /** something went wrong */
+    /* something went wrong */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        System.out.print("Connection failed");
+        Log.d("Connection failed: ", connectionResult.getErrorMessage());
     }
 }

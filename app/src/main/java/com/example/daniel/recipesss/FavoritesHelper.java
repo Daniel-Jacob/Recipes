@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,9 +29,9 @@ import java.lang.reflect.Type;
  */
 
 public class FavoritesHelper {
+    // global variables
     Context context;
     Utils utils;
-    RecipeAdapter recipeAdapter;
     View view;
     FirebaseDatabase database;
     DatabaseReference reference;
@@ -58,7 +59,7 @@ public class FavoritesHelper {
         this.myActivity = (FavoritesActivity)context;
         listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
     }
-
+    /* fetches favorites from database */
     public void fetchFavorites(final Recipes recipes) {
 
         if (user != null) {
@@ -67,16 +68,15 @@ public class FavoritesHelper {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
+                        // puts recipes in recipes object
                         recipe = snapshot.getValue(Recipe.class);
                         recipes.getRecipes().add(recipe);
-
                     }
+                    // sets recipe adapter
                     setAdapter((FavoritesActivity) context, recipes);
-
                 }
-
                 @Override
-                /** grabbing favorites got cancelled */
+                /* grabbing favorites got cancelled */
                 public void onCancelled(DatabaseError databaseError) {
                     Toast.makeText(context, "A database error occured... Please try " +
                             "again", Toast.LENGTH_SHORT).show();
@@ -84,51 +84,56 @@ public class FavoritesHelper {
             });
         }
     }
-
-
+    /* gets recipes user based on sign in type */
     public Recipes recipesUser(int signInType) {
+        // authenticated user
         if (signInType != 4 && signInType != 0) {
             fetchFavorites(recipes);
-
+            // local user
         } else if (signInType == 4) {
             Gson gson = new Gson();
+            // gets recipes
             String json = preferences.getString("recipeLocalUser", "");
             Type type = new TypeToken<Recipes>() {
             }.getType();
             recipes = gson.fromJson(json, type);
+            // sets adapter on recipes
             setAdapter((FavoritesActivity) context, recipes);
+            // error handling
         } else {
             Toast.makeText(context, "Oops... something went wrong", Toast.LENGTH_SHORT).show();
         }
         return recipes;
     }
-
+    /* listens for click on favorites item */
     public void onItemClick(Recipes recipess) {
         this.recipes = recipess;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                // authenticated user
                 if (signInType != 4) {
                   recipeDBbToDetailsActivity(position, recipes);
                 } else {
+                    // local user
                     toDetailsActivity(signInType, position);
                 }
             }
 
         });
     }
-
+    /* listens for long click and removes the clicked item from database and recipes object */
     public void listensForLongClickUIThread(Activity activity, final Recipes recipesLongClick) {
         this.recipesLongClick = recipes;Activity myActivity = activity;
         ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                // removes item from database
                 if (signInType != 4) {
-
                     removeRecipeFromDB(position);
                 }
-                // local user
+                // local user, so remove from shared preferences
                 else {
                     removeRecipeFromSharedPreferences(recipesLongClick, position);
                 }
@@ -136,8 +141,7 @@ public class FavoritesHelper {
             }
         });
     }
-
-
+    /* sets recipe adapter on listview and sets up progressbar */
     public void setAdapter(final FavoritesActivity activity, final Recipes recipes) {
         final Activity myActivity = activity;
         new Thread(new Runnable() {
@@ -147,16 +151,18 @@ public class FavoritesHelper {
                     @Override
                     public void run() {
                         ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
+                        ProgressBar progressBar = (ProgressBar) myActivity.findViewById(R.id.indeterminateBar);
+                        progressBar.setVisibility(View.VISIBLE);
                         adapter = new RecipeAdapter(context, R.layout.simple_list_itemmm, recipes);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
             }
         }).start();
-
     }
-
+    /* finds recipe if it exactly matches the clicked recipe */
     public boolean findRecipe(Recipe recipe, Recipes recipes, int position) {
         if (recipe != null && recipe.getTitle().equals(recipes.getRecipes().get(position).getTitle())
                 && recipe.getImage().equals(recipes.getRecipes().get(position).getImage())

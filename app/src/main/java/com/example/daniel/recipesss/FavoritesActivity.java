@@ -32,8 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * Sets up the favorites of a given user */
+/* Sets up the favorites of a given user */
 public class FavoritesActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     // global variables
     SharedPreferences preferences;
@@ -47,14 +46,13 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     ArrayAdapter arrayAdapter;
     ProgressBar progressBar;
     Recipes recipes;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
         listView = (ListView) findViewById(R.id.listviewwwww);
         auth = FirebaseAuth.getInstance();
+        // getc current user
         user = auth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
@@ -65,20 +63,18 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         // tracks activity
         preferences.edit().putInt("Activity", 8);
         recipes = new Recipes();
+        // creates favoriteshelper
         FavoritesHelper helper = new FavoritesHelper(this);
+        // gets recipes of user
         recipes = helper.recipesUser(signInType);
+        // listens for click on favorites item
         helper.onItemClick(recipes);
+        // listens for a long click on favorites item
         helper.listensForLongClickUIThread(this, recipes);
-        // gets firebase user
+        // sets adapter on listview
         arrayAdapter = new RecipeAdapter(this, R.layout.simple_list_itemmm, recipes);
         listView.setAdapter(arrayAdapter);
     }
-
-    /**
-     * removes recipe from
-     * database and listview
-     */
-
     @Override
     // connection has failed
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -88,14 +84,11 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     protected void onStart() {
         super.onStart();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         Utils utils = new Utils(this);
         signInType = utils.getSignInType();
-
     }
 }

@@ -24,61 +24,43 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * creates an asynctask from yummly api
- * and returns recipes to processfinish
- * function
- */
+/* creates an asynctask from yummly api and returns recipes to processfinish function */
 public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
-    // g;obal variables
+    // global variables
     Context context;
     Recipes recipes;
     String imageLink;
     String[] imageLinkTrimmed;
     String cleanImageLink;
-    ArrayList<Recipe> recipesArrayList = new ArrayList<>();
     JSONObject recipe = null;
-
-    /**
-     * interface for asynctask
-     */
+    /* interface for asynctask */
     public interface AsyncResponse {
         void processFinish(Recipes output);
-
     }
-    /**
-     * after asynctask is completed
-     * point to processFinish function
-     */
+    /* after asynctask is complete point to processFinish function */
     public AsyncResponse delegate = null;
-
     public AsyncWithInterface(AsyncResponse delegate) {
         this.delegate = delegate;
     }
-
-    /**
-     * code before download
-     */
+    /* code before download */
     @Override
     protected void onPreExecute() {
     }
 
     @Override
-    /** recipes are being downloaded */
+    /* recipes are being downloaded */
     protected String doInBackground(String... params) {
         return HttpRequestHelper.downloadFromServer(params);
     }
 
     @Override
-    /** converts jsondata into recipes
-     * object and goes to processFinish */
+    /* converts jsondata into recipes object and goes to processFinish */
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         recipes = recipesReturned(result);
         delegate.processFinish(recipes);
     }
-
-    /** formats imagelink */
+    /* formats imagelink */
     public String formatImageLink(String imageLink) {
         // splits imagelink
         imageLinkTrimmed = imageLink.split(":");
@@ -87,7 +69,7 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
         cleanImageLink = cleanImageLink.substring(1, cleanImageLink.length() - 2);
         return cleanImageLink;
     }
-    /** returns recipes object */
+    /* returns recipes object */
     public Recipes initializeRecipes(JSONArray array) {
         Recipes recipes = new Recipes();
         for (int i = 0; i < array.length(); i++) {
@@ -114,15 +96,13 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
                 recipeObject.setAttributes(attributes);
                 // adds recipe to recipes object
                 recipes.Recipes.add(recipeObject);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         return recipes;
-
     }
-    /** returns recipes from json data */
+    /* returns recipes from json data */
     public Recipes recipesReturned(String result) {
         JSONObject myJSON;
         recipes = new Recipes();

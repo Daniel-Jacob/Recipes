@@ -22,29 +22,25 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-/**
- * Activity that lets user
- * search for recipes that
- * match all the given
- * ingredients
- */
-
-public class RecipeByIngredient extends AppCompatActivity implements AsyncWithInterface.AsyncResponse, GoogleApiClient.OnConnectionFailedListener {
+/* Activity that lets user search for recipes that match all the given ingredients */
+public class RecipeByIngredient extends AppCompatActivity implements AsyncWithInterface.
+        AsyncResponse, GoogleApiClient.OnConnectionFailedListener {
     // global variables
     SearchView searchView;
     SharedPreferences preferences;
     GoogleSignIn signIn;
     Utils utilities;
     ProgressBar progressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,26 +54,25 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         searchView.setOnQueryTextListener(onQueryTextListener);
         // track activity
         preferences.edit().putInt("Activity", 4).commit();
-
     }
-
     @Override
-    /** if there are recipes send them to next activity */
+    /* if there are recipes send them to next activity */
     public void processFinish(Recipes output) {
         // recipes found
         utilities.returnRecipesToGridview(output);
     }
-
-    /*8 goes to favorites */
+    /* goes to favorites */
     public void favorites(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
-
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
-
-
+    /* connection with google api client failed */
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("Tag", connectionResult.getErrorMessage());
+        Toast.makeText(getApplicationContext(), "Oops... something went wrong",
+                Toast.LENGTH_SHORT).show();
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -86,29 +81,26 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         // connects Google api client
         signIn.googleApiClient.connect();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
+        // sets logout or sign up button based on sign in type
         utilities.setLogoutOrSignOutButton((Button) findViewById(R.id.Loginandlogout));
         int activity = preferences.getInt("Activity", 0);
+        // recreate activity if user comes from another activity
         if(activity != 4){
-
             recreate();
         }
     }
-
     @Override
     protected void onStop() {
         super.onStop();
         signIn.googleApiClient.stopAutoManage(this);
         // disconnects google api client
         signIn.googleApiClient.disconnect();
-
     }
-    /** logs user out */
+    /* logs user out */
     public void loginOrLogout(View view) {
-
         int signInType = utilities.getSignInType();
         // google user
         if (signInType == 1) {
@@ -119,17 +111,16 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
             utilities.signoutOrSignUp();
         }
     }
-    /** goes to general recipe search */
+    /* goes to general recipe search */
     public void generalRecipes(View view) {
         Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
         startActivity(intent);
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+        // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
     }
-
 }

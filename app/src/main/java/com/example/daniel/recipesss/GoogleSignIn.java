@@ -61,20 +61,13 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
     FirebaseAuth auth;
     FirebaseUser user;
     String googleClientId = "818367032142-kjv7mqeb242bdvq35jg3v5cnblelke7r.apps.googleusercontent.com";
-
-
-
     // constructor
     public GoogleSignIn(Context c) {
         this.context = c;
-        // test
         auth = FirebaseAuth.getInstance();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
-
-
-
-    /** builds googleapiclient */
+    /* builds googleapiclient */
     public  GoogleApiClient buildApiClient() {
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -87,28 +80,26 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                 .build();
         return googleApiClient;
     }
-    /** signs user out */
+    /* signs user out */
     public void signOut(){
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-
-                        preferences.edit().putInt("Activity", 1).commit();
+                        // signs user out of firebase
                         FirebaseAuth.getInstance().signOut();
+                        // go back to sign in activity
                         Intent intent = new Intent(context, MainActivity.class);
                         context.startActivity(intent);
                     }
                 });
     }
-
-
     /** sign user in and redirects to next activity */
     public void handleSignInResult(Context context, GoogleSignInResult result) {
         this.context = (MainActivity) context;
         Log.d("TAG", "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
+            // Signed in successfully.
             GoogleSignInAccount acct = result.getSignInAccount();
             firebaseAuthWithGoogle(acct);
             // here the user data is put in firebase database
@@ -122,36 +113,31 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
             context.startActivity(intent);
         }
     }
-
     @Override
     // connection failed so display message
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Toast.makeText(getApplicationContext(),
                 "A connection error occured...", Toast.LENGTH_SHORT).show();
     }
-    
-
-
-    /** authenticates google user with firebase */
+    /* authenticates google user with firebase */
     public void firebaseAuthWithGoogle( GoogleSignInAccount acct) {
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        // sign in succesfull
                         if (task.isSuccessful()) {
                             // Sign in success, gets firebase user
                             Log.d("Tag", "signInWithCredential:success");
+                            // get user
                             user = auth.getCurrentUser();
-                            System.out.print(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
                             Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
     }

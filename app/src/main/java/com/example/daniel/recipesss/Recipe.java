@@ -18,20 +18,14 @@ package com.example.daniel.recipesss;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/** modelclass for recipe */
+/* modelclass for recipe */
 public class Recipe implements Serializable {
     // object fields
     public String title;
     public String image;
     public ArrayList<String> ingredients;
     public ArrayList<String> attributes;
-
-    // constructor
-    public Recipe(){
-
-    }
-
-    /** getters and setters */
+    /* getters and setters */
     public void setTitle(String title) {
         this.title = title;
     }

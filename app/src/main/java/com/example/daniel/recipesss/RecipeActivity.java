@@ -34,7 +34,6 @@ import com.google.firebase.auth.FirebaseUser;
 /** activity that lets user search for general recipes */
 public class RecipeActivity extends AppCompatActivity
         implements AsyncWithInterface.AsyncResponse, OnConnectionFailedListener {
-
     // global variables
     SearchView searchView;
     SharedPreferences preferences;
@@ -42,7 +41,6 @@ public class RecipeActivity extends AppCompatActivity
     ProgressBar progressBar;
     Utils utilities;
     GoogleSignIn signIn;
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,19 +50,14 @@ public class RecipeActivity extends AppCompatActivity
         preferences.edit().putInt("Activity", 3).commit();
         // initialize searchview
         searchView = (SearchView) findViewById(R.id.searchview);
-        // display login or signup button
-       // setLogoutOrSignOutButton();
         utilities = new Utils(this);
         // initializes litener
         OnQueryTextListener onQueryTextListener = new OnQueryTextListener(this);
         // listens for an entered query
         searchView.setOnQueryTextListener(onQueryTextListener);
     }
-
-
-    /** signs user out */
+    /* signs user out */
     public void loginOrLogout(View view) {
-
         int signInType = utilities.getSignInType();
         // google user
         if (signInType == 1) {
@@ -77,19 +70,16 @@ public class RecipeActivity extends AppCompatActivity
         }
     }
 
-    /** goes to recipe by ingredient activity */
+    /* goes to recipe by ingredient activity */
     public void recipeByIngredient(View view) {
         Intent intentByIngredient = new Intent(this, RecipeByIngredient.class);
         startActivity(intentByIngredient);
     }
-
-    // goes to favorites
+    /* goes to favorites */
     public void favorites(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -107,10 +97,9 @@ public class RecipeActivity extends AppCompatActivity
     protected void onPause(){
         super.onPause();
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+        // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
-        // releases progressbar
     }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -118,16 +107,16 @@ public class RecipeActivity extends AppCompatActivity
         // disconnects Google api client
         signIn.googleApiClient.disconnect();
     }
-
     @Override
-    /** displays message according to signintype */
+    /* displays message according to signintype */
     public void onBackPressed() {
        // gets sign in type
         int signInType = utilities.getSignInType();
         // user is signed in
         if (user != null) {
             Toast.makeText(getApplicationContext(),
-                    "You are already signed in. Logout to go to the previous screen", Toast.LENGTH_LONG).show();
+                    "You are already signed in. Logout to go to the previous screen",
+                    Toast.LENGTH_LONG).show();
         }
         // user is not signed in
         else if(signInType == 4){
@@ -139,25 +128,24 @@ public class RecipeActivity extends AppCompatActivity
             startActivity(intent);
         }
     }
-
     @Override
-    /** goes to next activity if there are recipes */
+    /* goes to next activity if there are recipes */
     public void processFinish(Recipes output) {
         utilities.returnRecipesToGridview(output);
     }
 
     @Override
     // connection failed
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {Toast.makeText
+            (getApplicationContext(), "Oops.. something went wrong", Toast.LENGTH_SHORT).show();
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
+        // sets logout or sign up button based on sign in type
         utilities.setLogoutOrSignOutButton((Button) findViewById(R.id.Loginandlogout));
         int activity = preferences.getInt("Activity", 0);
+        // user comes from different activity so recreate so query can be submitted
         if(activity != 3){
             recreate();
         }

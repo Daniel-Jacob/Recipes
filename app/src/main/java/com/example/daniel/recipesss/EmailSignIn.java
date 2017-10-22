@@ -33,10 +33,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-/**
- * registers and signs user in. */
+/** registers and signs user in. */
 public class EmailSignIn extends Activity {
-
     // global variables
     Context context;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -60,8 +58,7 @@ public class EmailSignIn extends Activity {
             }
         }
     };
-
-    /** creates user account with emailaddress and password */
+    /* creates user account with emailaddress and password */
     public void createAccount(final String email, final String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
@@ -70,7 +67,7 @@ public class EmailSignIn extends Activity {
                         Log.d("TAG", "createUserWithEmail:onComplete:" + task.isSuccessful());
                         // display message if task failed
                         if (!task.isSuccessful()) {
-                            System.out.print(task.getException());
+                            Log.w("Tag", "Create account:failed", task.getException());
                             Toast.makeText(context, "Authentication failed...",
                                     LENGTH_SHORT).show();
                         }
@@ -84,8 +81,7 @@ public class EmailSignIn extends Activity {
                     }
                 });
     }
-
-    /** gets userdata */
+    /* gets userdata */
     public FirebaseUser getUserData() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -98,7 +94,7 @@ public class EmailSignIn extends Activity {
         return user;
     }
 
-    /** signs user in with email and password */
+    /* signs user in with email and password */
     public void signInWithEmailAndPassword(String email, final String password) {
         // get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -109,6 +105,7 @@ public class EmailSignIn extends Activity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             Log.d("TAG", "signInWithEmail:onComplete:" + task.isSuccessful());
+                            // gets current user
                             user = FirebaseAuth.getInstance().getCurrentUser();
                             // save sign in type
                             preferences.edit().putInt("signintype", 3).commit();

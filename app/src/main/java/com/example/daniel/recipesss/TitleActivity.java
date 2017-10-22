@@ -22,19 +22,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import java.util.ArrayList;
-/** Populates listview with titles */
+/* Populates listview with titles */
 public class TitleActivity extends AppCompatActivity {
-
     // global variables
     ListView listView;
     Recipes recipes;
     SharedPreferences preferences;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +43,6 @@ public class TitleActivity extends AppCompatActivity {
         setAdapter(recipes);
         // make listview clickable
         listView.setClickable(true);
-        // listen for click event
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,19 +55,11 @@ public class TitleActivity extends AppCompatActivity {
             }
         });
     }
-
-    /**
-     * adapter to add titles to listview
-     */
+    /* adapter to add titles to listview */
     public void setAdapter(Recipes recipes) {
         // add recipe titles to arraylist
         ListView listView = (ListView) findViewById(R.id.titles);
-        ArrayList<String> titles = new ArrayList<>();
-        for (Recipe s : recipes.getRecipes()) {
-            titles.add(s.getTitle());
-        }
-        // sets title adapter
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.simple_list_itemmm, titles);
+        RecipeAdapter adapter = new RecipeAdapter(this, R.layout.simple_list_itemmm, recipes);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

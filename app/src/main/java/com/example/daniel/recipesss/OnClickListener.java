@@ -9,12 +9,7 @@ import android.view.View;
 
 import com.facebook.FacebookSdk;
 
-/**
- * listener that checks
- * if one of the
- * loginbuttons is clicked
- */
-
+/*listener that checks if one of the loginbuttons is clicked */
 public class OnClickListener implements View.OnClickListener {
     Context context;
     SharedPreferences preferences;
