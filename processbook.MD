@@ -66,4 +66,7 @@ gewerkt aan de codekwaliteit. Deze dagen bijeen gezet, omdat ik mijn commits kwi
 
 3. Grote functies geprobeerd in te korten door er kleinere functies van te maken. In plaats van een grote onitemclick functie heb ik de functie opgedeeld in een deel dat het recept vindt in sharedpreferences of de database, en een functie om dat recept naar de volgende activity te brengen. Hetzelfde gedaan voor de longclick om removeFromDB en removeFromSharedPreferences functies aan te maken. 
 
-4. Voor het setten van de adapter realiseerde ik mij dat het onnodig was om eerst de recepten objecten te krijgen, dan deze naar een arraylist van strings om te zetten om vervolgens de arrayAdapter te initializeren. Daarom heb ik besloten om alsnog een recipe adapter te implementeren, waardoor de objecten gewoon in de adapter kunnen worden gezet. 
+4. Voor het setten van de adapter realiseerde ik mij dat het onnodig was om eerst de recepten objecten te krijgen, dan deze naar een arraylist van strings om te zetten om vervolgens de arrayAdapter te initializeren. Daarom heb ik besloten om alsnog een recipe adapter te implementeren, waardoor de objecten gewoon in de adapter kunnen worden gezet.
+
+day 25: gewerkt aan code kwaliteit. Hierbij een aantal lange functies in kleinere functies opgedeeld. Voorbeelden hiervan zijn de onItemClick, de onItemLongClick en ook de downloadFromServer functie. 
+Better code hub cijfer is nu een 8. Verder wat debugging gedaan. Gezorgd dat in iedergeval een item niet voor een 2e keer binnen een activity opgeslagen kan worden. Dit werkt op dit moment alleen binnen de activity omdat de data nog niet is opgehaald wanneer ik check of het recept al bestaat. Hier morgen mee verder. 
