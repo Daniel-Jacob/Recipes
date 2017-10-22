@@ -47,31 +47,11 @@ public class HttpRequestHelper {
         // gets correct url
         url = HttpRequestHelper.returnCorrectUrl(activity, params[0]);
         URL urlObject = createUrlObject(url);
-        HttpURLConnection connection;
-        if (url != null) {
-            // make connection to endpoint
-            try {
-                connection = (HttpURLConnection) urlObject.openConnection();
-                connection.setRequestMethod("GET");
-                Integer responseCode = connection.getResponseCode();
-                if (responseCode >= 200 && responseCode < 300) {
-                    // inputreader
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-                    String data;
-                    // append data to result string
-                    while ((data = reader.readLine()) != null) {
-                        result += data;
-                    }
-
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        result = getJsonDataFromApi(urlObject);
         return result;
-    }
 
+    }
+    
     /** returns correct url that needs
      * to be requested from api based
      *  on what activity the user is in
@@ -115,5 +95,32 @@ public class HttpRequestHelper {
             e.printStackTrace();
         }
         return urlObject;
+    }
+
+    public static String getJsonDataFromApi(URL url){
+        String result = "";
+        HttpURLConnection connection;
+        if (url != null) {
+            // make connection to endpoint
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                Integer responseCode = connection.getResponseCode();
+                if (responseCode >= 200 && responseCode < 300) {
+                    // inputreader
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                    String data;
+                    // append data to result string
+                    while ((data = reader.readLine()) != null) {
+                        result += data;
+                    }
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }
