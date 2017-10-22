@@ -51,7 +51,7 @@ public class HttpRequestHelper {
         return result;
 
     }
-    
+
     /** returns correct url that needs
      * to be requested from api based
      *  on what activity the user is in

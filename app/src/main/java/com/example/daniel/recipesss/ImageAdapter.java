@@ -41,6 +41,7 @@ public class ImageAdapter extends BaseAdapter {
         context = c;
         this.data = data;
         this.layout = gridItemLayout;
+        ImageView imageView;
     }
     /** gets number of items */
     public int getCount() {
@@ -68,6 +69,10 @@ public class ImageAdapter extends BaseAdapter {
         }
         // gets image and loads it into imageview
         url = data.get(position).getImage();
+        loadImageData(url, imageView);
+        return imageView;
+    }
+    public void loadImageData(String url, ImageView imageView){
         if (url != null) {
             Picasso.with(context)
                     .load(url)
@@ -83,7 +88,6 @@ public class ImageAdapter extends BaseAdapter {
                     });
         }
 
-        return imageView;
 
     }
 }
