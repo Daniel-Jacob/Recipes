@@ -1,3 +1,4 @@
+[![BCH compliance](https://bettercodehub.com/edge/badge/us3rna/Recipes?branch=master)](https://bettercodehub.com/)
 # Proposal programmeerproject | University of Amsterdam 2017 | Studentnumber: 10001228 | Recipe app Recipes4u
 
 Problemdefinition
