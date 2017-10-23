@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 /* Sets up the favorites of a given user */
+/* Sets up the favorites of a given user */
 public class FavoritesActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     // global variables
     SharedPreferences preferences;
@@ -47,6 +48,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     ProgressBar progressBar;
     Recipes recipes;
     TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,24 +57,29 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         auth = FirebaseAuth.getInstance();
         // getc current user
         user = auth.getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
-        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-        // shared preferences instance
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int signInType = preferences.getInt("signintype", 0);
-        // tracks activity
-        preferences.edit().putInt("Activity", 8);
-        recipes = new Recipes();
-        // creates favoriteshelper
-        FavoritesHelper helper = new FavoritesHelper(this);
-        // gets recipes of user
-        recipes = helper.recipesUser(signInType);
+        if (user != null) {
+            database = FirebaseDatabase.getInstance();
+            reference = database.getReference();
+            progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+            // shared preferences instance
+            preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            int signInType = preferences.getInt("signintype", 0);
+            // tracks activity
+            preferences.edit().putInt("Activity", 8);
+            recipes = new Recipes();
+            // creates favoriteshelper
+            FavoritesHelper helper = new FavoritesHelper(this);
+            // gets recipes of user
+            recipes = helper.recipesUser(signInType);
             // listens for click on favorites item
             helper.onItemClick(recipes);
             // listens for a long click on favorites item
             helper.listensForLongClickUIThread(this, recipes);
-        recipesIsEmpty(recipes);
+            recipesIsEmpty(recipes);
+        }
+        else{
+            recreate();
+        }
     }
     public void recipesIsEmpty(Recipes recipes){
         if(recipes.getRecipes().isEmpty()){

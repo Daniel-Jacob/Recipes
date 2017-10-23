@@ -75,19 +75,20 @@ public class Utils extends Activity implements  View.OnClickListener {
         if (signInType == 2) {
             LoginManager.getInstance().logOut();
             FirebaseAuth.getInstance().signOut();
-            preferences.edit().putInt("Activity", 1).commit();
+            preferences.edit().putInt("Activity", 99).commit();
             Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);
         } else if (signInType == 3) {
             FirebaseAuth user = FirebaseAuth.getInstance();
             user.signOut();
-            preferences.edit().putInt("Activity", 1).commit();
+            preferences.edit().putInt("Activity", 99).commit();
             Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);
         } else if (signInType == 4) {
-            preferences.edit().putInt("Activity", 1).commit();
             Intent intent = new Intent(context, MainActivity.class);
+            preferences.edit().putInt("Activity", 99).commit();
             context.startActivity(intent);
+
         }
     }
     /* sends recipes to gridview */
@@ -127,9 +128,9 @@ public class Utils extends Activity implements  View.OnClickListener {
     /* checks if user is logged in or signed out and displays message accordingly. */
     public void setLogoutOrSignOutButton(Button button) {
         inflateLayout();
-        int signInType = preferences.getInt("signintype", 0);
+        signInType = preferences.getInt("signintype", 0);
         // nobody is logged in
-        if (signInType == 4) {
+        if (user == null && signInType == 4) {
             button.setText("Sign up");
         } else {
             button.setText("Log out");
@@ -170,14 +171,17 @@ public class Utils extends Activity implements  View.OnClickListener {
 
                     @Override
                     public void run() {
-                        // inflates layout
-                        inflateLayout();
-                        myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
-                        Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
-                        setLogoutOrSignOutButton(button);
+                        if(user != null) {
+                            // inflates layout
+                            inflateLayout();
+                            myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
+                            Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
+                            setLogoutOrSignOutButton(button);
+                        }
                     }
                 });
             }
         }).start();
+
     }
 }

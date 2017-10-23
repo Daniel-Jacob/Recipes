@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,11 +57,13 @@ public class FavoritesHelper {
         recipes = new Recipes();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         signInType = utils.getSignInType();
-        this.myActivity = (FavoritesActivity)context;
+        this.myActivity = (FavoritesActivity) context;
         listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
     }
+
     /* fetches favorites from database */
-    public void fetchFavorites(final Recipes recipes) {
+    public void fetchFavorites(Recipes recipesFetch) {
+        this.recipes = recipesFetch;
 
         if (user != null) {
             // fetches favorites from firebase
@@ -75,6 +78,7 @@ public class FavoritesHelper {
                     // sets recipe adapter
                     setAdapter((FavoritesActivity) context, recipes);
                 }
+
                 @Override
                 /* grabbing favorites got cancelled */
                 public void onCancelled(DatabaseError databaseError) {
@@ -84,11 +88,14 @@ public class FavoritesHelper {
             });
         }
     }
+
     /* gets recipes user based on sign in type */
     public Recipes recipesUser(int signInType) {
         // authenticated user
         if (signInType != 4 && signInType != 0) {
-            fetchFavorites(recipes);
+            if(user != null) {
+                fetchFavorites(recipes);
+            }
             // local user
         } else if (signInType == 4) {
             Gson gson = new Gson();
@@ -105,6 +112,7 @@ public class FavoritesHelper {
         }
         return recipes;
     }
+
     /* listens for click on favorites item */
     public void onItemClick(final Recipes recipess) {
         this.recipes = recipess;
@@ -113,7 +121,7 @@ public class FavoritesHelper {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 // authenticated user
                 if (signInType != 4) {
-                  recipeDBbToDetailsActivity(position, recipes);
+                    recipeDBbToDetailsActivity(position, recipes);
                 } else {
                     // local user
                     toDetailsActivity(signInType, position);
@@ -122,9 +130,11 @@ public class FavoritesHelper {
 
         });
     }
+
     /* listens for long click and removes the clicked item from database and recipes object */
     public void listensForLongClickUIThread(Activity activity, final Recipes recipesLongClick) {
-        this.recipesLongClick = recipes;Activity myActivity = activity;
+        this.recipesLongClick = recipes;
+        Activity myActivity = activity;
         ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -141,8 +151,10 @@ public class FavoritesHelper {
             }
         });
     }
+
     /* sets recipe adapter on listview and sets up progressbar */
-    public void setAdapter(FavoritesActivity activity, Recipes recipesForAdapter) {
+    public void setAdapter(FavoritesActivity activity, final Recipes recipesForAdapter) {
+        recipes = new Recipes();
         this.recipes = recipesForAdapter;
         final Activity myActivity = activity;
         new Thread(new Runnable() {
@@ -157,6 +169,7 @@ public class FavoritesHelper {
                         adapter = new RecipeAdapter(context, R.layout.simple_list_itemmm, recipes);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
+                        recipesIsEmpty(recipesForAdapter, progressBar);
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -164,16 +177,25 @@ public class FavoritesHelper {
         }).start();
     }
 
-    public void recipeDBbToDetailsActivity(final int position, final Recipes recipes){
+    public void recipesIsEmpty(Recipes recipes, ProgressBar progressBar) {
+        if (recipes.getRecipes() == null || recipes.getRecipes().isEmpty()) {
+            listView.setEmptyView(myActivity.findViewById(R.id.empty_text_view));
+            TextView textView = (TextView) myActivity.findViewById(R.id.Favorites);
+            textView.setVisibility(View.INVISIBLE);
+
+        }
+    }
+
+    public void recipeDBbToDetailsActivity(final int position, final Recipes recipes) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
-                    Recipe recipe = s.getValue(Recipe.class);
-                   // findRecipe(recipe, recipes, position);
-                    toDetailsActivity(signInType, position);
+                    recipe = s.getValue(Recipe.class);
                 }
+                toDetailsActivity(signInType, position);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(context, "A database error of type" +
@@ -183,18 +205,21 @@ public class FavoritesHelper {
     }
 
 
-    public void removeRecipeFromDB(final int position, final Recipe recipeRemoved){
+    public void removeRecipeFromDB(final int position, final Recipe recipeRemoved) {
         final RecipeCompare compare = new RecipeCompare();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                 for(DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
+                for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
                     Recipe recipe = s.getValue(Recipe.class);
-                     int compareRecipes = compare.compare(recipe, recipeRemoved);
-                     if(compareRecipes == 1){
-                         s.getRef().removeValue();
-                         recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
-                     }
+                    int compareRecipes = compare.compare(recipe, recipeRemoved);
+                    if (compareRecipes == 1) {
+                        Toast.makeText(context, recipesLongClick.getRecipes().get(position).
+                                getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
+                        recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
+                        s.getRef().removeValue();
+
+                    }
                 }
                 setAdapter((FavoritesActivity) context, recipesLongClick);
 
@@ -206,35 +231,37 @@ public class FavoritesHelper {
             }
         });
     }
+
     public void toDetailsActivity(int signInType, int position) {
         if (signInType != 4) {
             Intent intent = new Intent(context, DetailsActivity.class);
             intent.putExtra("Recipe", recipes.getRecipes().get(position));
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(intent);
         } else {
             FavoritesHelper helper = new FavoritesHelper(context);
             recipes = helper.recipesUser(signInType);
             recipe = recipes.getRecipes().get(position);
             Intent intent = new Intent(context, DetailsActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.putExtra("Recipe", recipe);
             context.startActivity(intent);
         }
     }
 
+
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
         for (int i = 0; i < recipesLongClick.getRecipes().size(); i++) {
 
             if (recipesLongClick.getRecipes().get(i).equals(recipesLongClick.getRecipes().get(position))) {
+                Toast.makeText(context, recipesLongClick.getRecipes().
+                        get(position) + " " + "removed", Toast.LENGTH_SHORT).show();
                 recipesLongClick.getRecipes().remove(i);
             }
             Gson gson = new Gson();
             String json = gson.toJson(recipesLongClick);
             preferences.edit().putString("recipeLocalUser", json).commit();
-
         }
         setAdapter((FavoritesActivity) context, recipesLongClick);
         return false;
     }
+
 }

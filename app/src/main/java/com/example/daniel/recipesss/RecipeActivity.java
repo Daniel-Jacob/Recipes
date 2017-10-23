@@ -42,6 +42,7 @@ public class RecipeActivity extends AppCompatActivity
     ProgressBar progressBar;
     Utils utilities;
     GoogleSignIn signIn;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +53,13 @@ public class RecipeActivity extends AppCompatActivity
         // initialize searchview
         searchView = (SearchView) findViewById(R.id.searchview);
         utilities = new Utils(this);
+        utilities.getSignInType();
         // initializes litener
         OnQueryTextListener onQueryTextListener = new OnQueryTextListener(this);
         // listens for an entered query
         searchView.setOnQueryTextListener(onQueryTextListener);
     }
+
     /* signs user out */
     public void loginOrLogout(View view) {
         int signInType = utilities.getSignInType();
@@ -64,8 +67,7 @@ public class RecipeActivity extends AppCompatActivity
         if (signInType == 1) {
             // signs google user out
             signIn.signOut();
-        }
-        else{
+        } else {
             // signs in other user
             utilities.signoutOrSignUp();
         }
@@ -76,11 +78,13 @@ public class RecipeActivity extends AppCompatActivity
         Intent intentByIngredient = new Intent(this, RecipeByIngredient.class);
         startActivity(intentByIngredient);
     }
+
     /* goes to favorites */
     public void favorites(View view) {
-        Intent intent = new Intent(this, FavoritesActivity.class);
-        startActivity(intent);
+            Intent intent = new Intent(this, FavoritesActivity.class);
+            startActivity(intent);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -92,15 +96,17 @@ public class RecipeActivity extends AppCompatActivity
         // adds authentication listener for email
         EmailSignIn emailSignIn = new EmailSignIn(getApplicationContext());
         emailSignIn.mAuth.addAuthStateListener(emailSignIn.listener);
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -108,11 +114,12 @@ public class RecipeActivity extends AppCompatActivity
         // disconnects Google api client
         signIn.googleApiClient.disconnect();
     }
+
     @Override
     /* displays message according to signintype */
     public void onBackPressed() {
         user = FirebaseAuth.getInstance().getCurrentUser();
-       // gets sign in type
+        // gets sign in type
         int signInType = utilities.getSignInType();
         // user is signed in
         if (user != null) {
@@ -121,15 +128,15 @@ public class RecipeActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
         }
         // user is not signed in
-        else if(signInType == 4){
+        else if (signInType == 4) {
             Toast.makeText(this, "Click signup to create an account", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             // user doesnt belong in activity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
     }
+
     @Override
     /* goes to next activity if there are recipes */
     public void processFinish(Recipes output) {
@@ -138,18 +145,18 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     // connection failed
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {Toast.makeText
-            (getApplicationContext(), "Oops.. something went wrong", Toast.LENGTH_SHORT).show();
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText
+                (getApplicationContext(), "Oops.. something went wrong", Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         // sets logout or sign up button based on sign in type
         utilities.setLogoutOrSignOutButton((Button) findViewById(R.id.Loginandlogout));
         int activity = preferences.getInt("Activity", 0);
-        // user comes from different activity so recreate so query can be submitted
-        if(activity != 3){
-            recreate();
-        }
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
+
 }

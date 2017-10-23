@@ -13,10 +13,12 @@ import com.facebook.FacebookSdk;
 public class OnClickListener implements View.OnClickListener {
     Context context;
     SharedPreferences preferences;
+    int signInType;
     // constuctor
     public OnClickListener(Context context) {
         this.context = context;
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        signInType = preferences.getInt("signintype", 0);
     }
     @Override
     public void onClick(View v) {

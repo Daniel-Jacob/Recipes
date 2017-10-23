@@ -48,7 +48,10 @@
             />
         <activity android:name=".TitleActivity" />
         <activity android:name=".RecipeByIngredient" />
-        <activity android:name=".FavoritesActivity" />
+        <activity android:name=".FavoritesActivity"
+            android:launchMode="singleTop"
+
+            />
     </application>
 
 </manifest>

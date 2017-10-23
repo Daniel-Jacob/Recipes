@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onStart() {
         super.onStart();
         googleApiClient.connect();
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
     @Override
     protected void onResume() {
@@ -131,4 +132,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         googleApiClient.stopAutoManage(this);
         googleApiClient.disconnect();
     }
+
 }

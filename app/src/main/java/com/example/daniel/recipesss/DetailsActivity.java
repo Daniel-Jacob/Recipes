@@ -118,7 +118,13 @@ public class DetailsActivity extends AppCompatActivity {
         int signInType = preferences.getInt("signintype", 0);
         // adds recipe to database
         if (signInType != 4 && signInType != 0) {
-            addRecipesToDB();
+            if(user != null){
+                System.out.print(user.getUid());
+                addRecipesToDB();
+            }
+            else{
+                recreate();
+            }
             // adds recipe to shared preferences
         } else {
             addRecipesToSharedPreferences();
@@ -212,31 +218,31 @@ public class DetailsActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (user != null) {
-                    RecipeCompare compare = new RecipeCompare();
-                    Recipe recipeDatabase = new Recipe();
-                    for (DataSnapshot s : dataSnapshot.getChildren()) {
-                        recipeDatabase = s.getValue(Recipe.class);
-                        comparison = compare.compare(recipeDatabase, recipe);
-                    }
-                }
-                    if(comparison == 0){
-
-                            reference.push().setValue((recipe)
-                                    , new DatabaseReference.CompletionListener() {
-
-                                        @Override
-                                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                            Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                if (dataSnapshot.getValue() != null) {
+                    if (user != null) {
+                        RecipeCompare compare = new RecipeCompare();
+                        Recipe recipeDatabase = new Recipe();
+                        for (DataSnapshot s : dataSnapshot.getChildren()) {
+                            recipeDatabase = s.getValue(Recipe.class);
+                            comparison = compare.compare(recipeDatabase, recipe);
+                            if (comparison == 1) {
+                                break;
+                            }
+                        }
+                        if (comparison == 0) {
+                            reference.push().setValue(recipe);
+                            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                         }
                         else{
-                        Toast.makeText(getApplicationContext(), "Item exists", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
+                        }
                     }
+                }
+                else{
+                    reference.push().setValue(recipe);
+                    Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
+                }
             }
-
-
                                     @Override
             /* adding to database failed */
                                     public void onCancelled(DatabaseError databaseError) {
