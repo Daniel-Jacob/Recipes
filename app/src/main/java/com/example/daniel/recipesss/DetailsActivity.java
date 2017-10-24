@@ -42,6 +42,21 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/*
+ * Copyright (C) 2015 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /* grabs title, ingredients, attributes and image of a given recipe and adds these to the activity */
 public class DetailsActivity extends AppCompatActivity {
 
@@ -77,6 +92,8 @@ public class DetailsActivity extends AppCompatActivity {
         titleView = (TextView) findViewById(R.id.Title);
         ingredientView = (TextView) findViewById(R.id.ingredients);
         attributeView = (TextView) findViewById(R.id.attributes);
+        Utils utils = new Utils(this);
+        utils.loginOrLogout(this);
         // checks what activity user comes from
         final int requestCode = getIntent().getIntExtra("activity", 0);
         // returns recipe from previous activity
@@ -119,7 +136,6 @@ public class DetailsActivity extends AppCompatActivity {
         // adds recipe to database
         if (signInType != 4 && signInType != 0) {
             if(user != null){
-                System.out.print(user.getUid());
                 addRecipesToDB();
             }
             else{
@@ -206,9 +222,9 @@ public class DetailsActivity extends AppCompatActivity {
             // put recipes in shared preferences
             String jsonData = gson.toJson(recipes);
             preferences.edit().putString("recipeLocalUser", jsonData).commit();
-            Toast.makeText(getApplicationContext(), "Item added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getApplicationContext(), "Item exists", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -226,6 +242,7 @@ public class DetailsActivity extends AppCompatActivity {
                             recipeDatabase = s.getValue(Recipe.class);
                             comparison = compare.compare(recipeDatabase, recipe);
                             if (comparison == 1) {
+                                Toast.makeText(getApplicationContext(), recipeDatabase.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
                                 break;
                             }
                         }
@@ -233,23 +250,21 @@ public class DetailsActivity extends AppCompatActivity {
                             reference.push().setValue(recipe);
                             Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                         }
-                        else{
-                            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
-                        }
                     }
                 }
+
                 else{
                     reference.push().setValue(recipe);
                     Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                 }
             }
-                                    @Override
+            @Override
             /* adding to database failed */
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Log.d("Tag", "An error of type" + databaseError + "occured");
-                                    }
-                                });
-                }
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("Tag", "An error of type" + databaseError + "occured");
+            }
+        });
+    }
     /**
      * adds recipe for local user to shared preferences
      */

@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -64,6 +65,8 @@ public class FavoritesHelper {
     /* fetches favorites from database */
     public void fetchFavorites(Recipes recipesFetch) {
         this.recipes = recipesFetch;
+        setProgressBar((Activity) context);
+
 
         if (user != null) {
             // fetches favorites from firebase
@@ -74,8 +77,7 @@ public class FavoritesHelper {
                         // puts recipes in recipes object
                         recipe = snapshot.getValue(Recipe.class);
                         recipes.getRecipes().add(recipe);
-                    }
-                    // sets recipe adapter
+                    }                   // sets recipe adapter
                     setAdapter((FavoritesActivity) context, recipes);
                 }
 
@@ -93,9 +95,7 @@ public class FavoritesHelper {
     public Recipes recipesUser(int signInType) {
         // authenticated user
         if (signInType != 4 && signInType != 0) {
-            if(user != null) {
-                fetchFavorites(recipes);
-            }
+            fetchFavorites(recipes);
             // local user
         } else if (signInType == 4) {
             Gson gson = new Gson();
@@ -104,6 +104,9 @@ public class FavoritesHelper {
             Type type = new TypeToken<Recipes>() {
             }.getType();
             recipes = gson.fromJson(json, type);
+            if(recipes == null){
+                recipes = new Recipes();
+            }
             // sets adapter on recipes
             setAdapter((FavoritesActivity) context, recipes);
             // error handling
@@ -154,7 +157,6 @@ public class FavoritesHelper {
 
     /* sets recipe adapter on listview and sets up progressbar */
     public void setAdapter(FavoritesActivity activity, final Recipes recipesForAdapter) {
-        recipes = new Recipes();
         this.recipes = recipesForAdapter;
         final Activity myActivity = activity;
         new Thread(new Runnable() {
@@ -171,16 +173,18 @@ public class FavoritesHelper {
                         adapter.notifyDataSetChanged();
                         recipesIsEmpty(recipesForAdapter, progressBar);
                         progressBar.setVisibility(View.INVISIBLE);
+                        loginOrLogout((Activity) context);
+
                     }
                 });
             }
         }).start();
     }
 
-    public void recipesIsEmpty(Recipes recipes, ProgressBar progressBar) {
-        if (recipes.getRecipes() == null || recipes.getRecipes().isEmpty()) {
+    public void recipesIsEmpty(Recipes recipes, ProgressBar progressBar){
+        if(recipes.getRecipes().isEmpty()){
             listView.setEmptyView(myActivity.findViewById(R.id.empty_text_view));
-            TextView textView = (TextView) myActivity.findViewById(R.id.Favorites);
+            TextView textView = (TextView)myActivity.findViewById(R.id.Favorites);
             textView.setVisibility(View.INVISIBLE);
 
         }
@@ -214,8 +218,7 @@ public class FavoritesHelper {
                     Recipe recipe = s.getValue(Recipe.class);
                     int compareRecipes = compare.compare(recipe, recipeRemoved);
                     if (compareRecipes == 1) {
-                        Toast.makeText(context, recipesLongClick.getRecipes().get(position).
-                                getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, recipe.getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
                         recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
                         s.getRef().removeValue();
 
@@ -247,13 +250,11 @@ public class FavoritesHelper {
         }
     }
 
-
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
         for (int i = 0; i < recipesLongClick.getRecipes().size(); i++) {
 
             if (recipesLongClick.getRecipes().get(i).equals(recipesLongClick.getRecipes().get(position))) {
-                Toast.makeText(context, recipesLongClick.getRecipes().
-                        get(position) + " " + "removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, recipesLongClick.getRecipes().get(i).getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
                 recipesLongClick.getRecipes().remove(i);
             }
             Gson gson = new Gson();
@@ -264,4 +265,47 @@ public class FavoritesHelper {
         return false;
     }
 
+    public void loginOrLogout(Activity activity) {
+        final Activity myActivity = activity;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final int signInType = preferences.getInt("signintype", 0);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final int activity = preferences.getInt("Activity", 0);
+                myActivity.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // inflates layout
+                        Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
+                        if(signInType != 4) {
+                            button.setText("Log out");
+                        }
+                        else {
+                            button.setText("Sign up");
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
+
+    public void setProgressBar(Activity activity) {
+        final Activity myActivity = activity;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                myActivity.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // inflates layout
+                        myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }).start();
+    }
 }

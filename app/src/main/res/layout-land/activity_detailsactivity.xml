@@ -34,18 +34,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_marginBottom="207dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/favorites"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp" />
 
     <TextView
         android:id="@+id/attributes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="123dp"
-        android:layout_marginTop="53dp"
         android:text="TextView"
-        android:layout_alignTop="@+id/ingredients"
+        android:layout_marginBottom="48dp"
+        android:layout_alignBottom="@+id/favorites"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -54,22 +54,21 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="20sp"
-        android:layout_marginBottom="21dp"
         android:layout_above="@+id/ingredients"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="14dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/attributes"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp"
         android:clickable="true"
         app:fabSize="mini"
         app:srcCompat="@android:drawable/ic_input_add"
         android:onClick="goToFavorites"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="19dp" />
 
         <Button
             android:id="@+id/Loginandlogout"

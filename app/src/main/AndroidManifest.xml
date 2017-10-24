@@ -37,7 +37,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistrationActivity" />
-        <activity android:name=".RecipeActivity" />
+        <activity android:name=".RecipeActivity"
+            />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -47,7 +48,9 @@
         <activity android:name=".DetailsActivity"
             />
         <activity android:name=".TitleActivity" />
-        <activity android:name=".RecipeByIngredient" />
+        <activity android:name=".RecipeByIngredient"
+
+            />
         <activity android:name=".FavoritesActivity"
             android:launchMode="singleTop"
 

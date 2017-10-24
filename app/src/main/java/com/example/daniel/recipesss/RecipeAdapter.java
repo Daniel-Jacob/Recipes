@@ -13,10 +13,16 @@ import android.widget.TextView;
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
         private Recipes recipes = new Recipes();
         Recipe recipe;
+        int comparator = 0;
     // constructor
     public RecipeAdapter(Context context, int textViewResourceId, Recipes recipes) {
         super(context, textViewResourceId, recipes.getRecipes());
         this.recipes = recipes;
+        if(recipes.getRecipes().isEmpty() || recipes.getRecipes() == null){
+           recipes = new Recipes();
+
+        }
+
     }
 
     @Override
@@ -31,10 +37,11 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         // get recipe
         recipe = recipes.getRecipes().get(position);
         if (recipe != null) {
-            // set title of recipe on row of listview
-            TextView textView = (TextView) v.findViewById(R.id.text);
-            textView.setText(recipe.getTitle());
-        }
+
+                    // set title of recipe on row of listview
+                    TextView textView = (TextView) v.findViewById(R.id.text);
+                    textView.setText(recipe.getTitle());
+                }
         return v;
     }
 }

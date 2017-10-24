@@ -34,7 +34,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 /* Sets up the favorites of a given user */
-/* Sets up the favorites of a given user */
 public class FavoritesActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     // global variables
     SharedPreferences preferences;
@@ -48,7 +47,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     ProgressBar progressBar;
     Recipes recipes;
     TextView textView;
-
+    Utils utils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,36 +56,31 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         auth = FirebaseAuth.getInstance();
         // getc current user
         user = auth.getCurrentUser();
-        if (user != null) {
-            database = FirebaseDatabase.getInstance();
-            reference = database.getReference();
-            progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-            // shared preferences instance
-            preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            int signInType = preferences.getInt("signintype", 0);
-            // tracks activity
-            preferences.edit().putInt("Activity", 8);
-            recipes = new Recipes();
-            // creates favoriteshelper
-            FavoritesHelper helper = new FavoritesHelper(this);
-            // gets recipes of user
-            recipes = helper.recipesUser(signInType);
-            // listens for click on favorites item
-            helper.onItemClick(recipes);
-            // listens for a long click on favorites item
-            helper.listensForLongClickUIThread(this, recipes);
-            recipesIsEmpty(recipes);
-        }
-        else{
+
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
+        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+        // shared preferences instance
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int signInType = preferences.getInt("signintype", 0);
+        // tracks activity
+        preferences.edit().putInt("Activity", 8);
+        recipes = new Recipes();
+        if(user == null && signInType != 4){
+            Toast.makeText(this, "loading...", Toast.LENGTH_SHORT).show();
             recreate();
+            progressBar =(ProgressBar)findViewById(R.id.indeterminateBar);
+            progressBar.setVisibility(View.VISIBLE);
         }
-    }
-    public void recipesIsEmpty(Recipes recipes){
-        if(recipes.getRecipes().isEmpty()){
-            listView.setEmptyView(findViewById(R.id.empty_text_view));
-            textView = (TextView)findViewById(R.id.Favorites);
-            textView.setVisibility(View.INVISIBLE);
-        }
+        // creates favoriteshelper
+        FavoritesHelper helper = new FavoritesHelper(this);
+        // gets recipes of user
+        recipes = helper.recipesUser(signInType);
+
+        // listens for click on favorites item
+        helper.onItemClick(recipes);
+        // listens for a long click on favorites item
+        helper.listensForLongClickUIThread(this, recipes);
     }
     @Override
     // connection has failed
@@ -101,7 +95,8 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     protected void onResume() {
         super.onResume();
-        Utils utils = new Utils(this);
+        utils = new Utils(this);
         signInType = utils.getSignInType();
+
     }
 }

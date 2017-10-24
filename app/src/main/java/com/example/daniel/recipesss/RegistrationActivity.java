@@ -55,6 +55,10 @@ public class RegistrationActivity extends AppCompatActivity {
         // email and password fields
         email = (EditText) findViewById(R.id.email);
         passwrd = (EditText) findViewById(R.id.password);
+        String emailAddress = preferences.getString("email", "");
+        String password = preferences.getString("password", "");
+        email.setText(emailAddress);
+        passwrd.setText(password);
     }
     /* registers user */
     public void submit(View view) {
@@ -87,8 +91,12 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        String emailAddress = email.getText().toString();
+        String password = passwrd.getText().toString();
         // track last activity
         preferences.edit().putInt("Activity", 2).commit();
+        preferences.edit().putString("email",emailAddress).commit();
+        preferences.edit().putString("password", password).commit();
     }
 
     @Override

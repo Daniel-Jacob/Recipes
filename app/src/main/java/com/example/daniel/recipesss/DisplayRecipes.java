@@ -53,12 +53,14 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         // tracks activity
         preferences.edit().putInt("Activity", 5).commit();
         preferences.edit().putString("DisplayRecipes", "").commit();
+        preferences.edit().putString("query", "").commit();
         elements = new ArrayList<>();
         // initializes gridview and listview
         gv = (GridView) findViewById(R.id.gridview);
         listView = (ListView) findViewById(R.id.listt);
         // sets adapter on image data
         setImageAdapter(recipes);
+
         // makes gridview clickable
         gv.setClickable(true);
         // listens for clicks on images
@@ -73,7 +75,10 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
                 startActivity(intent);
             }
         });
+        Utils utils = new Utils(this);
+        utils.loginOrLogout(this);
     }
+
     /* sets image adapter */
     public void setImageAdapter(Recipes recipes){
         for (int i = 0; i < recipes.getRecipes().size(); i++) {
@@ -106,6 +111,14 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             recipes = gson.fromJson(json, type);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        preferences.edit().putString("query", "").commit();
+        preferences.edit().putInt("Activity", 5).commit();
+    }
+
     /* send recipes to titleActivity */
     public void listTitles(View view) {
         Intent intent = new Intent(this, TitleActivity.class);

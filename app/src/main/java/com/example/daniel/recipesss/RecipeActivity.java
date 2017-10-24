@@ -42,7 +42,6 @@ public class RecipeActivity extends AppCompatActivity
     ProgressBar progressBar;
     Utils utilities;
     GoogleSignIn signIn;
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +51,8 @@ public class RecipeActivity extends AppCompatActivity
         preferences.edit().putInt("Activity", 3).commit();
         // initialize searchview
         searchView = (SearchView) findViewById(R.id.searchview);
+        String query = preferences.getString("query", "");
+        searchView.setQuery(query, true);
         utilities = new Utils(this);
         utilities.getSignInType();
         // initializes litener
@@ -59,7 +60,6 @@ public class RecipeActivity extends AppCompatActivity
         // listens for an entered query
         searchView.setOnQueryTextListener(onQueryTextListener);
     }
-
     /* signs user out */
     public void loginOrLogout(View view) {
         int signInType = utilities.getSignInType();
@@ -67,7 +67,8 @@ public class RecipeActivity extends AppCompatActivity
         if (signInType == 1) {
             // signs google user out
             signIn.signOut();
-        } else {
+        }
+        else{
             // signs in other user
             utilities.signoutOrSignUp();
         }
@@ -78,13 +79,11 @@ public class RecipeActivity extends AppCompatActivity
         Intent intentByIngredient = new Intent(this, RecipeByIngredient.class);
         startActivity(intentByIngredient);
     }
-
     /* goes to favorites */
     public void favorites(View view) {
-            Intent intent = new Intent(this, FavoritesActivity.class);
-            startActivity(intent);
+        Intent intent = new Intent(this, FavoritesActivity.class);
+        startActivity(intent);
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -96,17 +95,17 @@ public class RecipeActivity extends AppCompatActivity
         // adds authentication listener for email
         EmailSignIn emailSignIn = new EmailSignIn(getApplicationContext());
         emailSignIn.mAuth.addAuthStateListener(emailSignIn.listener);
-        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause(){
         super.onPause();
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
+        String query = searchView.getQuery().toString();
+        preferences.edit().putString("query", query).commit();
     }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -114,29 +113,24 @@ public class RecipeActivity extends AppCompatActivity
         // disconnects Google api client
         signIn.googleApiClient.disconnect();
     }
-
     @Override
     /* displays message according to signintype */
     public void onBackPressed() {
         user = FirebaseAuth.getInstance().getCurrentUser();
-        // gets sign in type
+       // gets sign in type
         int signInType = utilities.getSignInType();
         // user is signed in
-        if (user != null) {
+        if (user != null || signInType != 4) {
             Toast.makeText(getApplicationContext(),
                     "You are already signed in. Logout to go to the previous screen",
                     Toast.LENGTH_LONG).show();
         }
         // user is not signed in
-        else if (signInType == 4) {
+        else if(signInType == 4){
             Toast.makeText(this, "Click signup to create an account", Toast.LENGTH_SHORT).show();
-        } else {
-            // user doesnt belong in activity
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
         }
-    }
 
+    }
     @Override
     /* goes to next activity if there are recipes */
     public void processFinish(Recipes output) {
@@ -145,9 +139,8 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     // connection failed
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText
-                (getApplicationContext(), "Oops.. something went wrong", Toast.LENGTH_SHORT).show();
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {Toast.makeText
+            (getApplicationContext(), "Oops.. something went wrong", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -156,7 +149,11 @@ public class RecipeActivity extends AppCompatActivity
         // sets logout or sign up button based on sign in type
         utilities.setLogoutOrSignOutButton((Button) findViewById(R.id.Loginandlogout));
         int activity = preferences.getInt("Activity", 0);
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        // user comes from different activity so recreate so query can be submitted
+        if(activity != 3){
+            String query = preferences.getString("query", "");
+            searchView.setQuery(query, true);
+            recreate();
+        }
     }
-
 }

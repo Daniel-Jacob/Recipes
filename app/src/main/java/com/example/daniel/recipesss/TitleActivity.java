@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 /* Populates listview with titles */
 public class TitleActivity extends AppCompatActivity {
     // global variables
@@ -36,11 +37,13 @@ public class TitleActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.titles);
         // grabs recipe data from different activity
         recipes = (Recipes) getIntent().getSerializableExtra("titles");
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // tracks activity
         preferences.edit().putInt("Activity", 6).commit();
         // sets titles to listview
         setAdapter(recipes);
+
         // make listview clickable
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,9 +57,20 @@ public class TitleActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Utils utils = new Utils(this);
+        utils.loginOrLogout(this);
     }
     /* adapter to add titles to listview */
     public void setAdapter(Recipes recipes) {
+        RecipeCompare recipeCompare = new RecipeCompare();
+        for(int i = 0; i < recipes.getRecipes().size(); i++){
+            for(int j = 0; j < i -1; j++){
+                int compare = recipeCompare.compare(recipes.getRecipes().get(j), recipes.getRecipes().get(i));
+                if(compare == 1){
+                    recipes.getRecipes().remove(j);
+                }
+            }
+        }
         // add recipe titles to arraylist
         ListView listView = (ListView) findViewById(R.id.titles);
         RecipeAdapter adapter = new RecipeAdapter(this, R.layout.simple_list_itemmm, recipes);

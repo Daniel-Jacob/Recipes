@@ -21,6 +21,7 @@ import java.util.List;
 
 /* modelclass for recipes */
 public class Recipes extends Recipe implements Serializable {
+    ArrayList<String> titles;
 
     List<Recipe> Recipes = new ArrayList<Recipe>();
     // getters and setters
@@ -28,7 +29,16 @@ public class Recipes extends Recipe implements Serializable {
         this.Recipes = recipes;
     }
 
+
     public List<Recipe> getRecipes() {
         return Recipes;
+    }
+
+    public void setTitles(ArrayList<String> titles) {
+        this.titles = titles;
+    }
+
+    public ArrayList<String> getTitles() {
+        return titles;
     }
 }

@@ -32,6 +32,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 
 /* Utilities class that includes searches onclickeventlisteners and signout options that occur
  more than once */
@@ -75,26 +77,39 @@ public class Utils extends Activity implements  View.OnClickListener {
         if (signInType == 2) {
             LoginManager.getInstance().logOut();
             FirebaseAuth.getInstance().signOut();
-            preferences.edit().putInt("Activity", 99).commit();
+            preferences.edit().putInt("Activity", 1).commit();
             Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);
         } else if (signInType == 3) {
             FirebaseAuth user = FirebaseAuth.getInstance();
             user.signOut();
-            preferences.edit().putInt("Activity", 99).commit();
+            preferences.edit().putInt("Activity", 1).commit();
             Intent intent = new Intent(context, MainActivity.class);
             context.startActivity(intent);
         } else if (signInType == 4) {
+            preferences.edit().putInt("Activity", 1).commit();
             Intent intent = new Intent(context, MainActivity.class);
-            preferences.edit().putInt("Activity", 99).commit();
             context.startActivity(intent);
-
         }
     }
     /* sends recipes to gridview */
     public void returnRecipesToGridview(Recipes output) {
+        RecipeCompare compare = new RecipeCompare();
+        int comparee;
+        ArrayList<String> values = new ArrayList<>();
+
         if (output.getRecipes().size() > 0) {
-            ToGridview(output);
+            for (int i = 0; i < output.getRecipes().size(); i++) {
+                values.add(output.getRecipes().get(i).getTitle());
+
+                for (int j = i + 1; j < output.getRecipes().size(); j++) {
+                    if (output.getRecipes().get(i).getTitle().equals(output.getRecipes().get(j).getTitle()))
+                        output.getRecipes().remove(output.getRecipes().get(j));
+                }
+            }
+
+                    ToGridview(output);
+
         } else {
             // no recipes found so try again
             Toast.makeText(context, "No recipes found", Toast.LENGTH_LONG).show();
@@ -171,17 +186,34 @@ public class Utils extends Activity implements  View.OnClickListener {
 
                     @Override
                     public void run() {
-                        if(user != null) {
-                            // inflates layout
-                            inflateLayout();
-                            myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
-                            Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
-                            setLogoutOrSignOutButton(button);
-                        }
+                        // inflates layout
+                        inflateLayout();
+                        myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
+                        Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
+                        setLogoutOrSignOutButton(button);
                     }
                 });
             }
         }).start();
+    }
+    /* sets up logut or sign up button and progressbar */
+    public void loginOrLogout(Activity activity) {
+        final Activity myActivity = activity;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final int activity = preferences.getInt("Activity", 0);
+                myActivity.runOnUiThread(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        // inflates layout
+                        inflateLayout();
+                        Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
+                        setLogoutOrSignOutButton(button);
+                    }
+                });
+            }
+        }).start();
     }
 }

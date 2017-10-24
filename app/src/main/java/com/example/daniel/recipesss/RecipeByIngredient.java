@@ -47,6 +47,8 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         setContentView(R.layout.activity_recipe_by_ingredient);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         searchView = (SearchView) findViewById(R.id.searchview);
+        String query = preferences.getString("query", "");
+        searchView.setQuery(query, true);
         utilities = new Utils(this);
         // initializes listener
         OnQueryTextListener onQueryTextListener = new OnQueryTextListener(this);
@@ -89,6 +91,8 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         int activity = preferences.getInt("Activity", 0);
         // recreate activity if user comes from another activity
         if(activity != 4){
+            String query = preferences.getString("query", "");
+            searchView.setQuery(query, true);
             recreate();
         }
     }
@@ -122,5 +126,7 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
+        String query = searchView.getQuery().toString();
+        preferences.edit().putString("query",query).commit();
     }
 }
