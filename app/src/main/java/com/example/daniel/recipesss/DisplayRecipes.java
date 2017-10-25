@@ -140,4 +140,10 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 }

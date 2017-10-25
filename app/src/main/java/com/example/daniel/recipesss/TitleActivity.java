@@ -24,6 +24,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+
 /* Populates listview with titles */
 public class TitleActivity extends AppCompatActivity {
     // global variables
@@ -41,6 +46,7 @@ public class TitleActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // tracks activity
         preferences.edit().putInt("Activity", 6).commit();
+        addOrFetchRecipes();
         // sets titles to listview
         setAdapter(recipes);
 
@@ -81,5 +87,28 @@ public class TitleActivity extends AppCompatActivity {
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
+    }
+    public void addOrFetchRecipes() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // add recipes to sharedpreferences
+        if (recipes != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(recipes);
+            preferences.edit().putString("json", json).commit();
+        } else {
+            // gets recipes from sharedpreferences
+            preferences.getString("json", null);
+            Gson gson = new Gson();
+            String json = preferences.getString("json", "");
+            Type type = new TypeToken<Recipes>() {
+            }.getType();
+            recipes = gson.fromJson(json, type);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
     }
 }

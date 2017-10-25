@@ -64,7 +64,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int signInType = preferences.getInt("signintype", 0);
         // tracks activity
-        preferences.edit().putInt("Activity", 8);
+        preferences.edit().putInt("Activity", 8).commit();
         recipes = new Recipes();
         if(user == null && signInType != 4){
             Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
@@ -100,11 +100,20 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         super.onResume();
         utils = new Utils(this);
         signInType = utils.getSignInType();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

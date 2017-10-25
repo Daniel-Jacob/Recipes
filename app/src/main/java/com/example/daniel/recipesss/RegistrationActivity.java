@@ -106,5 +106,6 @@ public class RegistrationActivity extends AppCompatActivity {
         if(emailSignIn.listener != null){
             emailSignIn.mAuth.removeAuthStateListener(emailSignIn.listener);
         }
+
     }
 }

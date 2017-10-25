@@ -302,6 +302,12 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
@@ -311,4 +317,5 @@ public class DetailsActivity extends AppCompatActivity {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
     }
+
 }

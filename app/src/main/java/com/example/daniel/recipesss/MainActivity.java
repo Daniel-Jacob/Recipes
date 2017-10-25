@@ -48,8 +48,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Utils utils = new Utils(this);
         // creates sharedpreferences instance
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int activity = preferences.getInt("Activity", 0);
+        utils.redirectUserToCorrectActivity(activity);
         auth = FirebaseAuth.getInstance();
         // builds api client
         initializeGoogleUser = new GoogleSignIn(this);
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         findViewById(R.id.textView).setOnClickListener(listener);
         // update activity
         preferences.edit().putInt("Activity", 1).commit();
+
     }
     @Override
     /* signs user into google other sign in methods handled elsewhere in utils class  */
