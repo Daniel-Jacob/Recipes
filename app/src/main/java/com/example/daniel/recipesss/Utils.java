@@ -183,6 +183,7 @@ public class Utils extends Activity implements  View.OnClickListener {
         }
     }
 
+
     public void redirectUserToCorrectActivity(int activity){
         this.activity = activity;
         Intent intent;

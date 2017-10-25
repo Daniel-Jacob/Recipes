@@ -119,6 +119,12 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         preferences.edit().putInt("Activity", 5).commit();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+
     /* send recipes to titleActivity */
     public void listTitles(View view) {
         Intent intent = new Intent(this, TitleActivity.class);
@@ -144,6 +150,8 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
+        startActivity(intent);
 
     }
 }

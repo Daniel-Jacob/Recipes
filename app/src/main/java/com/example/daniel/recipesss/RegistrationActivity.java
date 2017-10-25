@@ -15,6 +15,7 @@
  */
 package com.example.daniel.recipesss;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -107,5 +108,12 @@ public class RegistrationActivity extends AppCompatActivity {
             emailSignIn.mAuth.removeAuthStateListener(emailSignIn.listener);
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

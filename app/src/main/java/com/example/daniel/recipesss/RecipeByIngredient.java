@@ -102,8 +102,15 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         signIn.googleApiClient.stopAutoManage(this);
         // disconnects google api client
         signIn.googleApiClient.disconnect();
-        preferences.edit().putBoolean("RecipesByIngredientRestored", true).commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
+        startActivity(intent);
+    }
+
     /* logs user out */
     public void loginOrLogout(View view) {
         int signInType = utilities.getSignInType();
@@ -129,4 +136,5 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         progressBar.setVisibility(View.INVISIBLE);
         String query = searchView.getQuery().toString();
     }
+
 }

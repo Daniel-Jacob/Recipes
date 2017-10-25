@@ -15,6 +15,7 @@
  */
 package com.example.daniel.recipesss;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -107,13 +108,15 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         super.onStop();
     }
 
-    public void logout(View view) {
-        Utils utils = new Utils(this);
-        utils.signoutOrSignUp();
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
+        startActivity(intent);
+    }
+
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
     }
 }

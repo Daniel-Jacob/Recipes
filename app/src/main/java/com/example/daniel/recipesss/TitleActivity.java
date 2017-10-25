@@ -109,6 +109,12 @@ public class TitleActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
+        startActivity(intent);
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.example.daniel.recipesss;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -304,13 +305,13 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
+        startActivity(intent);
     }
 
     public void logout(View view) {

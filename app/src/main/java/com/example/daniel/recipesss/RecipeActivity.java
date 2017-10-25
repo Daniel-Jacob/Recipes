@@ -112,6 +112,7 @@ public class RecipeActivity extends AppCompatActivity
         signIn.googleApiClient.stopAutoManage(this);
         // disconnects Google api client
         signIn.googleApiClient.disconnect();
+
     }
     @Override
     /* displays message according to signintype */
@@ -155,5 +156,6 @@ public class RecipeActivity extends AppCompatActivity
             searchView.setQuery(query, true);
             recreate();
         }
+
     }
 }
