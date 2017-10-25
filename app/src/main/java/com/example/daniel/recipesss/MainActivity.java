@@ -131,4 +131,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         googleApiClient.stopAutoManage(this);
         googleApiClient.disconnect();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+    }
 }

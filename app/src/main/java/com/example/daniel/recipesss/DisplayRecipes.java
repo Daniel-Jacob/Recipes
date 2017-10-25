@@ -135,4 +135,9 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("Connection failed: ", connectionResult.getErrorMessage());
     }
+
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
+    }
 }

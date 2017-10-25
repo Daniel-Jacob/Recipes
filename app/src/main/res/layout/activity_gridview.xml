@@ -56,7 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/listt"
             android:layout_alignParentEnd="true"
-            android:text="Button" />
+            android:text="Button"
+            android:onClick="logout"
+            />
 
     </RelativeLayout>
 

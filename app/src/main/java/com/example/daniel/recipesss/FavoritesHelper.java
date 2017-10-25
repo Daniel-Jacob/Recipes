@@ -144,7 +144,8 @@ public class FavoritesHelper {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 // removes item from database
                 if (signInType != 4) {
-                    removeRecipeFromDB(position, recipesLongClick.getRecipes().get(position));
+                    removeRecipeFromDB(recipesLongClick.getRecipes().get(position));
+                    recipesLongClick.getRecipes().remove(position);
                 }
                 // local user, so remove from shared preferences
                 else {
@@ -209,7 +210,7 @@ public class FavoritesHelper {
     }
 
 
-    public void removeRecipeFromDB(final int position, final Recipe recipeRemoved) {
+    public void removeRecipeFromDB(final Recipe recipeRemoved) {
         final RecipeCompare compare = new RecipeCompare();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -219,7 +220,6 @@ public class FavoritesHelper {
                     int compareRecipes = compare.compare(recipe, recipeRemoved);
                     if (compareRecipes == 1) {
                         Toast.makeText(context, recipe.getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
-                        recipesLongClick.getRecipes().remove(recipesLongClick.getRecipes().get(position));
                         s.getRef().removeValue();
 
                     }

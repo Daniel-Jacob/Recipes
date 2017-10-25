@@ -18,6 +18,7 @@ package com.example.daniel.recipesss;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -136,6 +137,7 @@ public class DetailsActivity extends AppCompatActivity {
         // adds recipe to database
         if (signInType != 4 && signInType != 0) {
             if(user != null){
+
                 addRecipesToDB();
             }
             else{
@@ -230,6 +232,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     /* adds recipe to database */
     public void addRecipesToDB() {
+        final FloatingActionButton button = (FloatingActionButton)findViewById(R.id.favorites);
+        button.setClickable(false);
         reference = database.getReference().child("Users").child(user.getUid()).child("Recipes");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -257,6 +261,7 @@ public class DetailsActivity extends AppCompatActivity {
                     reference.push().setValue(recipe);
                     Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                 }
+                button.setClickable(true);
             }
             @Override
             /* adding to database failed */
@@ -300,5 +305,10 @@ public class DetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
     }
 }

@@ -77,4 +77,9 @@ public class TitleActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
+    }
 }

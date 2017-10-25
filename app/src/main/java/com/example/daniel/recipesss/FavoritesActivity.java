@@ -67,7 +67,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         preferences.edit().putInt("Activity", 8);
         recipes = new Recipes();
         if(user == null && signInType != 4){
-            Toast.makeText(this, "loading...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
             recreate();
             progressBar =(ProgressBar)findViewById(R.id.indeterminateBar);
             progressBar.setVisibility(View.VISIBLE);
@@ -82,6 +82,10 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         // listens for a long click on favorites item
         helper.listensForLongClickUIThread(this, recipes);
     }
+
+
+
+
     @Override
     // connection has failed
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -90,7 +94,6 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     protected void onStart() {
         super.onStart();
-        user = FirebaseAuth.getInstance().getCurrentUser();
     }
     @Override
     protected void onResume() {
@@ -98,5 +101,10 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         utils = new Utils(this);
         signInType = utils.getSignInType();
 
+    }
+
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
     }
 }

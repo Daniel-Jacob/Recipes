@@ -93,9 +93,7 @@ public class Utils extends Activity implements  View.OnClickListener {
         }
     }
     /* sends recipes to gridview */
-    public void returnRecipesToGridview(Recipes output) {
-        RecipeCompare compare = new RecipeCompare();
-        int comparee;
+    public void returnRecipesToGridview(Recipes output){
         ArrayList<String> values = new ArrayList<>();
 
         if (output.getRecipes().size() > 0) {
@@ -106,9 +104,18 @@ public class Utils extends Activity implements  View.OnClickListener {
                     if (output.getRecipes().get(i).getTitle().equals(output.getRecipes().get(j).getTitle()))
                         output.getRecipes().remove(output.getRecipes().get(j));
                 }
-            }
 
-                    ToGridview(output);
+            }
+            if(output.getRecipes().size() % 3 != 0){
+                if(output.getRecipes().size() % 3 == 1){
+                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -1));
+                }
+                else if(output.getRecipes().size() % 3 == 2){
+                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -1));
+                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -2));
+                }
+            }
+                ToGridview(output);
 
         } else {
             // no recipes found so try again
