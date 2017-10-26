@@ -75,10 +75,11 @@ public class FavoritesHelper {
         this.myActivity = (FavoritesActivity) context;
         listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
     }
+
     /* fetches favorites from database */
     public void fetchFavorites(Recipes recipesFetch) {
         this.recipes = recipesFetch;
-        setProgressBar((Activity) context);
+        utils.setupProgressBar((Activity)context);
         if (user != null) {
             // fetches favorites from firebase
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -102,6 +103,7 @@ public class FavoritesHelper {
             });
         }
     }
+
     /* gets recipes user based on sign in type */
     public Recipes recipesUser(int signInType) {
         // authenticated user
@@ -116,7 +118,7 @@ public class FavoritesHelper {
             Type type = new TypeToken<Recipes>() {
             }.getType();
             recipes = gson.fromJson(json, type);
-            if(recipes == null){
+            if (recipes == null) {
                 recipes = new Recipes();
             }
             // sets adapter on recipes
@@ -127,6 +129,7 @@ public class FavoritesHelper {
         }
         return recipes;
     }
+
     /* listens for click on favorites item */
     public void onItemClick(final Recipes recipess) {
         this.recipes = recipess;
@@ -144,6 +147,7 @@ public class FavoritesHelper {
 
         });
     }
+
     /* listens for long click and removes the clicked item from database and recipes object */
     public void onLongClick(Activity activity, final Recipes recipesLongClick) {
         this.recipesLongClick = recipes;
@@ -156,8 +160,7 @@ public class FavoritesHelper {
                 if (signInType != 4) {
                     removeRecipeFromDB(recipesLongClick.getRecipes().get(position));
                     recipesLongClick.getRecipes().remove(position);
-                }
-                else {
+                } else {
                     // local user, so remove from shared preferences and recipes object
                     removeRecipeFromSharedPreferences(recipesLongClick, position);
                 }
@@ -165,6 +168,7 @@ public class FavoritesHelper {
             }
         });
     }
+
     /* removes recipe from database */
     public void removeRecipeFromDB(final Recipe recipeRemoved) {
         final RecipeCompare compare = new RecipeCompare();
@@ -184,6 +188,7 @@ public class FavoritesHelper {
                 // set adapter
                 setAdapter((FavoritesActivity) context, recipesLongClick);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("Database error: ", databaseError.getDetails());
@@ -192,6 +197,7 @@ public class FavoritesHelper {
             }
         });
     }
+
     /* removes a given recipe from shared preferences */
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
         for (int i = 0; i < recipesLongClick.getRecipes().size(); i++) {
@@ -210,6 +216,7 @@ public class FavoritesHelper {
         setAdapter((FavoritesActivity) context, recipesLongClick);
         return false;
     }
+
     /* grabs a recipe from the database and sends it to detailsActivity */
     public void recipeDBbToDetailsActivity(final int position) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -220,6 +227,7 @@ public class FavoritesHelper {
                 }
                 toDetailsActivity(signInType, position);
             }
+
             @Override
             /* database retriaval cancelled */
             public void onCancelled(DatabaseError databaseError) {
@@ -229,6 +237,7 @@ public class FavoritesHelper {
             }
         });
     }
+
     /* sends recipe data to detailsactivity */
     public void toDetailsActivity(int signInType, int position) {
         // authenticated user
@@ -273,14 +282,16 @@ public class FavoritesHelper {
             }
         }).start();
     }
+
     /* displays textview when recipes list is empty */
-    public void recipesIsEmpty(Recipes recipes){
-        if(recipes.getRecipes().isEmpty()){
+    public void recipesIsEmpty(Recipes recipes) {
+        if (recipes.getRecipes().isEmpty()) {
             listView.setEmptyView(myActivity.findViewById(R.id.empty_text_view));
-            TextView textView = (TextView)myActivity.findViewById(R.id.Favorites);
+            TextView textView = (TextView) myActivity.findViewById(R.id.Favorites);
             textView.setVisibility(View.INVISIBLE);
         }
     }
+
     /* displays log out or sign up button based on login status */
     public void loginOrLogout(Activity activity) {
         final Activity myActivity = activity;
@@ -297,30 +308,13 @@ public class FavoritesHelper {
                         // inflates layout
                         Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
                         // authenticated user
-                        if(signInType != 4) {
+                        if (signInType != 4) {
                             button.setText("Log out");
                         }
                         // local user
                         else {
                             button.setText("Sign up");
                         }
-                    }
-                });
-            }
-        }).start();
-    }
-    /* sets progressbar */
-    public void setProgressBar(Activity activity) {
-        final Activity myActivity = activity;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                myActivity.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // inflates layout
-                        myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
                     }
                 });
             }
