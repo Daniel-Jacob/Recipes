@@ -41,13 +41,16 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     GoogleSignIn signIn;
     Utils utilities;
     ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_by_ingredient);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         searchView = (SearchView) findViewById(R.id.searchview);
+        // gets not yet completed query
         String query = preferences.getString("query", "");
+        // sets query to searchview
         searchView.setQuery(query, true);
         utilities = new Utils(this);
         // initializes listener
@@ -57,17 +60,38 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         // track activity
         preferences.edit().putInt("Activity", 4).commit();
     }
+
     @Override
     /* if there are recipes send them to next activity */
     public void processFinish(Recipes output) {
         // recipes found
         utilities.returnRecipesToGridview(output);
     }
+
+    /* logs user out */
+    public void loginOrLogout(View view) {
+        int signInType = utilities.getSignInType();
+        // google user
+        if (signInType == 1) {
+            signIn.signOut();
+        } else {
+            // other user
+            utilities.signoutOrSignUp();
+        }
+    }
+
+    /* goes to general recipe search */
+    public void generalRecipes(View view) {
+        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
+        startActivity(intent);
+    }
+
     /* goes to favorites */
     public void favorites(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
+
     @Override
     /* connection with google api client failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -75,27 +99,39 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         Toast.makeText(getApplicationContext(), "Oops... something went wrong",
                 Toast.LENGTH_SHORT).show();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
+        // builds google api client
         signIn = new GoogleSignIn(this);
         signIn.buildApiClient();
         // connects Google api client
         signIn.googleApiClient.connect();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+        // make progressbar invisible
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         // sets logout or sign up button based on sign in type
         utilities.setLogoutOrSignOutButton((Button) findViewById(R.id.Loginandlogout));
         int activity = preferences.getInt("Activity", 0);
-        // recreate activity if user comes from another activity
-        if(activity != 4){
+        // user comes from different activity so recreate so query can be submitted
+        if (activity != 4) {
             String query = preferences.getString("query", "");
             searchView.setQuery(query, true);
             recreate();
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -107,34 +143,8 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        // send user back to general recipe search activity
         Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
         startActivity(intent);
     }
-
-    /* logs user out */
-    public void loginOrLogout(View view) {
-        int signInType = utilities.getSignInType();
-        // google user
-        if (signInType == 1) {
-            signIn.signOut();
-        }
-        else{
-            // other user
-            utilities.signoutOrSignUp();
-        }
-    }
-    /* goes to general recipe search */
-    public void generalRecipes(View view) {
-        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
-        startActivity(intent);
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-        // make progressbar invisible
-        progressBar.setVisibility(View.INVISIBLE);
-        String query = searchView.getQuery().toString();
-    }
-
 }

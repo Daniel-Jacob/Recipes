@@ -36,6 +36,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 /* Grabs recipes from asynctask and populates them in a gridview */
 public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener{
+
     // global variables
     ArrayList<Recipe> elements;
     Recipes recipes;
@@ -47,12 +48,13 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gridview);
-        // grabs recipe data from different activity
+        // grabs recipe data from previous activity
         recipes = (Recipes) getIntent().getSerializableExtra("Data");
+        // if there are recipes save them, otherwise fetch them from previous save
         addOrFetchRecipes();
         // tracks activity
         preferences.edit().putInt("Activity", 5).commit();
-        preferences.edit().putString("DisplayRecipes", "").commit();
+        // query has been completed so make key empty
         preferences.edit().putString("query", "").commit();
         elements = new ArrayList<>();
         // initializes gridview and listview
@@ -60,7 +62,6 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         listView = (ListView) findViewById(R.id.listt);
         // sets adapter on image data
         setImageAdapter(recipes);
-
         // makes gridview clickable
         gv.setClickable(true);
         // listens for clicks on images
@@ -75,25 +76,12 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
                 startActivity(intent);
             }
         });
+        // sets sign up or log out button
         Utils utils = new Utils(this);
         utils.loginOrLogout(this);
     }
-
-    /* sets image adapter */
-    public void setImageAdapter(Recipes recipes){
-        for (int i = 0; i < recipes.getRecipes().size(); i++) {
-            // grabs all the image links from the objects
-            Recipe recipe = recipes.getRecipes().get(i);
-            elements.add(recipe);
-        }
-        // sets image adapter
-        ImageAdapter adapter = new ImageAdapter(this, R.layout.grid_item_layout, elements);
-        gv.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
     /* checks if user came from a previous activity or user shut down application and needs to be
-    redirected */
+   redirected */
     public void addOrFetchRecipes() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // add recipes to sharedpreferences
@@ -111,19 +99,24 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             recipes = gson.fromJson(json, type);
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        preferences.edit().putString("query", "").commit();
-        preferences.edit().putInt("Activity", 5).commit();
+    /* sets image adapter */
+    public void setImageAdapter(Recipes recipes){
+        for (int i = 0; i < recipes.getRecipes().size(); i++) {
+            // grabs all the image links from the objects
+            Recipe recipe = recipes.getRecipes().get(i);
+            elements.add(recipe);
+        }
+        // sets image adapter
+        ImageAdapter adapter = new ImageAdapter(this, R.layout.grid_item_layout, elements);
+        gv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    /* if user is logged in log user out */
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
     }
-
 
     /* send recipes to titleActivity */
     public void listTitles(View view) {
@@ -142,9 +135,13 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         Log.d("Connection failed: ", connectionResult.getErrorMessage());
     }
 
-    public void logout(View view) {
-        Utils utils = new Utils(this);
-        utils.signoutOrSignUp();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // query has been submitted so empty query
+        preferences.edit().putString("query", "").commit();
+        // track activity
+        preferences.edit().putInt("Activity", 5).commit();
     }
 
     @Override
@@ -152,6 +149,5 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
         startActivity(intent);
-
     }
 }

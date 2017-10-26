@@ -66,7 +66,6 @@ public class DetailsActivity extends AppCompatActivity {
     Recipe recipe;
     String title;
     SharedPreferences preferences;
-    ArrayList<String> titles;
     DatabaseReference reference;
     Recipes recipes;
     ImageView im;
@@ -87,69 +86,34 @@ public class DetailsActivity extends AppCompatActivity {
         preferences.edit().putInt("Activity", 7).commit();
         // gets current user
         user = FirebaseAuth.getInstance().getCurrentUser();
-        titles = new ArrayList<>();
         // initialize views to hold recipe data
         im = (ImageView) findViewById(R.id.imageView1);
+        // sets layout parameters
         im.setLayoutParams(new RelativeLayout.LayoutParams(600, 600));
+        // initializes textviews
         titleView = (TextView) findViewById(R.id.Title);
         ingredientView = (TextView) findViewById(R.id.ingredients);
         attributeView = (TextView) findViewById(R.id.attributes);
         Utils utils = new Utils(this);
+        // sets text of button to sign up or log out based on sign in type
         utils.loginOrLogout(this);
         // checks what activity user comes from
         final int requestCode = getIntent().getIntExtra("activity", 0);
-        // returns recipe from previous activity
+        // returns recipe from that activity
         recipe = recipeReturned(requestCode);
+        // if there is a recipe then save it
         if (recipe != null) {
             Gson gson = new Gson();
             String json = gson.toJson(recipe);
             preferences.edit().putString("recipe", json).commit();
         }
-        // gets recipe that was viewed before application was closed
+        // application has been shut down so retrieve saved recipe
         if (recipe == null) {
             recipe = getRecipeFromPreviousUsage();
         }
-        // sets up view with recipe
+        // sets up view with the recipe
         setupDetails(recipe);
     }
-
-    /* loads image into imageview */
-    public void initializeImage(String url, ImageView imageView) {
-        Picasso.with(getApplicationContext()).load(url).into(imageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                Log.d("Tag", "Success");
-            }
-
-            @Override
-            /* load failed */
-            public void onError() {
-                Log.d("Tag", "Error loading image");
-                Toast.makeText(getApplicationContext(), "Error loading image...", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /* adds a given recipe to favorites list */
-    public void goToFavorites(View view) {
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
-        int signInType = preferences.getInt("signintype", 0);
-        // adds recipe to database
-        if (signInType != 4 && signInType != 0) {
-            if(user != null){
-
-                addRecipesToDB();
-            }
-            else{
-                recreate();
-            }
-            // adds recipe to shared preferences
-        } else {
-            addRecipesToSharedPreferences();
-        }
-    }
-
     /* returns the recipe that has been clicked in the previous activity */
     public Recipe recipeReturned(int requestCode) {
         if (requestCode == 0) {
@@ -160,6 +124,26 @@ public class DetailsActivity extends AppCompatActivity {
             recipe = (Recipe) getIntent().getSerializableExtra("titleactivity");
         } else {
             Toast.makeText(this, "unknown activity", Toast.LENGTH_LONG).show();
+        }
+        return recipe;
+    }
+    /* if recipe exists add to shared preferences. if it doesn't exist then add it */
+    public Recipe getRecipeFromPreviousUsage() {
+        Gson gson = new Gson();
+        if (recipe != null) {
+            gson = new Gson();
+            String json = gson.toJson(recipe);
+            // put recipe in shared preferences
+            preferences.edit().putString("recipe", json).commit();
+            // puts recipe data in activity
+            setupDetails(recipe);
+        } else {
+            // gets type
+            Type type = new TypeToken<Recipe>() {
+            }.getType();
+            // gets recipe
+            String json = preferences.getString("recipe", "");
+            recipe = gson.fromJson(json, type);
         }
         return recipe;
     }
@@ -191,77 +175,86 @@ public class DetailsActivity extends AppCompatActivity {
                 .replace("]", "").replace("\"", ""));
     }
 
-    /* if recipe exists add to shared preferences. if it doesn't exist then add it */
-    public Recipe getRecipeFromPreviousUsage() {
-        Gson gson = new Gson();
-        if (recipe != null) {
-            gson = new Gson();
-            String json = gson.toJson(recipe);
-            // put recipe in shared preferences
-            preferences.edit().putString("recipe", json).commit();
-            // puts recipe data in activity
-            setupDetails(recipe);
-        } else {
-            // gets type
-            Type type = new TypeToken<Recipe>() {
-            }.getType();
-            // gets recipe
-            String json = preferences.getString("recipe", "");
-            recipe = gson.fromJson(json, type);
-        }
-        return recipe;
+    /* loads image into imageview */
+    public void initializeImage(String url, ImageView imageView) {
+        Picasso.with(getApplicationContext()).load(url).into(imageView, new Callback() {
+            @Override
+            /* image loaded */
+            public void onSuccess() {
+                Log.d("Success:", "Image succesfully loaded");
+            }
+            @Override
+            /* load failed */
+            public void onError() {
+                Log.d("Error", "Error loading image");
+                Toast.makeText(getApplicationContext(), "Error loading image...", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public void addRecipeToFavorites(){
-        Gson gson = new Gson();
-        RecipeCompare compare = new RecipeCompare();
-        int recipeCompare = 0;
-        for (Recipe r : recipes.getRecipes()) {
-            recipeCompare = compare.compare(recipe, r);
-        }
-        if (recipeCompare == 0) {
-            // adds recipe to recipes object
-            recipes.getRecipes().add(recipe);
-            // put recipes in shared preferences
-            String jsonData = gson.toJson(recipes);
-            preferences.edit().putString("recipeLocalUser", jsonData).commit();
-            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
+    /* adds a given recipe to favorites list */
+    public void goToFavorites(View view) {
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
+        int signInType = preferences.getInt("signintype", 0);
+        // adds recipe to database
+        if (signInType != 4 && signInType != 0) {
+            if(user != null){
+
+                addRecipeToDB();
+            }
+            else{
+                // user has not been loaded yet
+                recreate();
+            }
+            // local user, so add recipe to shared preferences
         } else {
-            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
+            addRecipesToSharedPreferences();
         }
     }
 
+
+    // TODO: 26-10-2017 simplify 
     /* adds recipe to database */
-    public void addRecipesToDB() {
+    public void addRecipeToDB() {
+        // initialize action button
         final FloatingActionButton button = (FloatingActionButton)findViewById(R.id.favorites);
+        // make it unclickable until recipe is added to database
         button.setClickable(false);
         reference = database.getReference().child("Users").child(user.getUid()).child("Recipes");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // recipes already exist
                 if (dataSnapshot.getValue() != null) {
+                    // user exists
                     if (user != null) {
                         RecipeCompare compare = new RecipeCompare();
                         Recipe recipeDatabase = new Recipe();
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
+                            // get recipes from database
                             recipeDatabase = s.getValue(Recipe.class);
+                            // compare recipes from database with current clicked recipe
                             comparison = compare.compare(recipeDatabase, recipe);
+                            // recipe exists so don't add
                             if (comparison == 1) {
                                 Toast.makeText(getApplicationContext(), recipeDatabase.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
                                 break;
                             }
                         }
+                        // recipe doesn't exist, so add
                         if (comparison == 0) {
                             reference.push().setValue(recipe);
                             Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-
+                // add recipe to database
                 else{
                     reference.push().setValue(recipe);
                     Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                 }
+                // recipe has been added so make button clickable again
                 button.setClickable(true);
             }
             @Override
@@ -271,9 +264,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
-    /**
-     * adds recipe for local user to shared preferences
-     */
+    /*  adds recipe for local user to shared preferences */
     public void addRecipesToSharedPreferences() {
         String json = preferences.getString("recipeLocalUser", "");
         // if recipes exist get them first
@@ -289,6 +280,30 @@ public class DetailsActivity extends AppCompatActivity {
         }
         addRecipeToFavorites();
     }
+    /* adds recipe to shared preferences */
+    public void addRecipeToFavorites(){
+        Gson gson = new Gson();
+        RecipeCompare compare = new RecipeCompare();
+        int recipeCompare = 0;
+        for (Recipe r : recipes.getRecipes()) {
+            recipeCompare = compare.compare(recipe, r);
+        }
+        // add to shared preferences if it doesn't exist yet
+        if (recipeCompare == 0) {
+            recipes.getRecipes().add(recipe);
+            String jsonData = gson.toJson(recipes);
+            preferences.edit().putString("recipeLocalUser", jsonData).commit();
+            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
+        }
+    }
+    /* signs user out if authenticated */
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
+    }
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -298,25 +313,9 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
         startActivity(intent);
     }
-
-    public void logout(View view) {
-        Utils utils = new Utils(this);
-        utils.signoutOrSignUp();
-    }
-
 }

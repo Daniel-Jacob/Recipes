@@ -24,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -36,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 /* Sets up the favorites of a given user */
 public class FavoritesActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+
     // global variables
     SharedPreferences preferences;
     FirebaseDatabase database;
@@ -47,26 +47,28 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     int signInType;
     ProgressBar progressBar;
     Recipes recipes;
-    TextView textView;
     Utils utils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
         listView = (ListView) findViewById(R.id.listviewwwww);
         auth = FirebaseAuth.getInstance();
-        // getc current user
+        // get current user
         user = auth.getCurrentUser();
-
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
+        // initialize progressbar
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-        // shared preferences instance
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // gets sign in type
         int signInType = preferences.getInt("signintype", 0);
         // tracks activity
         preferences.edit().putInt("Activity", 8).commit();
         recipes = new Recipes();
+        // authenticated user, but has not been loaded yet
         if(user == null && signInType != 4){
             Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
             recreate();
@@ -77,35 +79,23 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         FavoritesHelper helper = new FavoritesHelper(this);
         // gets recipes of user
         recipes = helper.recipesUser(signInType);
-
         // listens for click on favorites item
         helper.onItemClick(recipes);
         // listens for a long click on favorites item
-        helper.listensForLongClickUIThread(this, recipes);
+        helper.onLongClick(this, recipes);
     }
-
-
-
 
     @Override
     // connection has failed
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getApplicationContext(), "Connection failed...", Toast.LENGTH_SHORT).show();
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+
     @Override
     protected void onResume() {
         super.onResume();
         utils = new Utils(this);
         signInType = utils.getSignInType();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override

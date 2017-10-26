@@ -135,7 +135,7 @@ public class FavoritesHelper {
     }
 
     /* listens for long click and removes the clicked item from database and recipes object */
-    public void listensForLongClickUIThread(Activity activity, final Recipes recipesLongClick) {
+    public void onLongClick(Activity activity, final Recipes recipesLongClick) {
         this.recipesLongClick = recipes;
         Activity myActivity = activity;
         ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);

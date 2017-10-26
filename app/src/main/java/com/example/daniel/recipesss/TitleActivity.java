@@ -31,25 +31,26 @@ import java.lang.reflect.Type;
 
 /* Populates listview with titles */
 public class TitleActivity extends AppCompatActivity {
+
     // global variables
     ListView listView;
     Recipes recipes;
     SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_titleactivity);
         listView = (ListView) findViewById(R.id.titles);
-        // grabs recipe data from different activity
+        // grabs recipe data from display recipes activity
         recipes = (Recipes) getIntent().getSerializableExtra("titles");
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // tracks activity
         preferences.edit().putInt("Activity", 6).commit();
+        // if there are recipes save them, if not retrieve them
         addOrFetchRecipes();
         // sets titles to listview
         setAdapter(recipes);
-
         // make listview clickable
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -63,10 +64,11 @@ public class TitleActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // sets up sign up or logout button based on login status
         Utils utils = new Utils(this);
         utils.loginOrLogout(this);
     }
-    /* adapter to add titles to listview */
+    /* adapter to add titles to listview and remove duplicate titles */
     public void setAdapter(Recipes recipes) {
         RecipeCompare recipeCompare = new RecipeCompare();
         for(int i = 0; i < recipes.getRecipes().size(); i++){
@@ -77,17 +79,18 @@ public class TitleActivity extends AppCompatActivity {
                 }
             }
         }
-        // add recipe titles to arraylist
+        // sets adapter
         ListView listView = (ListView) findViewById(R.id.titles);
         RecipeAdapter adapter = new RecipeAdapter(this, R.layout.simple_list_itemmm, recipes);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
+    /* if user is logged in, log out */
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
     }
+    /* if there are recipes, save them, if not retrieve them from previous usage */
     public void addOrFetchRecipes() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // add recipes to sharedpreferences
@@ -104,11 +107,6 @@ public class TitleActivity extends AppCompatActivity {
             }.getType();
             recipes = gson.fromJson(json, type);
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override

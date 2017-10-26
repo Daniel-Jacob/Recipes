@@ -42,26 +42,35 @@ public class RecipeActivity extends AppCompatActivity
     ProgressBar progressBar;
     Utils utilities;
     GoogleSignIn signIn;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipeactivity);
+        utilities = new Utils(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         // tracks activity
         preferences.edit().putInt("Activity", 3).commit();
-        // initialize searchview
+        // initialize searchview and populate searchview with previous text
         searchView = (SearchView) findViewById(R.id.searchview);
         String query = preferences.getString("query", "");
         searchView.setQuery(query, true);
-        utilities = new Utils(this);
-        utilities.getSignInType();
-        // initializes litener
+        // initializes listener
         OnQueryTextListener onQueryTextListener = new OnQueryTextListener(this);
         // listens for an entered query
         searchView.setOnQueryTextListener(onQueryTextListener);
     }
+
+    @Override
+    /* passes recipes to next activity if there are any recipes */
+    public void processFinish(Recipes output) {
+        utilities.returnRecipesToGridview(output);
+    }
     /* signs user out */
     public void loginOrLogout(View view) {
+        // allows user to go to previous activity
+        preferences.edit().putInt("Activity", 1).commit();
+        // gets sign in type
         int signInType = utilities.getSignInType();
         // google user
         if (signInType == 1) {
@@ -69,7 +78,7 @@ public class RecipeActivity extends AppCompatActivity
             signIn.signOut();
         }
         else{
-            // signs in other user
+            // signs other user out
             utilities.signoutOrSignUp();
         }
     }
@@ -84,6 +93,13 @@ public class RecipeActivity extends AppCompatActivity
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    // connection failed
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {Toast.makeText
+            (getApplicationContext(), "Oops.. something went wrong", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -92,9 +108,6 @@ public class RecipeActivity extends AppCompatActivity
         signIn.buildApiClient();
         // connects Google api client
         signIn.googleApiClient.connect();
-        // adds authentication listener for email
-        EmailSignIn emailSignIn = new EmailSignIn(getApplicationContext());
-        emailSignIn.mAuth.addAuthStateListener(emailSignIn.listener);
     }
 
     @Override
@@ -103,47 +116,10 @@ public class RecipeActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
+        // save query
         String query = searchView.getQuery().toString();
         preferences.edit().putString("query", query).commit();
     }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        signIn.googleApiClient.stopAutoManage(this);
-        // disconnects Google api client
-        signIn.googleApiClient.disconnect();
-
-    }
-    @Override
-    /* displays message according to signintype */
-    public void onBackPressed() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-       // gets sign in type
-        int signInType = utilities.getSignInType();
-        // user is signed in
-        if (user != null || signInType != 4) {
-            Toast.makeText(getApplicationContext(),
-                    "You are already signed in. Logout to go to the previous screen",
-                    Toast.LENGTH_LONG).show();
-        }
-        // user is not signed in
-        else if(signInType == 4){
-            Toast.makeText(this, "Click signup to create an account", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-    @Override
-    /* goes to next activity if there are recipes */
-    public void processFinish(Recipes output) {
-        utilities.returnRecipesToGridview(output);
-    }
-
-    @Override
-    // connection failed
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {Toast.makeText
-            (getApplicationContext(), "Oops.. something went wrong", Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -156,6 +132,30 @@ public class RecipeActivity extends AppCompatActivity
             searchView.setQuery(query, true);
             recreate();
         }
-
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        signIn.googleApiClient.stopAutoManage(this);
+        // disconnects Google api client
+        signIn.googleApiClient.disconnect();
+    }
+    @Override
+    /* displays message according to signintype */
+    public void onBackPressed() {
+        // gets firebase user
+        user = FirebaseAuth.getInstance().getCurrentUser();
+       // gets sign in type
+        int signInType = utilities.getSignInType();
+        // authenticated user
+        if (user != null || signInType != 4) {
+            Toast.makeText(getApplicationContext(),
+                    "You are already signed in. Logout to go to the previous screen",
+                    Toast.LENGTH_LONG).show();
+        }
+        // user is not signed in
+        else if(signInType == 4){
+            Toast.makeText(this, "Click signup to create an account", Toast.LENGTH_SHORT).show();
+        }
     }
 }

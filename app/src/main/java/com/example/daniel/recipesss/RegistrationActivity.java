@@ -56,6 +56,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // email and password fields
         email = (EditText) findViewById(R.id.email);
         passwrd = (EditText) findViewById(R.id.password);
+        // retrieves previously entered text and restores it in edittext
         String emailAddress = preferences.getString("email", "");
         String password = preferences.getString("password", "");
         email.setText(emailAddress);
@@ -94,8 +95,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onPause();
         String emailAddress = email.getText().toString();
         String password = passwrd.getText().toString();
-        // track last activity
-        preferences.edit().putInt("Activity", 2).commit();
+        // stores email and password
         preferences.edit().putString("email",emailAddress).commit();
         preferences.edit().putString("password", password).commit();
     }
@@ -107,12 +107,13 @@ public class RegistrationActivity extends AppCompatActivity {
         if(emailSignIn.listener != null){
             emailSignIn.mAuth.removeAuthStateListener(emailSignIn.listener);
         }
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        // goes to mainactivity
+        preferences.edit().putInt("Activity", 1).commit();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }

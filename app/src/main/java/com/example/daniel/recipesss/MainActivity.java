@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 Starting screen that provides google and facebook sign in options */
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         OnConnectionFailedListener, View.OnClickListener {
+
     // global variables
     private static final int RESULT = 1;
     SharedPreferences preferences;
@@ -45,14 +46,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
     GoogleApiClient googleApiClient;
     FirebaseAuth auth;
     FirebaseUser user;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
         setContentView(R.layout.activity_main);
         Utils utils = new Utils(this);
         // creates sharedpreferences instance
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // tracks activity
         int activity = preferences.getInt("Activity", 0);
+        // restores application state before possible shutdown
         utils.redirectUserToCorrectActivity(activity);
         auth = FirebaseAuth.getInstance();
         // builds api client
@@ -69,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         findViewById(R.id.textView).setOnClickListener(listener);
         // update activity
         preferences.edit().putInt("Activity", 1).commit();
-
     }
     @Override
     /* signs user into google other sign in methods handled elsewhere in utils class  */
@@ -140,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        // shut down application
         finishAffinity();
     }
 }

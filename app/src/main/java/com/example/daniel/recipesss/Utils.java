@@ -250,8 +250,6 @@ public class Utils extends Activity implements  View.OnClickListener {
 
                     @Override
                     public void run() {
-                        // inflates layout
-                        inflateLayout();
                         Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
                         setLogoutOrSignOutButton(button);
                     }
