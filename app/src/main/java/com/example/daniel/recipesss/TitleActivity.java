@@ -37,6 +37,7 @@ public class TitleActivity extends AppCompatActivity {
     Recipes recipes;
     SharedPreferences preferences;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +61,32 @@ public class TitleActivity extends AppCompatActivity {
                 Recipe recipe = recipes.getRecipes().get(position);
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
                 intent.putExtra("titleactivity", recipe);
+                // define what activity the recipe needs to be fetched from
                 intent.putExtra("activity", 2);
                 startActivity(intent);
             }
         });
         // sets up sign up or logout button based on login status
         Utils utils = new Utils(this);
-        utils.loginOrLogout(this);
+        utils.loginOrsignUp(this);
+    }
+    /* if there are recipes, save them, if not retrieve them from previous usage */
+    public void addOrFetchRecipes() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        // add recipes to sharedpreferences
+        if (recipes != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(recipes);
+            preferences.edit().putString("json", json).commit();
+        } else {
+            // gets recipes from sharedpreferences
+            preferences.getString("json", null);
+            Gson gson = new Gson();
+            String json = preferences.getString("json", "");
+            Type type = new TypeToken<Recipes>() {
+            }.getType();
+            recipes = gson.fromJson(json, type);
+        }
     }
     /* adapter to add titles to listview and remove duplicate titles */
     public void setAdapter(Recipes recipes) {
@@ -89,24 +109,6 @@ public class TitleActivity extends AppCompatActivity {
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
-    }
-    /* if there are recipes, save them, if not retrieve them from previous usage */
-    public void addOrFetchRecipes() {
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // add recipes to sharedpreferences
-        if (recipes != null) {
-            Gson gson = new Gson();
-            String json = gson.toJson(recipes);
-            preferences.edit().putString("json", json).commit();
-        } else {
-            // gets recipes from sharedpreferences
-            preferences.getString("json", null);
-            Gson gson = new Gson();
-            String json = preferences.getString("json", "");
-            Type type = new TypeToken<Recipes>() {
-            }.getType();
-            recipes = gson.fromJson(json, type);
-        }
     }
 
     @Override

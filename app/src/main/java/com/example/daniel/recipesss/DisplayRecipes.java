@@ -54,7 +54,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         addOrFetchRecipes();
         // tracks activity
         preferences.edit().putInt("Activity", 5).commit();
-        // query has been completed so make key empty
+        // query has been completed so make query variable empty
         preferences.edit().putString("query", "").commit();
         elements = new ArrayList<>();
         // initializes gridview and listview
@@ -72,16 +72,17 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
                 Recipe recipe = elements.get(position);
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
                 intent.putExtra("Element", recipe);
+                // track from what activity recipe is passed
                 intent.putExtra("activity", 1);
                 startActivity(intent);
             }
         });
         // sets sign up or log out button
         Utils utils = new Utils(this);
-        utils.loginOrLogout(this);
+        utils.loginOrsignUp(this);
     }
-    /* checks if user came from a previous activity or user shut down application and needs to be
-   redirected */
+    /* checks if user came from a previous activity or user shut down application
+    and recipes need to be retrieved */
     public void addOrFetchRecipes() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // add recipes to sharedpreferences
@@ -106,7 +107,6 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             Recipe recipe = recipes.getRecipes().get(i);
             elements.add(recipe);
         }
-        // sets image adapter
         ImageAdapter adapter = new ImageAdapter(this, R.layout.grid_item_layout, elements);
         gv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -124,13 +124,13 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         intent.putExtra("titles", recipes);
         startActivity(intent);
     }
-    /* goes to favoritesActivity */
+    /* send user to favoritesActivity */
     public void goToFavoritesActivity(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
     @Override
-    /* something went wrong */
+    /* google connection failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("Connection failed: ", connectionResult.getErrorMessage());
     }
@@ -145,6 +145,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     }
 
     @Override
+    /* send user back to recipeActivity */
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);

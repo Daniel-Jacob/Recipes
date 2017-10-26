@@ -44,21 +44,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 /* grabs title, ingredients, attributes and image of a given recipe and adds these to the activity */
 public class DetailsActivity extends AppCompatActivity {
 
@@ -96,7 +81,7 @@ public class DetailsActivity extends AppCompatActivity {
         attributeView = (TextView) findViewById(R.id.attributes);
         Utils utils = new Utils(this);
         // sets text of button to sign up or log out based on sign in type
-        utils.loginOrLogout(this);
+        utils.loginOrsignUp(this);
         // checks what activity user comes from
         final int requestCode = getIntent().getIntExtra("activity", 0);
         // returns recipe from that activity
@@ -107,8 +92,8 @@ public class DetailsActivity extends AppCompatActivity {
             String json = gson.toJson(recipe);
             preferences.edit().putString("recipe", json).commit();
         }
+        else{
         // application has been shut down so retrieve saved recipe
-        if (recipe == null) {
             recipe = getRecipeFromPreviousUsage();
         }
         // sets up view with the recipe
@@ -136,7 +121,6 @@ public class DetailsActivity extends AppCompatActivity {
             // put recipe in shared preferences
             preferences.edit().putString("recipe", json).commit();
             // puts recipe data in activity
-            setupDetails(recipe);
         } else {
             // gets type
             Type type = new TypeToken<Recipe>() {
@@ -170,7 +154,7 @@ public class DetailsActivity extends AppCompatActivity {
         // formatting attribute data
         attributeView.setText(attributes.toString().replaceAll("\"", " ").
                 replace("[", " ").replace("]", " ").replace("{", " ").replace("}", " "));
-        // further formatting and setting it to the textview
+        // further formatting of ingredient data and setting it to the textview
         ingredientView.setText("Ingredients: " + Arrays.toString(ingredientsArray).replace("[", "")
                 .replace("]", "").replace("\"", ""));
     }

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 /* creates an asynctask from yummly api and returns recipes to processfinish function */
 public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
+
     // global variables
     Context context;
     Recipes recipes;
@@ -33,6 +34,7 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
     String[] imageLinkTrimmed;
     String cleanImageLink;
     JSONObject recipe = null;
+
     /* interface for asynctask */
     public interface AsyncResponse {
         void processFinish(Recipes output);
@@ -57,7 +59,9 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
     /* converts jsondata into recipes object and goes to processFinish */
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+        // returns recipe object from json data
         recipes = recipesReturned(result);
+        // send object to process finish
         delegate.processFinish(recipes);
     }
     /* formats imagelink */
@@ -76,7 +80,7 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
             try {
                 // gets a recipe
                 recipe = (JSONObject) array.get(i);
-                // gets title of recipe
+                // get title of recipe
                 String recipeName = String.valueOf(recipe.get("recipeName"));
                 // gets image link
                 imageLink = String.valueOf(recipe.get("imageUrlsBySize"));
@@ -117,7 +121,6 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
         }catch (JSONException e) {
             e.printStackTrace();
         }
-
         return recipes;
     }
 }

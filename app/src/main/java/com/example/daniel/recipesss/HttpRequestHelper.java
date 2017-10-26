@@ -26,12 +26,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * gathers data from
- * yummly api endpoint
- */
+/* gathers data from yummly api endpoint */
 public class HttpRequestHelper {
-    /** downloads recipes from yummly api */
+    /* downloads recipes from yummly api */
     protected static synchronized String downloadFromServer(String... params) {
         String result = "";
         String url;
@@ -62,9 +59,10 @@ public class HttpRequestHelper {
         // recipes by ingredient search
         else if (activity == 4) {
             String allowedIngredient = "&allowedIngredient[]=";
+            // splits entered words
             elements = query.split(" ");
+            // adds allowedingredient string before the word
             for (int i = 0; i < elements.length; i++) {
-                // adds allowedingredient and appends word of query
                 elements[i] = allowedIngredient + elements[i];
             }
             // creates string from elements array
@@ -88,7 +86,7 @@ public class HttpRequestHelper {
         }
         return urlObject;
     }
-    /* gets json data from yummly endpoint */
+    /* gets json data from yummly endpoint with url object */
     public static String getJsonDataFromApi(URL url){
         String result = "";
         HttpURLConnection connection;
@@ -98,6 +96,7 @@ public class HttpRequestHelper {
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 Integer responseCode = connection.getResponseCode();
+                // succesfull response
                 if (responseCode >= 200 && responseCode < 300) {
                     // inputreader
                     BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));

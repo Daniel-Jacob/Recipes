@@ -47,7 +47,6 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     int signInType;
     ProgressBar progressBar;
     Recipes recipes;
-    Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +60,9 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         reference = database.getReference();
         // initialize progressbar
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // gets sign in type
-        int signInType = preferences.getInt("signintype", 0);
+        signInType = preferences.getInt("signintype", 0);
         // tracks activity
         preferences.edit().putInt("Activity", 8).commit();
         recipes = new Recipes();
@@ -86,27 +84,21 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     }
 
     @Override
-    // connection has failed
+    // connection with google api client has failed
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getApplicationContext(), "Connection failed...", Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        utils = new Utils(this);
-        signInType = utils.getSignInType();
+    /* logs user out if authenticated */
+    public void logout(View view) {
+        Utils utils = new Utils(this);
+        utils.signoutOrSignUp();
     }
 
     @Override
+    /* navigate user back to recipeActivity */
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
         startActivity(intent);
-    }
-
-    public void logout(View view) {
-        Utils utils = new Utils(this);
-        utils.signoutOrSignUp();
     }
 }

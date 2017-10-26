@@ -30,11 +30,13 @@ import java.util.ArrayList;
 
 /* sets images that are grabbed from yummly API into a gridview */
 public class ImageAdapter extends BaseAdapter {
+
     // global variables
     private Context context;
     ArrayList<Recipe> data;
     String url;
     int layout;
+
     // constructor
     public ImageAdapter(Context c, int gridItemLayout, ArrayList<Recipe> data) {
         context = c;

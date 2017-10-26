@@ -35,11 +35,13 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 /** registers and signs user in. */
 public class EmailSignIn extends Activity {
+
     // global variables
     Context context;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     SharedPreferences preferences;
     FirebaseUser user;
+
     // constructor
     public EmailSignIn(Context context) {
         this.context = context;
@@ -112,6 +114,7 @@ public class EmailSignIn extends Activity {
                             user = FirebaseAuth.getInstance().getCurrentUser();
                             // save sign in type
                             preferences.edit().putInt("signintype", 3).commit();
+                            // authentication failed
                             if (!task.isSuccessful()) {
                                 Log.w("Tag", "signInWithEmail:failed", task.getException());
                                 Toast.makeText(context, "Sign in failed. You don't have an account " +
@@ -119,10 +122,11 @@ public class EmailSignIn extends Activity {
                                         Toast.LENGTH_SHORT).show();
                             }
                             else{
+                                // success: redirect to next activity
                                 Intent intent = new Intent(context, RecipeActivity.class);
                                 context.startActivity(intent);
                             }
                         }
                     });
-        }
     }
+}

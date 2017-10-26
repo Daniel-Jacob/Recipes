@@ -38,7 +38,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail().requestIdToken(googleClientId)
                     .build();
-            // buils google api client
+            // builds google api client
             googleApiClient = new GoogleApiClient.Builder(context)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();

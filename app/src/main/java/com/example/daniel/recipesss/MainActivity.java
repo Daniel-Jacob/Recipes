@@ -82,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
                 break;
         }
     }
+    /* sign in method for google */
+    public void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        this.startActivityForResult(signInIntent, RESULT);
+    }
     @Override
     /* checks result of authentication */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -102,11 +107,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
             e.printStackTrace();
         }
     }
-    /* sign in method for google */
-    public void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        this.startActivityForResult(signInIntent, RESULT);
-    }
+
     @Override
     /* google connection has failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         googleApiClient.connect();
     }
     @Override
+    /* adds authentication state listener */
     protected void onResume() {
         super.onResume();
         // gets current user

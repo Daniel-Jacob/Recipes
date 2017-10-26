@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.example.daniel.recipesss;
 
 import android.content.Intent;
@@ -35,6 +34,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 /* Activity that lets user search for recipes that match all the given ingredients */
 public class RecipeByIngredient extends AppCompatActivity implements AsyncWithInterface.
         AsyncResponse, GoogleApiClient.OnConnectionFailedListener {
+
     // global variables
     SearchView searchView;
     SharedPreferences preferences;

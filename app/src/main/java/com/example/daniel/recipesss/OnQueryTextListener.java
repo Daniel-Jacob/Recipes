@@ -19,19 +19,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
-
-
-
 /* listener for queries done in searchview */
 public class OnQueryTextListener implements SearchView.OnQueryTextListener {
+    // global variables
     SharedPreferences preferences;
     int counter;
     Context context;
     View view;
+
     // constructor
     public OnQueryTextListener(Context c) {
         context = c;
@@ -40,13 +38,6 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
     /* searches query when it is submitted */
     public boolean onQueryTextSubmit(String query) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int activity = preferences.getInt("Activity", 0);
-        // inflates layout
-        if (activity == 3) {
-            view = LayoutInflater.from(context).inflate(R.layout.activity_recipeactivity, null);
-        } else if (activity == 4) {
-            view = LayoutInflater.from(context).inflate(R.layout.activity_recipe_by_ingredient, null);
-        }
         // executes async task
         search(query);
         return false;
@@ -77,8 +68,8 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
             // creates an asyntask
             new AsyncWithInterface((AsyncWithInterface.AsyncResponse) context).execute(query);
             Utils utils = new Utils(context);
-            // progressbar
-            utils.runOnUiThread((Activity) context);
+            // sets up logout/sign up button and progressbar
+            utils.initializeButtons((Activity) context);
         }
         return false;
     }

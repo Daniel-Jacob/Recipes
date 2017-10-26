@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,10 +33,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-
 /* Utilities class that includes searches onclickeventlisteners and signout options that occur
  more than once */
-public class Utils extends Activity implements  View.OnClickListener {
+public class Utils extends Activity {
+
     // global variables
     Context context;
     View view;
@@ -49,6 +48,7 @@ public class Utils extends Activity implements  View.OnClickListener {
     FirebaseUser user;
     Recipe recipe;
     Recipes recipes;
+
     // constructor
     public Utils(Context context) {
         this.context = context;
@@ -63,13 +63,6 @@ public class Utils extends Activity implements  View.OnClickListener {
         int signInType = preferences.getInt("signintype", 0);
         return signInType;
     }
-    /* sends recipes to gridview */
-    public void ToGridview(Recipes recipes) {
-        Intent intent = new Intent(context, DisplayRecipes.class);
-        intent.putExtra("Data", recipes);
-        context.startActivity(intent);
-    }
-
     /* signs user out of facebook, email or goes to sign up screen */
     public void signoutOrSignUp() {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -92,20 +85,19 @@ public class Utils extends Activity implements  View.OnClickListener {
             context.startActivity(intent);
         }
     }
-    /* sends recipes to gridview */
+    /* error handling before recipes are sent to gridview */
     public void returnRecipesToGridview(Recipes output){
         ArrayList<String> values = new ArrayList<>();
-
         if (output.getRecipes().size() > 0) {
+            // removes elements with duplicate titles
             for (int i = 0; i < output.getRecipes().size(); i++) {
                 values.add(output.getRecipes().get(i).getTitle());
-
                 for (int j = i + 1; j < output.getRecipes().size(); j++) {
                     if (output.getRecipes().get(i).getTitle().equals(output.getRecipes().get(j).getTitle()))
                         output.getRecipes().remove(output.getRecipes().get(j));
                 }
-
             }
+            // removes last row if elements of row are less than three
             if(output.getRecipes().size() % 3 != 0){
                 if(output.getRecipes().size() % 3 == 1){
                     output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -1));
@@ -114,38 +106,19 @@ public class Utils extends Activity implements  View.OnClickListener {
                     output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -1));
                     output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -2));
                 }
-            }
-                ToGridview(output);
-
+            }   // send elements to gridview
+            ToGridview(output);
         } else {
             // no recipes found so try again
             Toast.makeText(context, "No recipes found", Toast.LENGTH_LONG).show();
             ((Activity) context).recreate();
         }
     }
-    @Override
-    /* listens button clicks of sign in options */
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.signInButton:
-                GoogleSignIn signIn = new GoogleSignIn(context);
-                signIn.signOut();
-                // attempt facebook sign in
-            case R.id.loginButton:
-                Intent intent = new Intent();
-                startActivityForResult(intent, FacebookSdk.getCallbackRequestCodeOffset());
-                break;
-            // goes to email registration and login screen
-            case R.id.emailsignin:
-                Intent intent1 = new Intent(context, RegistrationActivity.class);
-                startActivity(intent1);
-                break;
-            // local user
-            case R.id.textView:
-                preferences.edit().putInt("signintype", 4).apply();
-                Intent localUser = new Intent(context, RecipeActivity.class);
-                startActivity(localUser);
-        }
+    /* sends recipes to gridview */
+    public void ToGridview(Recipes recipes) {
+        Intent intent = new Intent(context, DisplayRecipes.class);
+        intent.putExtra("Data", recipes);
+        context.startActivity(intent);
     }
     /* checks if user is logged in or signed out and displays message accordingly. */
     public void setLogoutOrSignOutButton(Button button) {
@@ -182,8 +155,7 @@ public class Utils extends Activity implements  View.OnClickListener {
                 break;
         }
     }
-
-
+    /* user shut down app before so redirect user to where app was closed */
     public void redirectUserToCorrectActivity(int activity){
         this.activity = activity;
         Intent intent;
@@ -218,8 +190,8 @@ public class Utils extends Activity implements  View.OnClickListener {
                 break;
         }
     }
-    /* sets up logut or sign up button and progressbar */
-    public void runOnUiThread(Activity activity) {
+    /* sets up logout or sign up button and progressbar */
+    public void initializeButtons(Activity activity) {
         final Activity myActivity = activity;
         new Thread(new Runnable() {
             @Override
@@ -240,7 +212,7 @@ public class Utils extends Activity implements  View.OnClickListener {
         }).start();
     }
     /* sets up logut or sign up button and progressbar */
-    public void loginOrLogout(Activity activity) {
+    public void loginOrsignUp(Activity activity) {
         final Activity myActivity = activity;
         new Thread(new Runnable() {
             @Override

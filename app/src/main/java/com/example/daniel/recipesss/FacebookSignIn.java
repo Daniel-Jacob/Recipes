@@ -52,9 +52,9 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-/**
- * Signs in facebook user */
+/* Signs in facebook user */
 public class FacebookSignIn extends AppCompatActivity {
+
     // global variables
     CallbackManager manager;
     LoginButton facebookLogin;
@@ -66,6 +66,7 @@ public class FacebookSignIn extends AppCompatActivity {
     FirebaseUser user;
     DatabaseReference reference;
     FirebaseDatabase database;
+
     // constructor
     public FacebookSignIn(Context c) {
         this.context = c;
@@ -78,9 +79,7 @@ public class FacebookSignIn extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
     }
-
-
-    /* logs user in through facebook */
+    /* logs user in */
     public void createCallBack() {
         // creates callback manager
         manager = CallbackManager.Factory.create();
@@ -122,6 +121,30 @@ public class FacebookSignIn extends AppCompatActivity {
             }
         });
     }
+    /* submits a graph request for facebook user */
+    public GraphRequest submitGraphRequest(final LoginResult result){
+        GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    // autenticates user with firebase
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        handleFacebookAccessToken(result.getAccessToken());
+                    }
+                });
+        return request;
+    }
+    /* executes asynctask */
+    public void executeFacebookAsyncTask(GraphRequest request){
+        Bundle parameters = new Bundle();
+        // put user info in bundle
+        parameters.putString("fields", "id,name,link");
+        // use user info to execute async task
+        request.setParameters(parameters);
+        handleFacebookAccessToken(request.getAccessToken());
+        request.executeAsync();
+        Intent intent = new Intent(context, RecipeActivity.class);
+        context.startActivity(intent);
+    }
     /* authenticates user with firebase */
     public void handleFacebookAccessToken(AccessToken token) {
         final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -141,29 +164,4 @@ public class FacebookSignIn extends AppCompatActivity {
                     }
                 });
     }
-    /** executes asynctask */
-    public void executeFacebookAsyncTask(GraphRequest request){
-        Bundle parameters = new Bundle();
-        // put user info in bundle
-        parameters.putString("fields", "id,name,link");
-        // use user info to execute async task
-        request.setParameters(parameters);
-        handleFacebookAccessToken(request.getAccessToken());
-        request.executeAsync();
-        Intent intent = new Intent(context, RecipeActivity.class);
-        context.startActivity(intent);
-    }
-    /* submits a graph request for facebook user */
-    public GraphRequest submitGraphRequest(final LoginResult result){
-        GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    // autenticates user with firebase
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        handleFacebookAccessToken(result.getAccessToken());
-                    }
-                });
-        return request;
-    }
 }
-

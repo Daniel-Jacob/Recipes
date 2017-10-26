@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2015 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.daniel.recipesss;
 
 import android.content.Context;
@@ -6,23 +21,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-
-
 /* adapter that puts an arraylist of taskobjects on listview */
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
-        private Recipes recipes = new Recipes();
-        Recipe recipe;
-        int comparator = 0;
+
+    // objects
+    private Recipes recipes = new Recipes();
+    Recipe recipe;
+
     // constructor
     public RecipeAdapter(Context context, int textViewResourceId, Recipes recipes) {
         super(context, textViewResourceId, recipes.getRecipes());
         this.recipes = recipes;
         if(recipes.getRecipes().isEmpty() || recipes.getRecipes() == null){
            recipes = new Recipes();
-
         }
-
     }
 
     @Override
@@ -36,12 +48,12 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         }
         // get recipe
         recipe = recipes.getRecipes().get(position);
+        // set recipe title
         if (recipe != null) {
-
-                    // set title of recipe on row of listview
-                    TextView textView = (TextView) v.findViewById(R.id.text);
-                    textView.setText(recipe.getTitle());
-                }
+            // set title of recipe on row of listview
+            TextView textView = (TextView) v.findViewById(R.id.text);
+            textView.setText(recipe.getTitle());
+        }
         return v;
     }
 }

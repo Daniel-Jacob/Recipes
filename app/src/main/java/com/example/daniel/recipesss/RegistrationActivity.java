@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 /* activity to register or login user through email */
 public class RegistrationActivity extends AppCompatActivity {
+
     // global variables
     FirebaseDatabase database;
     DatabaseReference reference;
@@ -39,6 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
     FirebaseUser user;
     String emailAddress;
     String password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +58,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // email and password fields
         email = (EditText) findViewById(R.id.email);
         passwrd = (EditText) findViewById(R.id.password);
-        // retrieves previously entered text and restores it in edittext
+        // retrieves previously entered email and password
         String emailAddress = preferences.getString("email", "");
         String password = preferences.getString("password", "");
         email.setText(emailAddress);
@@ -69,7 +71,7 @@ public class RegistrationActivity extends AppCompatActivity {
         password = passwrd.getText().toString();
         // tries to register user
         emailSignIn.createAccount(emailAddress, password);
-        // user exists to add to database
+        // user exists so add to database
         user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null) {
             String userId = user.getUid();
@@ -79,40 +81,41 @@ public class RegistrationActivity extends AppCompatActivity {
     }
     /* signs user in with email and password */
     public void logMeIn(View view) {
-        // grabs text of email and password
         emailAddress = email.getText().toString();
         password = passwrd.getText().toString();
-        emailSignIn.signInWithEmailAndPassword(emailAddress, password);}
+        emailSignIn.signInWithEmailAndPassword(emailAddress, password);
+    }
 
     @Override
+    /* adds authentication state listener */
     protected void onStart() {
         super.onStart();
-        // add authentication listener
         emailSignIn.mAuth.addAuthStateListener(emailSignIn.listener);
     }
     @Override
+    /* saves email and password before the app is closed */
     protected void onPause() {
         super.onPause();
         String emailAddress = email.getText().toString();
         String password = passwrd.getText().toString();
-        // stores email and password
         preferences.edit().putString("email",emailAddress).commit();
         preferences.edit().putString("password", password).commit();
     }
 
     @Override
+    /* removes authentication state listener */
     protected void onStop() {
         super.onStop();
-        // stops authentication listener
         if(emailSignIn.listener != null){
             emailSignIn.mAuth.removeAuthStateListener(emailSignIn.listener);
         }
     }
 
     @Override
+    /* navigates user to starting screen */
     public void onBackPressed() {
         super.onBackPressed();
-        // goes to mainactivity
+        // tracks where user is in app
         preferences.edit().putInt("Activity", 1).commit();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);

@@ -45,12 +45,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 
-/**
- * helper class to sign
- * user into google
- */
-
+/* helper class to sign user into google */
 public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConnectionFailedListener, Serializable {
+
     // global variables
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reference = database.getReference();
@@ -61,40 +58,31 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
     FirebaseAuth auth;
     FirebaseUser user;
     String googleClientId = "818367032142-kjv7mqeb242bdvq35jg3v5cnblelke7r.apps.googleusercontent.com";
+
     // constructor
     public GoogleSignIn(Context c) {
         this.context = c;
         auth = FirebaseAuth.getInstance();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
+
     /* builds googleapiclient */
-    public  GoogleApiClient buildApiClient() {
+    public GoogleApiClient buildApiClient() {
+        if (googleApiClient == null) {
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().requestIdToken(googleClientId)
-                .build();
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail().requestIdToken(googleClientId)
+                    .build();
 
-        googleApiClient = new GoogleApiClient.Builder(context)
-                .enableAutoManage((FragmentActivity) context, (GoogleApiClient.OnConnectionFailedListener) context)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+            googleApiClient = new GoogleApiClient.Builder(context)
+                    .enableAutoManage((FragmentActivity) context, (GoogleApiClient.OnConnectionFailedListener) context)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
         return googleApiClient;
     }
-    /* signs user out */
-    public void signOut(){
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // signs user out of firebase
-                        FirebaseAuth.getInstance().signOut();
-                        // go back to sign in activity
-                        Intent intent = new Intent(context, MainActivity.class);
-                        context.startActivity(intent);
-                    }
-                });
-    }
-    /** sign user in and redirects to next activity */
+
+    /* sign user in and redirects to next activity */
     public void handleSignInResult(Context context, GoogleSignInResult result) {
         this.context = (MainActivity) context;
         Log.d("TAG", "handleSignInResult:" + result.isSuccess());
@@ -113,14 +101,9 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
             context.startActivity(intent);
         }
     }
-    @Override
-    // connection failed so display message
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(getApplicationContext(),
-                "A connection error occured...", Toast.LENGTH_SHORT).show();
-    }
+
     /* authenticates google user with firebase */
-    public void firebaseAuthWithGoogle( GoogleSignInAccount acct) {
+    public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -140,5 +123,27 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                         }
                     }
                 });
+    }
+
+    /* signs user out */
+    public void signOut() {
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // signs user out of firebase
+                        FirebaseAuth.getInstance().signOut();
+                        // go back to sign in activity
+                        Intent intent = new Intent(context, MainActivity.class);
+                        context.startActivity(intent);
+                    }
+                });
+    }
+
+    @Override
+    // connection failed so display message
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(getApplicationContext(),
+                "A connection error occured...", Toast.LENGTH_SHORT).show();
     }
 }
