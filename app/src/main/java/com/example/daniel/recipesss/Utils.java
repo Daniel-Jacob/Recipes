@@ -28,7 +28,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /* Utilities class that includes searches onclickeventlisteners and signout options that occur
@@ -117,6 +120,25 @@ public class Utils extends Activity {
         Intent intent = new Intent(context, DisplayRecipes.class);
         intent.putExtra("Data", recipes);
         context.startActivity(intent);
+    }
+    /* checks if user came from a previous activity or user shut down application
+      and recipes need to be retrieved */
+    public Recipes addOrFetchRecipes() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        // add recipes to sharedpreferences
+        if (recipes != null) {
+            Gson gson = new Gson();
+            String json = gson.toJson(recipes);
+            preferences.edit().putString("json", json).commit();
+        } else {
+            // gets recipes from sharedpreferences
+            preferences.getString("json", null);
+            Gson gson = new Gson();
+            String json = preferences.getString("json", "");
+            Type type = new TypeToken<Recipes>(){}.getType();
+            recipes = gson.fromJson(json, type);
+        }
+        return recipes;
     }
     /* user shut down app before so redirect user to where app was closed */
     public void redirectUserToCorrectActivity(int activity){

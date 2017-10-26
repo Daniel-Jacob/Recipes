@@ -37,6 +37,7 @@ public class TitleActivity extends AppCompatActivity {
     ListView listView;
     Recipes recipes;
     SharedPreferences preferences;
+    Utils utilities;
 
 
     @Override
@@ -50,7 +51,10 @@ public class TitleActivity extends AppCompatActivity {
         // tracks activity
         preferences.edit().putInt("Activity", 6).commit();
         // if there are recipes save them, if not retrieve them
-        addOrFetchRecipes();
+        utilities = new Utils(this);
+        if(recipes == null){
+            recipes = utilities.addOrFetchRecipes();
+        }
         // sets titles to listview
         setAdapter(recipes);
         // make listview clickable

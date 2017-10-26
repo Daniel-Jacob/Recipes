@@ -30,10 +30,7 @@ import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 /* Grabs recipes from asynctask and populates them in a gridview */
 public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener{
@@ -53,7 +50,8 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         // grabs recipe data from previous activity
         recipes = (Recipes) getIntent().getSerializableExtra("Data");
         // if there are recipes save them, otherwise fetch them from previous save
-        addOrFetchRecipes();
+        utilities = new Utils(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // tracks activity
         preferences.edit().putInt("Activity", 5).commit();
         // query has been completed so make query variable empty
@@ -80,27 +78,11 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             }
         });
     }
-    /* checks if user came from a previous activity or user shut down application
-    and recipes need to be retrieved */
-    public void addOrFetchRecipes() {
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // add recipes to sharedpreferences
-        if (recipes != null) {
-            Gson gson = new Gson();
-            String json = gson.toJson(recipes);
-            preferences.edit().putString("json", json).commit();
-        } else {
-            // gets recipes from sharedpreferences
-            preferences.getString("json", null);
-            Gson gson = new Gson();
-            String json = preferences.getString("json", "");
-            Type type = new TypeToken<Recipes>() {
-            }.getType();
-            recipes = gson.fromJson(json, type);
-        }
-    }
     /* sets image adapter */
     public void setImageAdapter(Recipes recipes){
+        if(recipes == null){
+            recipes = utilities.addOrFetchRecipes();
+        }
         for (int i = 0; i < recipes.getRecipes().size(); i++) {
             // grabs all the image links from the objects
             Recipe recipe = recipes.getRecipes().get(i);

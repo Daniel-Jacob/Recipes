@@ -246,6 +246,8 @@ public class FavoritesHelper {
             context.startActivity(intent);
         }
     }
+
+
     /* sets recipe adapter on listview and sets up progressbar */
     public void setAdapter(FavoritesActivity activity, final Recipes recipesForAdapter) {
         this.recipes = recipesForAdapter;
