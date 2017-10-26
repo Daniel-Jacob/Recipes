@@ -113,7 +113,7 @@ public class RecipeActivity extends AppCompatActivity
     }
 
     @Override
-    /* saves query and releases progressbar */
+    /* saves query a*/
     protected void onPause(){
         super.onPause();
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
