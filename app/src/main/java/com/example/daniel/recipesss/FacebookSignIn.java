@@ -51,7 +51,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-
 /* Signs in facebook user */
 public class FacebookSignIn extends AppCompatActivity {
 

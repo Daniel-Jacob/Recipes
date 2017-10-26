@@ -50,7 +50,6 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         recipe = recipes.getRecipes().get(position);
         // set recipe title
         if (recipe != null) {
-            // set title of recipe on row of listview
             TextView textView = (TextView) v.findViewById(R.id.text);
             textView.setText(recipe.getTitle());
         }

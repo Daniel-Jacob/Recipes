@@ -81,10 +81,11 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     /* sets image adapter */
     public void setImageAdapter(Recipes recipes){
         if(recipes == null){
+            // recipes have been saved on previous application use
             recipes = utilities.addOrFetchRecipes();
         }
         for (int i = 0; i < recipes.getRecipes().size(); i++) {
-            // grabs all the image links from the objects
+            // saves recipe to elements array
             Recipe recipe = recipes.getRecipes().get(i);
             elements.add(recipe);
         }
@@ -92,13 +93,11 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         gv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
     /* if user is logged in log user out */
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
     }
-
     /* send recipes to titleActivity */
     public void listTitles(View view) {
         Intent intent = new Intent(this, TitleActivity.class);
@@ -121,6 +120,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         super.onResume();
         utilities = new Utils(this);
         Button button = (Button)findViewById(R.id.Loginandlogout);
+        // sets button text according to sign in type
         int signInType = utilities.getSignInType();
         if(signInType == 4){
             button.setText("Sign up");

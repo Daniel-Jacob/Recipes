@@ -86,7 +86,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     }
 
     @Override
-    // connection with google api client has failed
+    /* connection with google api client has failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getApplicationContext(), "Connection failed...", Toast.LENGTH_SHORT).show();
     }
@@ -99,6 +99,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     protected void onResume() {
         super.onResume();
+        // sets button text according to sign in type
         Button button = (Button)findViewById(R.id.Loginandlogout);
         utilities = new Utils(this);
         int signInType = utilities.getSignInType();

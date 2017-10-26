@@ -38,7 +38,7 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     // global variables
     SearchView searchView;
     SharedPreferences preferences;
-    GoogleSignIn signIn;
+    GoogleSignIn googleUser;
     Utils utilities;
     ProgressBar progressBar;
 
@@ -73,7 +73,7 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         int signInType = utilities.getSignInType();
         // google user
         if (signInType == 1) {
-            signIn.signOut();
+            googleUser.signOut();
         } else {
             // other user
             utilities.signoutOrSignUp();
@@ -104,10 +104,10 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     protected void onStart() {
         super.onStart();
         // builds google api client
-        signIn = new GoogleSignIn(this);
-        signIn.buildApiClient();
+        googleUser = new GoogleSignIn(this);
+        googleUser.buildApiClient();
         // connects Google api client
-        signIn.googleApiClient.connect();
+        googleUser.googleApiClient.connect();
     }
 
     @Override
@@ -123,8 +123,8 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         super.onResume();
         // sets logout or sign up button based on sign in type
         int signInType = utilities.getSignInType();
-        Button button = (Button)findViewById(R.id.Loginandlogout);
-        if(signInType == 4){
+        Button button = (Button) findViewById(R.id.Loginandlogout);
+        if (signInType == 4) {
             button.setText("Sign up");
         }
         int activity = preferences.getInt("Activity", 0);
@@ -139,9 +139,9 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     @Override
     protected void onStop() {
         super.onStop();
-        signIn.googleApiClient.stopAutoManage(this);
+        googleUser.googleApiClient.stopAutoManage(this);
         // disconnects google api client
-        signIn.googleApiClient.disconnect();
+        googleUser.googleApiClient.disconnect();
     }
 
     @Override

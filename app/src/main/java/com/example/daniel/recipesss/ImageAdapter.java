@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
 /* sets images that are grabbed from yummly API into a gridview */
 public class ImageAdapter extends BaseAdapter {
 

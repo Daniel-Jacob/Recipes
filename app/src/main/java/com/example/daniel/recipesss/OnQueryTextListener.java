@@ -24,6 +24,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 /* listener for queries done in searchview */
 public class OnQueryTextListener implements SearchView.OnQueryTextListener {
+
     // global variables
     SharedPreferences preferences;
     int counter;
@@ -68,7 +69,7 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
             // creates an asyntask
             new AsyncWithInterface((AsyncWithInterface.AsyncResponse) context).execute(query);
             Utils utils = new Utils(context);
-            // sets up logout/sign up button and progressbar
+            // sets up progressbar
             utils.setupProgressBar((Activity) context);
         }
         return false;

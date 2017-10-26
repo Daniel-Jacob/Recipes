@@ -44,7 +44,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
-
 /* helper class to sign user into google */
 public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConnectionFailedListener, Serializable {
 
@@ -65,15 +64,12 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
         auth = FirebaseAuth.getInstance();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
-
     /* builds googleapiclient */
     public GoogleApiClient buildApiClient() {
         if (googleApiClient == null) {
-
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail().requestIdToken(googleClientId)
                     .build();
-
             googleApiClient = new GoogleApiClient.Builder(context)
                     .enableAutoManage((FragmentActivity) context, (GoogleApiClient.OnConnectionFailedListener) context)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -81,7 +77,6 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
         }
         return googleApiClient;
     }
-
     /* sign user in and redirects to next activity */
     public void handleSignInResult(Context context, GoogleSignInResult result) {
         this.context = (MainActivity) context;
@@ -101,7 +96,6 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
             context.startActivity(intent);
         }
     }
-
     /* authenticates google user with firebase */
     public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -124,7 +118,6 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                     }
                 });
     }
-
     /* signs user out */
     public void signOut() {
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(

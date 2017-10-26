@@ -25,7 +25,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 /* gathers data from yummly api endpoint */
 public class HttpRequestHelper {
     /* downloads recipes from yummly api */
@@ -91,8 +90,8 @@ public class HttpRequestHelper {
         String result = "";
         HttpURLConnection connection;
         if (url != null) {
-            // make connection to endpoint
             try {
+                // make connection to endpoint
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 Integer responseCode = connection.getResponseCode();

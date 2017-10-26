@@ -32,7 +32,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 /*
 Starting screen that provides google and facebook sign in options */
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
             if (requestCode == RESULT) {
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                 initializeGoogleUser.handleSignInResult(this, result);
-                // facebook user
+            // facebook user
             } else if (requestCode == FacebookSdk.getCallbackRequestCodeOffset()) {
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 initializeFacebookUser.manager.onActivityResult(requestCode, resultCode, data);

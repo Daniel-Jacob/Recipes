@@ -24,7 +24,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -81,12 +80,11 @@ public class FavoritesHelper {
         this.recipes = recipesFetch;
         utils.setupProgressBar((Activity)context);
         if (user != null) {
-            // fetches favorites from firebase
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
-                        // puts recipes in recipes object
+                        // puts recipe in recipes object
                         recipe = snapshot.getValue(Recipe.class);
                         recipes.getRecipes().add(recipe);
                     }
@@ -123,13 +121,12 @@ public class FavoritesHelper {
             }
             // sets adapter on recipes
             setAdapter((FavoritesActivity) context, recipes);
-            // error handling
         } else {
+            // unknown sign in type
             Toast.makeText(context, "Oops... something went wrong", Toast.LENGTH_SHORT).show();
         }
         return recipes;
     }
-
     /* listens for click on favorites item */
     public void onItemClick(final Recipes recipess) {
         this.recipes = recipess;
@@ -147,7 +144,6 @@ public class FavoritesHelper {
 
         });
     }
-
     /* listens for long click and removes the clicked item from database and recipes object */
     public void onLongClick(Activity activity, final Recipes recipesLongClick) {
         this.recipesLongClick = recipes;
@@ -168,7 +164,6 @@ public class FavoritesHelper {
             }
         });
     }
-
     /* removes recipe from database */
     public void removeRecipeFromDB(final Recipe recipeRemoved) {
         final RecipeCompare compare = new RecipeCompare();
@@ -190,6 +185,7 @@ public class FavoritesHelper {
             }
 
             @Override
+            /* database retrieval got cancelled */
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("Database error: ", databaseError.getDetails());
                 Toast.makeText(context, "oops... something went wrong", Toast.LENGTH_SHORT).
@@ -197,7 +193,6 @@ public class FavoritesHelper {
             }
         });
     }
-
     /* removes a given recipe from shared preferences */
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
         for (int i = 0; i < recipesLongClick.getRecipes().size(); i++) {
@@ -216,7 +211,6 @@ public class FavoritesHelper {
         setAdapter((FavoritesActivity) context, recipesLongClick);
         return false;
     }
-
     /* grabs a recipe from the database and sends it to detailsActivity */
     public void recipeDBbToDetailsActivity(final int position) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -229,7 +223,7 @@ public class FavoritesHelper {
             }
 
             @Override
-            /* database retriaval cancelled */
+            /* database retrieval cancelled */
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("Database error:", databaseError.getDetails());
                 Toast.makeText(context, "A database error of type" +
@@ -237,7 +231,6 @@ public class FavoritesHelper {
             }
         });
     }
-
     /* sends recipe data to detailsactivity */
     public void toDetailsActivity(int signInType, int position) {
         // authenticated user
@@ -255,8 +248,6 @@ public class FavoritesHelper {
             context.startActivity(intent);
         }
     }
-
-
     /* sets recipe adapter on listview and sets up progressbar */
     public void setAdapter(FavoritesActivity activity, final Recipes recipesForAdapter) {
         this.recipes = recipesForAdapter;
@@ -275,14 +266,11 @@ public class FavoritesHelper {
                         adapter.notifyDataSetChanged();
                         recipesIsEmpty(recipesForAdapter);
                         progressBar.setVisibility(View.INVISIBLE);
-                        loginOrLogout((Activity) context);
-
                     }
                 });
             }
         }).start();
     }
-
     /* displays textview when recipes list is empty */
     public void recipesIsEmpty(Recipes recipes) {
         if (recipes.getRecipes().isEmpty()) {
@@ -290,34 +278,5 @@ public class FavoritesHelper {
             TextView textView = (TextView) myActivity.findViewById(R.id.Favorites);
             textView.setVisibility(View.INVISIBLE);
         }
-    }
-
-    /* displays log out or sign up button based on login status */
-    public void loginOrLogout(Activity activity) {
-        final Activity myActivity = activity;
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final int signInType = preferences.getInt("signintype", 0);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final int activity = preferences.getInt("Activity", 0);
-                myActivity.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // inflates layout
-                        Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
-                        // authenticated user
-                        if (signInType != 4) {
-                            button.setText("Log out");
-                        }
-                        // local user
-                        else {
-                            button.setText("Sign up");
-                        }
-                    }
-                });
-            }
-        }).start();
     }
 }

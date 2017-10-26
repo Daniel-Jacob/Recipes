@@ -44,7 +44,6 @@ import com.squareup.picasso.Picasso;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 /* grabs title, ingredients, attributes and image of a given recipe and adds these to the activity */
 public class DetailsActivity extends AppCompatActivity {
 
@@ -82,7 +81,6 @@ public class DetailsActivity extends AppCompatActivity {
         ingredientView = (TextView) findViewById(R.id.ingredients);
         attributeView = (TextView) findViewById(R.id.attributes);
         utilities = new Utils(this);
-        // sets text of button to sign up or log out based on sign in type
         // checks what activity user comes from
         final int requestCode = getIntent().getIntExtra("activity", 0);
         // returns recipe from that activity
@@ -121,7 +119,6 @@ public class DetailsActivity extends AppCompatActivity {
             String json = gson.toJson(recipe);
             // put recipe in shared preferences
             preferences.edit().putString("recipe", json).commit();
-            // puts recipe data in activity
         } else {
             // gets type
             Type type = new TypeToken<Recipe>() {
@@ -132,7 +129,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
         return recipe;
     }
-
     /* formats recipe data and puts title, ingredients and attributes in activity */
     public void setupDetails(Recipe recipe) {
         // grabs recipe data
@@ -140,9 +136,9 @@ public class DetailsActivity extends AppCompatActivity {
         title = recipe.getTitle();
         ArrayList<String> attributes = recipe.getAttributes();
         String ingredients = String.valueOf(recipe.getIngredients());
-        // initialize image
+        // binds image to imageview
         initializeImage(url, im);
-        // set title
+        // sets title
         titleView.setText(title);
         // formatting ingredient data
         ingredients = ingredients.replace('[', ' ');
@@ -176,30 +172,26 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
-
     /* adds a given recipe to favorites list */
     public void goToFavorites(View view) {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
         int signInType = preferences.getInt("signintype", 0);
-        // adds recipe to database
+        // authenticated user
         if (signInType != 4 && signInType != 0) {
             if(user != null){
-
+                // adds recipe to database
                 addRecipeToDB();
             }
             else{
-                // user has not been loaded yet
+                // authenticated user has not been loaded yet
                 recreate();
             }
             // local user, so add recipe to shared preferences
         } else {
-            addRecipesToSharedPreferences();
+            fetchRecipesForLocalUser();
         }
     }
-
-
-    // TODO: 26-10-2017 simplify 
     /* adds recipe to database */
     public void addRecipeToDB() {
         // initialize action button
@@ -210,7 +202,7 @@ public class DetailsActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // recipes already exist
+                // recipes already exist in database
                 if (dataSnapshot.getValue() != null) {
                     // user exists
                     if (user != null) {
@@ -234,8 +226,8 @@ public class DetailsActivity extends AppCompatActivity {
                         }
                     }
                 }
-                // add recipe to database
                 else{
+                    // add recipe to database
                     reference.push().setValue(recipe);
                     Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                 }
@@ -250,13 +242,12 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
     /*  adds recipe for local user to shared preferences */
-    public void addRecipesToSharedPreferences() {
+    public void fetchRecipesForLocalUser() {
         String json = preferences.getString("recipeLocalUser", "");
         // if recipes exist get them first
         if (!json.isEmpty()) {
             Gson gson = new Gson();
-            Type type = new TypeToken<Recipes>() {
-            }.getType();
+            Type type = new TypeToken<Recipes>() {}.getType();
             recipes = gson.fromJson(json, type);
         }
         // otherwise make net instance of recipes
@@ -295,6 +286,7 @@ public class DetailsActivity extends AppCompatActivity {
         // gets sign in type
         Utils utils = new Utils(this);
         signInType = utils.getSignInType();
+        // sets button text according to sign in type
         Button button = (Button)findViewById(R.id.Loginandlogout);
         if(signInType == 4){
             button.setText("Sign up");

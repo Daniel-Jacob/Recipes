@@ -42,7 +42,7 @@ public class RecipeActivity extends AppCompatActivity
     FirebaseUser user;
     ProgressBar progressBar;
     Utils utilities;
-    GoogleSignIn signIn;
+    GoogleSignIn googleUser;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -76,7 +76,7 @@ public class RecipeActivity extends AppCompatActivity
         // google user
         if (signInType == 1) {
             // signs google user out
-            signIn.signOut();
+            googleUser.signOut();
         }
         else{
             // signs other user out
@@ -105,11 +105,11 @@ public class RecipeActivity extends AppCompatActivity
     /* connects google api client */
     protected void onStart() {
         super.onStart();
-        signIn = new GoogleSignIn(this);
+        googleUser = new GoogleSignIn(this);
         // builds Google api client
-        signIn.buildApiClient();
+        googleUser.buildApiClient();
         // connects Google api client
-        signIn.googleApiClient.connect();
+        googleUser.googleApiClient.connect();
     }
 
     @Override
@@ -144,9 +144,9 @@ public class RecipeActivity extends AppCompatActivity
     /* disconnects google api client */
     protected void onStop() {
         super.onStop();
-        signIn.googleApiClient.stopAutoManage(this);
+        googleUser.googleApiClient.stopAutoManage(this);
         // disconnects Google api client
-        signIn.googleApiClient.disconnect();
+        googleUser.googleApiClient.disconnect();
     }
 
     @Override

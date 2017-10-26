@@ -32,7 +32,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import static android.widget.Toast.LENGTH_SHORT;
-
 /** registers and signs user in. */
 public class EmailSignIn extends Activity {
 
@@ -75,14 +74,9 @@ public class EmailSignIn extends Activity {
                                     LENGTH_SHORT).show();
                         }
                         else {
-                            // adds sign in type to shared preferences
-                            preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                            // signs user in and tracks sign in type
-                            preferences.edit().putInt("signintype", 3).commit();
                             // sign user in
                             signInWithEmailAndPassword(email, password);
                         }
-
                     }
                 });
     }
@@ -98,10 +92,8 @@ public class EmailSignIn extends Activity {
         }
         return user;
     }
-
     /* signs user in with email and password */
     public void signInWithEmailAndPassword(String email, final String password) {
-
         // get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
             // if user is authenticated sign in

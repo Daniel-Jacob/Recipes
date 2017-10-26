@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
 /* creates an asynctask from yummly api and returns recipes to processfinish function */
 public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
 
@@ -39,11 +38,14 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
     public interface AsyncResponse {
         void processFinish(Recipes output);
     }
+
     /* after asynctask is complete point to processFinish function */
     public AsyncResponse delegate = null;
+
     public AsyncWithInterface(AsyncResponse delegate) {
         this.delegate = delegate;
     }
+
     /* code before download */
     @Override
     protected void onPreExecute() {
@@ -64,16 +66,26 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
         // send object to process finish
         delegate.processFinish(recipes);
     }
-    /* formats imagelink */
-    public String formatImageLink(String imageLink) {
-        // splits imagelink
-        imageLinkTrimmed = imageLink.split(":");
-        // removes characters that make link invalid
-        cleanImageLink = imageLinkTrimmed[1] + ":" + imageLinkTrimmed[2];
-        cleanImageLink = cleanImageLink.substring(1, cleanImageLink.length() - 2);
-        return cleanImageLink;
+
+    /* returns recipes from json data */
+    public Recipes recipesReturned(String result) {
+        JSONObject myJSON;
+        recipes = new Recipes();
+        try {
+            // creates jsonobject
+            myJSON = new JSONObject(result);
+            // gets json array
+            JSONArray object;
+            object = myJSON.getJSONArray("matches");
+            // creates recipes object
+            recipes = initializeRecipes(object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return recipes;
     }
-    /* returns recipes object */
+
+    /* returns recipes object from json array */
     public Recipes initializeRecipes(JSONArray array) {
         Recipes recipes = new Recipes();
         for (int i = 0; i < array.length(); i++) {
@@ -106,21 +118,13 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
         }
         return recipes;
     }
-    /* returns recipes from json data */
-    public Recipes recipesReturned(String result) {
-        JSONObject myJSON;
-        recipes = new Recipes();
-        try {
-            // creates jsonobject
-            myJSON = new JSONObject(result);
-            // gets json array
-            JSONArray object;
-            object = myJSON.getJSONArray("matches");
-            // creates recipes object
-            recipes = initializeRecipes(object);
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return recipes;
+    /* formats imagelink */
+    public String formatImageLink(String imageLink) {
+        // splits imagelink
+        imageLinkTrimmed = imageLink.split(":");
+        // removes characters that make link invalid
+        cleanImageLink = imageLinkTrimmed[1] + ":" + imageLinkTrimmed[2];
+        cleanImageLink = cleanImageLink.substring(1, cleanImageLink.length() - 2);
+        return cleanImageLink;
     }
 }
