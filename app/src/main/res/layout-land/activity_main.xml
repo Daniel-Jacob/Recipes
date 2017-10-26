@@ -12,9 +12,9 @@
             android:id="@+id/loginButton"
             android:layout_width="300dp"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="219dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="24dp"
             android:paddingBottom="15dp"
             android:paddingTop="20dp">
 
@@ -22,35 +22,32 @@
         </com.facebook.login.widget.LoginButton>
 
         <com.google.android.gms.common.SignInButton
-            android:layout_height="wrap_content"
-            android:layout_width="300dp"
-            android:layout_marginTop="63dp"
             android:id="@+id/signInButton"
-            android:onClick="onClick"
-            android:layout_alignTop="@+id/loginButton"
-            android:layout_alignParentStart="true"
-            />
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/loginButton"
+            android:layout_marginTop="13dp"
+            android:onClick="onClick" />
 
 
         <Button
             android:id="@+id/emailsignin"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="58dp"
-            android:text="Connect with E-mail"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/signInButton"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="17dp"
             android:onClick="Submit"
-            />
+            android:text="Connect with E-mail" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="20dp"
+            android:layout_below="@+id/emailsignin"
+            android:layout_marginTop="14dp"
+            android:layout_toEndOf="@+id/imageView2"
             android:clickable="true"
             android:onClick=""
             android:text="Continue searching recipes without personalization"
@@ -63,6 +60,14 @@
             android:layout_above="@+id/loginButton"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="40dp"
+            app:srcCompat="@drawable/foodio" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/loginButton"
             app:srcCompat="@drawable/foodio" />
 
 
