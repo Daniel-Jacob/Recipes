@@ -22,6 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -66,9 +67,6 @@ public class TitleActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        // sets up sign up or logout button based on login status
-        Utils utils = new Utils(this);
-        utils.loginOrsignUp(this);
     }
     /* if there are recipes, save them, if not retrieve them from previous usage */
     public void addOrFetchRecipes() {
@@ -109,6 +107,17 @@ public class TitleActivity extends AppCompatActivity {
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils utilities = new Utils(this);
+        Button button = (Button)findViewById(R.id.Loginandlogout);
+        int signInType = utilities.getSignInType();
+        if(signInType == 4){
+            button.setText("Sign up");
+        }
     }
 
     @Override

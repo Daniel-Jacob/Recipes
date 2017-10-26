@@ -20,9 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -120,41 +118,6 @@ public class Utils extends Activity {
         intent.putExtra("Data", recipes);
         context.startActivity(intent);
     }
-    /* checks if user is logged in or signed out and displays message accordingly. */
-    public void setLogoutOrSignOutButton(Button button) {
-        inflateLayout();
-        signInType = preferences.getInt("signintype", 0);
-        // nobody is logged in
-        if (user == null && signInType == 4) {
-            button.setText("Sign up");
-        } else {
-            button.setText("Log out");
-        }
-    }
-    /* inflates layout */
-    public void inflateLayout() {
-        int activity = preferences.getInt("Activity", 0);
-        switch (activity) {
-            case 3:
-                view = LayoutInflater.from(context).inflate(R.layout.activity_recipeactivity, null);
-                break;
-            case 4:
-                view = LayoutInflater.from(context).inflate(R.layout.activity_recipe_by_ingredient, null);
-                break;
-            case 5:
-                view = LayoutInflater.from(context).inflate(R.layout.activity_gridview, null);
-                break;
-            case 6:
-                view = LayoutInflater.from(context).inflate(R.layout.activity_titleactivity, null);
-                break;
-            case 7:
-                view = LayoutInflater.from(context).inflate(R.layout.activity_detailsactivity, null);
-                break;
-            case 8:
-                view = LayoutInflater.from(context).inflate(R.layout.activity_favorites, null);
-                break;
-        }
-    }
     /* user shut down app before so redirect user to where app was closed */
     public void redirectUserToCorrectActivity(int activity){
         this.activity = activity;
@@ -191,39 +154,16 @@ public class Utils extends Activity {
         }
     }
     /* sets up logout or sign up button and progressbar */
-    public void initializeButtons(Activity activity) {
+    public void setupProgressBar(Activity activity) {
         final Activity myActivity = activity;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final int activity = preferences.getInt("Activity", 0);
                 myActivity.runOnUiThread(new Runnable() {
-
                     @Override
                     public void run() {
                         // inflates layout
-                        inflateLayout();
                         myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
-                        Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
-                        setLogoutOrSignOutButton(button);
-                    }
-                });
-            }
-        }).start();
-    }
-    /* sets up logut or sign up button and progressbar */
-    public void loginOrsignUp(Activity activity) {
-        final Activity myActivity = activity;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final int activity = preferences.getInt("Activity", 0);
-                myActivity.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Button button = (Button) myActivity.findViewById(R.id.Loginandlogout);
-                        setLogoutOrSignOutButton(button);
                     }
                 });
             }

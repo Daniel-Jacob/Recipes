@@ -23,6 +23,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,6 +62,7 @@ public class DetailsActivity extends AppCompatActivity {
     FirebaseDatabase database;
     int signInType;
     int comparison;
+    Utils utilities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +81,8 @@ public class DetailsActivity extends AppCompatActivity {
         titleView = (TextView) findViewById(R.id.Title);
         ingredientView = (TextView) findViewById(R.id.ingredients);
         attributeView = (TextView) findViewById(R.id.attributes);
-        Utils utils = new Utils(this);
+        utilities = new Utils(this);
         // sets text of button to sign up or log out based on sign in type
-        utils.loginOrsignUp(this);
         // checks what activity user comes from
         final int requestCode = getIntent().getIntExtra("activity", 0);
         // returns recipe from that activity
@@ -294,6 +295,10 @@ public class DetailsActivity extends AppCompatActivity {
         // gets sign in type
         Utils utils = new Utils(this);
         signInType = utils.getSignInType();
+        Button button = (Button)findViewById(R.id.Loginandlogout);
+        if(signInType == 4){
+            button.setText("Sign up");
+        }
     }
 
     @Override

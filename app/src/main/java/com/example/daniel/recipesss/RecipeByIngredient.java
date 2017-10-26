@@ -122,7 +122,11 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     protected void onResume() {
         super.onResume();
         // sets logout or sign up button based on sign in type
-        utilities.setLogoutOrSignOutButton((Button) findViewById(R.id.Loginandlogout));
+        int signInType = utilities.getSignInType();
+        Button button = (Button)findViewById(R.id.Loginandlogout);
+        if(signInType == 4){
+            button.setText("Sign up");
+        }
         int activity = preferences.getInt("Activity", 0);
         // user comes from different activity so recreate so query can be submitted
         if (activity != 4) {

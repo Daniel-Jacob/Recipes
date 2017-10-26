@@ -24,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 
@@ -43,6 +44,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     ListView listView;
     GridView gv;
     SharedPreferences preferences;
+    Utils utilities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +79,6 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
                 startActivity(intent);
             }
         });
-        // sets sign up or log out button
-        Utils utils = new Utils(this);
-        utils.loginOrsignUp(this);
     }
     /* checks if user came from a previous activity or user shut down application
     and recipes need to be retrieved */
@@ -138,6 +137,12 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     @Override
     protected void onResume() {
         super.onResume();
+        utilities = new Utils(this);
+        Button button = (Button)findViewById(R.id.Loginandlogout);
+        int signInType = utilities.getSignInType();
+        if(signInType == 4){
+            button.setText("Sign up");
+        }
         // query has been submitted so empty query
         preferences.edit().putString("query", "").commit();
         // track activity

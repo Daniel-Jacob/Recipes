@@ -5,7 +5,7 @@
     android:id="@+id/drawerlayoutt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.daniel.recipesss.Recipeactivity"
+    tools:context="com.example.daniel.recipesss.RecipeActivity"
     >
 
     <SearchView
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/favorites"
             android:onClick="loginOrLogout"
-            android:text="Button" />
+            android:text="Log out" />
 
         <Button
             android:id="@+id/recipebyingredient"

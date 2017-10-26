@@ -60,7 +60,7 @@
             android:layout_marginStart="33dp"
             android:layout_toEndOf="@+id/gotofavoritesactivity"
             android:onClick="logout"
-            android:text="Button" />
+            android:text="Log out" />
 
     </RelativeLayout>
 

@@ -127,8 +127,11 @@ public class RecipeActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         Button button = (Button)findViewById(R.id.Loginandlogout);
+        int signInType = utilities.getSignInType();
+        if(signInType == 4){
+            button.setText("Sign up");
+        }
         // sets logout or sign up button based on sign in type
-        utilities.setLogoutOrSignOutButton(button);
         int activity = preferences.getInt("Activity", 0);
         // user comes from different activity so recreate so query can be submitted
         if(activity != 3){
@@ -137,7 +140,6 @@ public class RecipeActivity extends AppCompatActivity
             recreate();
         }
     }
-
     @Override
     /* disconnects google api client */
     protected void onStop() {
@@ -152,7 +154,7 @@ public class RecipeActivity extends AppCompatActivity
     public void onBackPressed() {
         // gets firebase user
         user = FirebaseAuth.getInstance().getCurrentUser();
-        // gets sign in type
+       // gets sign in type
         int signInType = utilities.getSignInType();
         // authenticated user
         if (user != null || signInType != 4) {

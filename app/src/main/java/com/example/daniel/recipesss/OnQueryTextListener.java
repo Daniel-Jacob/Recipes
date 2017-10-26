@@ -69,7 +69,7 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
             new AsyncWithInterface((AsyncWithInterface.AsyncResponse) context).execute(query);
             Utils utils = new Utils(context);
             // sets up logout/sign up button and progressbar
-            utils.initializeButtons((Activity) context);
+            utils.setupProgressBar((Activity) context);
         }
         return false;
     }

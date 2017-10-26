@@ -22,6 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     int signInType;
     ProgressBar progressBar;
     Recipes recipes;
+    Utils utilities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +97,21 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Button button = (Button)findViewById(R.id.Loginandlogout);
+        utilities = new Utils(this);
+        int signInType = utilities.getSignInType();
+        if(signInType == 4){
+            button.setText("Sign up");
+        }
+    }
+
+    @Override
     /* navigate user back to recipeActivity */
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
+        Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
         startActivity(intent);
     }
 }
