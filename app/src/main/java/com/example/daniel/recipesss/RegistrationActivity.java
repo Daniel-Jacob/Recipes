@@ -22,6 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -77,8 +78,16 @@ public class RegistrationActivity extends AppCompatActivity {
     public void logMeIn(View view) {
         emailAddress = email.getText().toString();
         password = passwrd.getText().toString();
-        emailSignIn.signInWithEmailAndPassword(emailAddress, password);
+        if(!emailAddress.isEmpty() && !password.isEmpty()) {
+            emailSignIn.signInWithEmailAndPassword(emailAddress, password);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Please fill in your " +
+                    "emailaddress and password", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
 
     @Override
     /* adds authentication state listener */

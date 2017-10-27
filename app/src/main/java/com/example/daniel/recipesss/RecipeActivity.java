@@ -165,7 +165,7 @@ public class RecipeActivity extends AppCompatActivity
         if (user != null || signInType != 4) {
             Toast.makeText(getApplicationContext(),
                     "You are already signed in. Logout to go to the previous screen",
-                    Toast.LENGTH_LONG).show();
+                    Toast.LENGTH_SHORT).show();
         }
         // user is not signed in
         else if(signInType == 4){

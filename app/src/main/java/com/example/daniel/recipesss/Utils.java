@@ -89,7 +89,7 @@ public class Utils extends Activity {
     }
 
     /* error handling before recipes are sent to gridview */
-    public void returnRecipesToGridview(Recipes output){
+    public void returnRecipesToGridview(Recipes output) {
         ArrayList<String> values = new ArrayList<>();
         if (output.getRecipes().size() > 0) {
             // removes elements with duplicate titles
@@ -101,21 +101,22 @@ public class Utils extends Activity {
                 }
             }
             // removes last row if elements of row are less than three
-            if(output.getRecipes().size() % 3 != 0){
-                if(output.getRecipes().size() % 3 == 1){
-                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -1));
-                }
-                else if(output.getRecipes().size() % 3 == 2){
-                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -1));
-                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -2));
+            if (output.getRecipes().size() % 3 != 0) {
+                if (output.getRecipes().size() % 3 == 1) {
+                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() - 1));
+                } else if (output.getRecipes().size() % 3 == 2) {
+                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() - 1));
+                    output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() - 2));
                 }
             }
-            // send elements to gridview
-            ToGridview(output);
-        } else {
-            // no recipes found so try again
-            Toast.makeText(context, "No recipes found", Toast.LENGTH_LONG).show();
-            ((Activity) context).recreate();
+            if (output.getRecipes().size() > 0) {
+                // send elements to gridview
+                ToGridview(output);
+            } else {
+                // no recipes found so try again
+                Toast.makeText(context, "No recipes found", Toast.LENGTH_LONG).show();
+                ((Activity) context).recreate();
+            }
         }
     }
 

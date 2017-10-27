@@ -70,7 +70,6 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         recipes = new Recipes();
         // authenticated user, but has not been loaded yet
         if(user == null && signInType != 4){
-            Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
             recreate();
             progressBar =(ProgressBar)findViewById(R.id.indeterminateBar);
             progressBar.setVisibility(View.VISIBLE);
@@ -119,12 +118,6 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     protected void onResume() {
         super.onResume();
         // booleans that have been used to track from what activity user comes
-        preferences.edit().putBoolean("recipesearch", false).commit();
-        preferences.edit().putBoolean("recipebyingredientsearch", false).commit();
-        preferences.edit().putBoolean("display", false).commit();
-        preferences.edit().putBoolean("details", false).commit();
-        preferences.edit().putBoolean("details", false).commit();
-        preferences.edit().putBoolean("title", false).commit();
         // sets button text according to sign in type
         Button button = (Button)findViewById(R.id.Loginandlogout);
         utilities = new Utils(this);
@@ -140,6 +133,11 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         googleUser.googleApiClient.stopAutoManage(this);
         // disconnects Google api client
         googleUser.googleApiClient.disconnect();
+        preferences.edit().putBoolean("recipesearch", false).commit();
+        preferences.edit().putBoolean("recipebyingredientsearch", false).commit();
+        preferences.edit().putBoolean("display", false).commit();
+        preferences.edit().putBoolean("details", false).commit();
+        preferences.edit().putBoolean("title", false).commit();
     }
 
     @Override

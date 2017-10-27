@@ -75,7 +75,7 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
             recipes = initializeRecipes(object);
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(context, "retrieving recipes failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyApplication.getAppContext(), "retrieving recipes failed", Toast.LENGTH_SHORT).show();
         }
         return recipes;
     }
@@ -109,7 +109,7 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
                 recipes.Recipes.add(recipeObject);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(context, "error retrieving recipes",
+                Toast.makeText(MyApplication.getAppContext(), "error retrieving recipes",
                         Toast.LENGTH_SHORT).show();
             }
         }
