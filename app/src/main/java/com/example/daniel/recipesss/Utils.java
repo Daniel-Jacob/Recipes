@@ -123,7 +123,7 @@ public class Utils extends Activity {
     }
     /* checks if user came from a previous activity or user shut down application
       and recipes need to be retrieved */
-    public Recipes addOrFetchRecipes() {
+    public Recipes addOrFetchRecipes(Recipes recipes) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         // add recipes to sharedpreferences
         if (recipes != null) {

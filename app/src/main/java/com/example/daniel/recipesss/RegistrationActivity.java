@@ -23,7 +23,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -71,16 +70,10 @@ public class RegistrationActivity extends AppCompatActivity {
         password = passwrd.getText().toString();
         // tries to register user
         emailSignIn.createAccount(emailAddress, password);
-        // user exists so add to database
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null) {
-            String userId = user.getUid();
-            // put user data in database
-            reference.child("Users").child(userId).setValue(emailSignIn.getUserData());
-        }
     }
     /* signs user in with email and password */
     public void logMeIn(View view) {
+
         emailAddress = email.getText().toString();
         password = passwrd.getText().toString();
         emailSignIn.signInWithEmailAndPassword(emailAddress, password);

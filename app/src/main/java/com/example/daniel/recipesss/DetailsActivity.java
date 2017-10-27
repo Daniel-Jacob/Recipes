@@ -121,8 +121,7 @@ public class DetailsActivity extends AppCompatActivity {
             preferences.edit().putString("recipe", json).commit();
         } else {
             // gets type
-            Type type = new TypeToken<Recipe>() {
-            }.getType();
+            Type type = new TypeToken<Recipe>() {}.getType();
             // gets recipe
             String json = preferences.getString("recipe", "");
             recipe = gson.fromJson(json, type);
@@ -155,7 +154,6 @@ public class DetailsActivity extends AppCompatActivity {
         ingredientView.setText("Ingredients: " + Arrays.toString(ingredientsArray).replace("[", "")
                 .replace("]", "").replace("\"", ""));
     }
-
     /* loads image into imageview */
     public void initializeImage(String url, ImageView imageView) {
         Picasso.with(getApplicationContext()).load(url).into(imageView, new Callback() {
@@ -187,7 +185,7 @@ public class DetailsActivity extends AppCompatActivity {
                 // authenticated user has not been loaded yet
                 recreate();
             }
-            // local user, so add recipe to shared preferences
+         // local user, so add recipe to shared preferences
         } else {
             fetchRecipesForLocalUser();
         }
@@ -207,7 +205,7 @@ public class DetailsActivity extends AppCompatActivity {
                     // user exists
                     if (user != null) {
                         RecipeCompare compare = new RecipeCompare();
-                        Recipe recipeDatabase = new Recipe();
+                        Recipe recipeDatabase;
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
                             // get recipes from database
                             recipeDatabase = s.getValue(Recipe.class);
@@ -281,6 +279,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    /* sets up button according to sign in type */
     protected void onResume(){
         super.onResume();
         // gets sign in type
@@ -294,9 +293,17 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    /* goes to DisplayRecipes */
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
         startActivity(intent);
+    }
+
+    /* goes to favorites */
+    public void favorites(View view) {
+        Intent intent = new Intent(this, FavoritesActivity.class);
+        startActivity(intent);
+        preferences.edit().putBoolean("details", true).commit();
     }
 }

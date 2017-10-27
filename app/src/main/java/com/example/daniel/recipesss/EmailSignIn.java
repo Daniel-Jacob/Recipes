@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -62,35 +61,28 @@ public class EmailSignIn extends Activity {
     };
     /* creates user account with emailaddress and password */
     public void createAccount(final String email, final String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("TAG", "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        // display message if task failed
-                        if (!task.isSuccessful()) {
-                            Log.w("Tag", "Create account:failed", task.getException());
-                            Toast.makeText(context, task.getException().getMessage(),
-                                    LENGTH_SHORT).show();
+        if (!email.isEmpty() && !password.isEmpty()) {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("TAG", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                            // display message if task failed
+                            if (!task.isSuccessful()) {
+                                Log.w("Tag", "Create account:failed", task.getException());
+                                Toast.makeText(context, task.getException().getMessage(),
+                                        LENGTH_SHORT).show();
+                            } else {
+                                // sign user in
+                                signInWithEmailAndPassword(email, password);
+                            }
                         }
-                        else {
-                            // sign user in
-                            signInWithEmailAndPassword(email, password);
-                        }
-                    }
-                });
-    }
-    /* gets userdata */
-    public FirebaseUser getUserData() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
-            String uid = user.getUid();
+                    });
         }
-        return user;
+        else{
+            Toast.makeText(context, "Please fill in your password and E-mail",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
     /* signs user in with email and password */
     public void signInWithEmailAndPassword(String email, final String password) {

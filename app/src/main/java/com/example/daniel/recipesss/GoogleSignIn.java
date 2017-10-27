@@ -114,6 +114,7 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
                             Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            preferences.edit().putInt("Activity", 1).commit();
                         }
                     }
                 });
@@ -128,6 +129,7 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                         FirebaseAuth.getInstance().signOut();
                         // go back to sign in activity
                         Intent intent = new Intent(context, MainActivity.class);
+                        preferences.edit().putInt("Activity", 1).commit();
                         context.startActivity(intent);
                     }
                 });

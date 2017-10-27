@@ -46,7 +46,7 @@ public class TitleActivity extends AppCompatActivity {
         // if there are recipes save them, if not retrieve them
         utilities = new Utils(this);
         if(recipes == null){
-            recipes = utilities.addOrFetchRecipes();
+            recipes = utilities.addOrFetchRecipes(recipes);
         }
         // sets titles to listview
         setAdapter(recipes);
@@ -86,6 +86,12 @@ public class TitleActivity extends AppCompatActivity {
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
+    }
+    /* goes to favorites */
+    public void favorites(View view) {
+        Intent intent = new Intent(this, FavoritesActivity.class);
+        startActivity(intent);
+        preferences.edit().putBoolean("titleactivity", true).commit();
     }
 
     @Override

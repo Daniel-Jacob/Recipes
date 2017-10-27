@@ -42,6 +42,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     GridView gv;
     SharedPreferences preferences;
     Utils utilities;
+    GoogleSignIn googleUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +80,9 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         });
     }
     /* sets image adapter */
-    public void setImageAdapter(Recipes recipes){
-        if(recipes == null){
-            // recipes have been saved on previous application use
-            recipes = utilities.addOrFetchRecipes();
-        }
+    public void setImageAdapter(Recipes recipess){
+        // recipes have been saved on previous application use
+        recipes = utilities.addOrFetchRecipes(recipess);
         for (int i = 0; i < recipes.getRecipes().size(); i++) {
             // saves recipe to elements array
             Recipe recipe = recipes.getRecipes().get(i);
@@ -96,6 +95,12 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     /* if user is logged in log user out */
     public void logout(View view) {
         Utils utils = new Utils(this);
+        int signInType = utils.getSignInType();
+        // google user
+        if(signInType == 1){
+            googleUser.signOut();
+        }
+        // other user
         utils.signoutOrSignUp();
     }
     /* send recipes to titleActivity */
@@ -108,11 +113,22 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     public void goToFavoritesActivity(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
+        preferences.edit().putBoolean("display", true).commit();
     }
     @Override
     /* google connection failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("Connection failed: ", connectionResult.getErrorMessage());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleUser = new GoogleSignIn(this);
+        // builds Google api client
+        googleUser.buildApiClient();
+        // connects Google api client
+        googleUser.googleApiClient.connect();
     }
 
     @Override
@@ -129,6 +145,14 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         preferences.edit().putString("query", "").commit();
         // track activity
         preferences.edit().putInt("Activity", 5).commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleUser.googleApiClient.stopAutoManage(this);
+        // disconnects Google api client
+        googleUser.googleApiClient.disconnect();
     }
 
     @Override

@@ -49,6 +49,7 @@ public class RecipeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipeactivity);
         utilities = new Utils(this);
+        user = FirebaseAuth.getInstance().getCurrentUser();
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         // tracks activity
         preferences.edit().putInt("Activity", 3).commit();
@@ -91,6 +92,7 @@ public class RecipeActivity extends AppCompatActivity
     }
     /* goes to favorites */
     public void favorites(View view) {
+        preferences.edit().putBoolean("recipesearch", true).commit();
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }

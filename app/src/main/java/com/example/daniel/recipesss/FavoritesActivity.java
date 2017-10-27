@@ -58,10 +58,10 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         auth = FirebaseAuth.getInstance();
         // get current user
         user = auth.getCurrentUser();
+        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
         // initialize progressbar
-        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // gets sign in type
         signInType = preferences.getInt("signintype", 0);
@@ -99,6 +99,13 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     protected void onResume() {
         super.onResume();
+        // booleans that have been used to track from what activity user comes
+        preferences.edit().putBoolean("recipesearch", false).commit();
+        preferences.edit().putBoolean("recipebyingredientsearch", false).commit();
+        preferences.edit().putBoolean("display", false).commit();
+        preferences.edit().putBoolean("details", false).commit();
+        preferences.edit().putBoolean("details", false).commit();
+        preferences.edit().putBoolean("title", false).commit();
         // sets button text according to sign in type
         Button button = (Button)findViewById(R.id.Loginandlogout);
         utilities = new Utils(this);
@@ -109,10 +116,29 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     }
 
     @Override
-    /* navigate user back to recipeActivity */
+    /* navigate user back to last activity */
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
-        startActivity(intent);
+        Intent intent;
+        boolean recipe = preferences.getBoolean("recipesearch", false);
+        boolean displayRecipes = preferences.getBoolean("display", false);
+        boolean details = preferences.getBoolean("details", false);
+        boolean title = preferences.getBoolean("title", false);
+        if(recipe){
+            intent = new Intent(this, RecipeActivity.class);
+            startActivity(intent);
+        }
+        else if(displayRecipes){
+            intent = new Intent(this, DisplayRecipes.class);
+            startActivity(intent);
+        }
+        else if(title){
+            intent = new Intent(this, TitleActivity.class);
+            startActivity(intent);
+        }
+        else if(details){
+            intent = new Intent(this, DetailsActivity.class);
+            startActivity(intent);
+        }
     }
 }
