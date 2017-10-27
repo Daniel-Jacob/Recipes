@@ -48,6 +48,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     ProgressBar progressBar;
     Recipes recipes;
     Utils utilities;
+    GoogleSignIn googleUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,23 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     /* logs user out if authenticated */
     public void logout(View view) {
         Utils utils = new Utils(this);
+        int signInType = utils.getSignInType();
+        // google user
+        if(signInType == 1){
+            googleUser.signOut();
+        }
+        // other user
         utils.signoutOrSignUp();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleUser = new GoogleSignIn(this);
+        // builds Google api client
+        googleUser.buildApiClient();
+        // connects Google api client
+        googleUser.googleApiClient.connect();
     }
 
     @Override
@@ -115,6 +132,14 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         if(signInType == 4){
             button.setText("Sign up");
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleUser.googleApiClient.stopAutoManage(this);
+        // disconnects Google api client
+        googleUser.googleApiClient.disconnect();
     }
 
     @Override

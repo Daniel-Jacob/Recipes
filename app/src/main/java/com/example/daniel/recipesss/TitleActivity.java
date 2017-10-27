@@ -19,19 +19,27 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 /* Populates listview with titles */
-public class TitleActivity extends AppCompatActivity {
+public class TitleActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener {
 
     // global variables
     ListView listView;
     Recipes recipes;
     SharedPreferences preferences;
     Utils utilities;
+    GoogleSignIn googleUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +94,14 @@ public class TitleActivity extends AppCompatActivity {
 
     /* if user is logged in, log out */
     public void logout(View view) {
-        Utils utils = new Utils(this);
-        utils.signoutOrSignUp();
+        int signInType = utilities.getSignInType();
+        // google user
+        if (signInType == 1) {
+            googleUser.signOut();
+        } else {
+            // other user
+            utilities.signoutOrSignUp();
+        }
     }
 
     /* goes to favorites */
@@ -95,6 +109,23 @@ public class TitleActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
         preferences.edit().putBoolean("titleactivity", true).commit();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("Connection failed", connectionResult.getErrorMessage());
+        Toast.makeText(this, "connection with google server has failed",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleUser = new GoogleSignIn(this);
+        // builds Google api client
+        googleUser.buildApiClient();
+        // connects Google api client
+        googleUser.googleApiClient.connect();
     }
 
     @Override
@@ -107,6 +138,14 @@ public class TitleActivity extends AppCompatActivity {
         if(signInType == 4){
             button.setText("Sign up");
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleUser.googleApiClient.stopAutoManage(this);
+        // disconnects Google api client
+        googleUser.googleApiClient.disconnect();
     }
 
     @Override

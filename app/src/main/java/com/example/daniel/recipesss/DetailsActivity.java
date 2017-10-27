@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -29,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +48,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 /* grabs title, ingredients, attributes and image of a given recipe and adds these to the activity */
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     // global variables
     Recipe recipe;
@@ -60,6 +63,7 @@ public class DetailsActivity extends AppCompatActivity {
     FirebaseDatabase database;
     int signInType;
     int comparison;
+    GoogleSignIn googleUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,6 +287,12 @@ public class DetailsActivity extends AppCompatActivity {
     /* signs user out if authenticated */
     public void logout(View view) {
         Utils utils = new Utils(this);
+        int signInType = utils.getSignInType();
+        // google user
+        if(signInType == 1){
+            googleUser.signOut();
+        }
+        // other user
         utils.signoutOrSignUp();
     }
 
@@ -291,6 +301,23 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
         preferences.edit().putBoolean("details", true).commit();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("Connection failed", connectionResult.getErrorMessage());
+        Toast.makeText(this, "Connection to google server has failed",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleUser = new GoogleSignIn(this);
+        // builds Google api client
+        googleUser.buildApiClient();
+        // connects Google api client
+        googleUser.googleApiClient.connect();
     }
 
     @Override
@@ -305,6 +332,14 @@ public class DetailsActivity extends AppCompatActivity {
         if (signInType == 4) {
             button.setText("Sign up");
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleUser.googleApiClient.stopAutoManage(this);
+        // disconnects Google api client
+        googleUser.googleApiClient.disconnect();
     }
 
     @Override
