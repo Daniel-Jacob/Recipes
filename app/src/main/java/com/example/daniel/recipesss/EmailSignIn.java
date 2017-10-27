@@ -45,6 +45,7 @@ public class EmailSignIn extends Activity {
         this.context = context;
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
+
     // authentication listener
     FirebaseAuth.AuthStateListener listener = new FirebaseAuth.AuthStateListener() {
         @Override
@@ -59,6 +60,7 @@ public class EmailSignIn extends Activity {
             }
         }
     };
+
     /* creates user account with emailaddress and password */
     public void createAccount(final String email, final String password) {
         if (!email.isEmpty() && !password.isEmpty()) {
@@ -84,6 +86,7 @@ public class EmailSignIn extends Activity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
     /* signs user in with email and password */
     public void signInWithEmailAndPassword(String email, final String password) {
         // get current user
@@ -101,8 +104,8 @@ public class EmailSignIn extends Activity {
                             // authentication failed
                             if (!task.isSuccessful()) {
                                 Log.w("Tag", "signInWithEmail:failed", task.getException());
-                                Toast.makeText(context, "Sign in failed. You don't have an account " +
-                                                "or the password is invalid",
+                                Toast.makeText(context, "Sign in failed. You don't have an " +
+                                                "account " + "or the password is invalid",
                                         Toast.LENGTH_SHORT).show();
                             }
                             else{

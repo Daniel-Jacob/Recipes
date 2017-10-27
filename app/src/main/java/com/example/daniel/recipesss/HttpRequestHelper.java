@@ -18,6 +18,7 @@ package com.example.daniel.recipesss;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class HttpRequestHelper {
         result = getJsonDataFromApi(urlObject);
         return result;
     }
+
     /* returns correct url that needs to be requested from api based on what activity the user is in */
     public static String returnCorrectUrl(int activity, String query){
         String url = "";
@@ -75,6 +77,7 @@ public class HttpRequestHelper {
         }
         return url;
     }
+
     /* creates an url object */
     public static URL createUrlObject(String url){
         URL urlObject = null;
@@ -82,9 +85,12 @@ public class HttpRequestHelper {
             urlObject = new URL(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            Toast.makeText(MyApplication.getAppContext(), "invalid url",
+                    Toast.LENGTH_SHORT).show();
         }
         return urlObject;
     }
+
     /* gets json data from yummly endpoint with url object */
     public static String getJsonDataFromApi(URL url){
         String result = "";
@@ -107,6 +113,8 @@ public class HttpRequestHelper {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(MyApplication.getAppContext(), "Error connecting to server",
+                        Toast.LENGTH_SHORT).show();
             }
         }
         return result;

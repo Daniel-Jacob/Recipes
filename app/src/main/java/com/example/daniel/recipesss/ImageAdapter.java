@@ -42,6 +42,7 @@ public class ImageAdapter extends BaseAdapter {
         this.data = data;
         this.layout = gridItemLayout;
     }
+
     /* gets number of items */
     public int getCount() {
         return data.size();
@@ -71,6 +72,7 @@ public class ImageAdapter extends BaseAdapter {
         loadImageData(url, imageView);
         return imageView;
     }
+
     /* loads image data into imageview */
     public void loadImageData(String url, ImageView imageView){
         if (url != null) {

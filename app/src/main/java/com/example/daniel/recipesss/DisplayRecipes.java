@@ -79,6 +79,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             }
         });
     }
+
     /* sets image adapter */
     public void setImageAdapter(Recipes recipess){
         // recipes have been saved on previous application use
@@ -92,6 +93,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         gv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+
     /* if user is logged in log user out */
     public void logout(View view) {
         Utils utils = new Utils(this);
@@ -103,18 +105,21 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         // other user
         utils.signoutOrSignUp();
     }
+
     /* send recipes to titleActivity */
     public void listTitles(View view) {
         Intent intent = new Intent(this, TitleActivity.class);
         intent.putExtra("titles", recipes);
         startActivity(intent);
     }
+
     /* send user to favoritesActivity */
     public void goToFavoritesActivity(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
         preferences.edit().putBoolean("display", true).commit();
     }
+
     @Override
     /* google connection failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

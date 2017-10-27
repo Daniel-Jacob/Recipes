@@ -49,11 +49,10 @@ public class DetailsActivity extends AppCompatActivity {
 
     // global variables
     Recipe recipe;
-    String title;
     SharedPreferences preferences;
     DatabaseReference reference;
     Recipes recipes;
-    ImageView im;
+    ImageView imageView;
     TextView titleView;
     TextView attributeView;
     TextView ingredientView;
@@ -61,7 +60,6 @@ public class DetailsActivity extends AppCompatActivity {
     FirebaseDatabase database;
     int signInType;
     int comparison;
-    Utils utilities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +71,13 @@ public class DetailsActivity extends AppCompatActivity {
         // gets current user
         user = FirebaseAuth.getInstance().getCurrentUser();
         // initialize views to hold recipe data
-        im = (ImageView) findViewById(R.id.imageView1);
+        imageView = (ImageView) findViewById(R.id.imageView1);
         // sets layout parameters
-        im.setLayoutParams(new RelativeLayout.LayoutParams(600, 600));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(600, 600));
         // initializes textviews
         titleView = (TextView) findViewById(R.id.Title);
         ingredientView = (TextView) findViewById(R.id.ingredients);
         attributeView = (TextView) findViewById(R.id.attributes);
-        utilities = new Utils(this);
         // checks what activity user comes from
         final int requestCode = getIntent().getIntExtra("activity", 0);
         // returns recipe from that activity
@@ -90,14 +87,14 @@ public class DetailsActivity extends AppCompatActivity {
             Gson gson = new Gson();
             String json = gson.toJson(recipe);
             preferences.edit().putString("recipe", json).commit();
-        }
-        else{
-        // application has been shut down so retrieve saved recipe
+        } else {
+            // application has been shut down so retrieve saved recipe
             recipe = getRecipeFromPreviousUsage();
         }
         // sets up view with the recipe
         setupDetails(recipe);
     }
+
     /* returns the recipe that has been clicked in the previous activity */
     public Recipe recipeReturned(int requestCode) {
         if (requestCode == 0) {
@@ -111,6 +108,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
         return recipe;
     }
+
     /* if recipe exists add to shared preferences. if it doesn't exist then add it */
     public Recipe getRecipeFromPreviousUsage() {
         Gson gson = new Gson();
@@ -121,22 +119,24 @@ public class DetailsActivity extends AppCompatActivity {
             preferences.edit().putString("recipe", json).commit();
         } else {
             // gets type
-            Type type = new TypeToken<Recipe>() {}.getType();
+            Type type = new TypeToken<Recipe>() {
+            }.getType();
             // gets recipe
             String json = preferences.getString("recipe", "");
             recipe = gson.fromJson(json, type);
         }
         return recipe;
     }
+
     /* formats recipe data and puts title, ingredients and attributes in activity */
     public void setupDetails(Recipe recipe) {
         // grabs recipe data
         String url = recipe.getImage();
-        title = recipe.getTitle();
+        String title = recipe.getTitle();
         ArrayList<String> attributes = recipe.getAttributes();
         String ingredients = String.valueOf(recipe.getIngredients());
         // binds image to imageview
-        initializeImage(url, im);
+        initializeImage(url, imageView);
         // sets title
         titleView.setText(title);
         // formatting ingredient data
@@ -144,8 +144,9 @@ public class DetailsActivity extends AppCompatActivity {
         ingredients = ingredients.replace(']', ' ');
         String[] ingredientsArray = ingredients.split(",");
         for (int i = 0; i < ingredientsArray.length - 1; i++) {
-            ingredientsArray[i] = ingredientsArray[i].replaceAll("\"", " ").replace("[", " ").
-                    replaceAll("]", " ").replaceAll(",", " ");
+            ingredientsArray[i] = ingredientsArray[i].replaceAll("\"", " ").
+                    replace("[", " ").replaceAll("]", " ").
+                    replaceAll(",", " ");
         }
         // formatting attribute data
         attributeView.setText(attributes.toString().replaceAll("\"", " ").
@@ -154,6 +155,7 @@ public class DetailsActivity extends AppCompatActivity {
         ingredientView.setText("Ingredients: " + Arrays.toString(ingredientsArray).replace("[", "")
                 .replace("]", "").replace("\"", ""));
     }
+
     /* loads image into imageview */
     public void initializeImage(String url, ImageView imageView) {
         Picasso.with(getApplicationContext()).load(url).into(imageView, new Callback() {
@@ -162,6 +164,7 @@ public class DetailsActivity extends AppCompatActivity {
             public void onSuccess() {
                 Log.d("Success:", "Image succesfully loaded");
             }
+
             @Override
             /* load failed */
             public void onError() {
@@ -170,6 +173,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
+
     /* adds a given recipe to favorites list */
     public void goToFavorites(View view) {
         database = FirebaseDatabase.getInstance();
@@ -177,23 +181,23 @@ public class DetailsActivity extends AppCompatActivity {
         int signInType = preferences.getInt("signintype", 0);
         // authenticated user
         if (signInType != 4 && signInType != 0) {
-            if(user != null){
+            if (user != null) {
                 // adds recipe to database
                 addRecipeToDB();
-            }
-            else{
+            } else {
                 // authenticated user has not been loaded yet
                 recreate();
             }
-         // local user, so add recipe to shared preferences
+            // local user, so add recipe to shared preferences
         } else {
             fetchRecipesForLocalUser();
         }
     }
+
     /* adds recipe to database */
     public void addRecipeToDB() {
         // initialize action button
-        final FloatingActionButton button = (FloatingActionButton)findViewById(R.id.favorites);
+        final FloatingActionButton button = (FloatingActionButton) findViewById(R.id.favorites);
         // make it unclickable until recipe is added to database
         button.setClickable(false);
         reference = database.getReference().child("Users").child(user.getUid()).child("Recipes");
@@ -223,8 +227,7 @@ public class DetailsActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
-                else{
+                } else {
                     // add recipe to database
                     reference.push().setValue(recipe);
                     Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
@@ -232,6 +235,7 @@ public class DetailsActivity extends AppCompatActivity {
                 // recipe has been added so make button clickable again
                 button.setClickable(true);
             }
+
             @Override
             /* adding to database failed */
             public void onCancelled(DatabaseError databaseError) {
@@ -239,13 +243,15 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
     }
+
     /*  adds recipe for local user to shared preferences */
     public void fetchRecipesForLocalUser() {
         String json = preferences.getString("recipeLocalUser", "");
         // if recipes exist get them first
         if (!json.isEmpty()) {
             Gson gson = new Gson();
-            Type type = new TypeToken<Recipes>() {}.getType();
+            Type type = new TypeToken<Recipes>() {
+            }.getType();
             recipes = gson.fromJson(json, type);
         }
         // otherwise make net instance of recipes
@@ -254,8 +260,9 @@ public class DetailsActivity extends AppCompatActivity {
         }
         addRecipeToFavorites();
     }
+
     /* adds recipe to shared preferences */
-    public void addRecipeToFavorites(){
+    public void addRecipeToFavorites() {
         Gson gson = new Gson();
         RecipeCompare compare = new RecipeCompare();
         int recipeCompare = 0;
@@ -272,22 +279,30 @@ public class DetailsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
         }
     }
+
     /* signs user out if authenticated */
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
     }
 
+    /* goes to favorites */
+    public void favorites(View view) {
+        Intent intent = new Intent(this, FavoritesActivity.class);
+        startActivity(intent);
+        preferences.edit().putBoolean("details", true).commit();
+    }
+
     @Override
     /* sets up button according to sign in type */
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         // gets sign in type
         Utils utils = new Utils(this);
         signInType = utils.getSignInType();
         // sets button text according to sign in type
-        Button button = (Button)findViewById(R.id.Loginandlogout);
-        if(signInType == 4){
+        Button button = (Button) findViewById(R.id.Loginandlogout);
+        if (signInType == 4) {
             button.setText("Sign up");
         }
     }
@@ -298,12 +313,5 @@ public class DetailsActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
         startActivity(intent);
-    }
-
-    /* goes to favorites */
-    public void favorites(View view) {
-        Intent intent = new Intent(this, FavoritesActivity.class);
-        startActivity(intent);
-        preferences.edit().putBoolean("details", true).commit();
     }
 }

@@ -78,6 +78,7 @@ public class FacebookSignIn extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
     }
+
     /* logs user in */
     public void createCallBack() {
         // creates callback manager
@@ -90,6 +91,7 @@ public class FacebookSignIn extends AppCompatActivity {
         // executes facebook async task
         registerCallBack();
     }
+
     /* executes asynctask to facebook api */
     public void registerCallBack() {
         facebookLogin.registerCallback(manager, new FacebookCallback<LoginResult>() {
@@ -120,6 +122,7 @@ public class FacebookSignIn extends AppCompatActivity {
             }
         });
     }
+
     /* submits a graph request for facebook user */
     public GraphRequest submitGraphRequest(final LoginResult result){
         GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
@@ -132,6 +135,7 @@ public class FacebookSignIn extends AppCompatActivity {
                 });
         return request;
     }
+
     /* executes asynctask */
     public void executeFacebookAsyncTask(GraphRequest request){
         Bundle parameters = new Bundle();
@@ -144,6 +148,7 @@ public class FacebookSignIn extends AppCompatActivity {
         Intent intent = new Intent(context, RecipeActivity.class);
         context.startActivity(intent);
     }
+
     /* authenticates user with firebase */
     public void handleFacebookAccessToken(AccessToken token) {
         final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());

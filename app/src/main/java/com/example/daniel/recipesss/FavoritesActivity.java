@@ -33,7 +33,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 /* Sets up the favorites of a given user */
 public class FavoritesActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -90,6 +89,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getApplicationContext(), "Connection failed...", Toast.LENGTH_SHORT).show();
     }
+
     /* logs user out if authenticated */
     public void logout(View view) {
         Utils utils = new Utils(this);
@@ -97,6 +97,8 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     }
 
     @Override
+    /* set booleans to track what activity user came from to false and set button text based on
+     sign in type */
     protected void onResume() {
         super.onResume();
         // booleans that have been used to track from what activity user comes

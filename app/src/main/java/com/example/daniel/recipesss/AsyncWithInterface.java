@@ -17,6 +17,7 @@ package com.example.daniel.recipesss;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,25 +30,18 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
     // global variables
     Context context;
     Recipes recipes;
-    String imageLink;
-    String[] imageLinkTrimmed;
-    String cleanImageLink;
-    JSONObject recipe = null;
 
     /* interface for asynctask */
     public interface AsyncResponse {
         void processFinish(Recipes output);
     }
 
-    /* after asynctask is complete point to processFinish function */
     public AsyncResponse delegate = null;
+    /* after asynctask is complete point to processFinish function */
+    public AsyncWithInterface(AsyncResponse delegate) {this.delegate = delegate;}
 
-    public AsyncWithInterface(AsyncResponse delegate) {
-        this.delegate = delegate;
-    }
-
-    /* code before download */
     @Override
+    /* code before download */
     protected void onPreExecute() {
     }
 
@@ -81,6 +75,7 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
             recipes = initializeRecipes(object);
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(context, "retrieving recipes failed", Toast.LENGTH_SHORT).show();
         }
         return recipes;
     }
@@ -91,11 +86,11 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
         for (int i = 0; i < array.length(); i++) {
             try {
                 // gets a recipe
-                recipe = (JSONObject) array.get(i);
+                JSONObject recipe = (JSONObject) array.get(i);
                 // get title of recipe
                 String recipeName = String.valueOf(recipe.get("recipeName"));
                 // gets image link
-                imageLink = String.valueOf(recipe.get("imageUrlsBySize"));
+                String imageLink = String.valueOf(recipe.get("imageUrlsBySize"));
                 // formats image link
                 imageLink = formatImageLink(imageLink);
                 // variables to hold recipe data
@@ -106,7 +101,7 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
                 // recipe object
                 Recipe recipeObject = new Recipe();
                 // sets recipe data of a given recipe
-                recipeObject.setImage(cleanImageLink);
+                recipeObject.setImage(imageLink);
                 recipeObject.setTitle(recipeName);
                 recipeObject.setIngredients(ingredients);
                 recipeObject.setAttributes(attributes);
@@ -114,16 +109,19 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
                 recipes.Recipes.add(recipeObject);
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(context, "error retrieving recipes",
+                        Toast.LENGTH_SHORT).show();
             }
         }
         return recipes;
     }
+
     /* formats imagelink */
     public String formatImageLink(String imageLink) {
         // splits imagelink
-        imageLinkTrimmed = imageLink.split(":");
+        String [] imageLinkTrimmed = imageLink.split(":");
         // removes characters that make link invalid
-        cleanImageLink = imageLinkTrimmed[1] + ":" + imageLinkTrimmed[2];
+        String cleanImageLink = imageLinkTrimmed[1] + ":" + imageLinkTrimmed[2];
         cleanImageLink = cleanImageLink.substring(1, cleanImageLink.length() - 2);
         return cleanImageLink;
     }

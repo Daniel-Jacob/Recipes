@@ -65,6 +65,7 @@ public class TitleActivity extends AppCompatActivity {
             }
         });
     }
+
     /* adapter to add titles to listview and remove duplicate titles */
     public void setAdapter(Recipes recipes) {
         RecipeCompare recipeCompare = new RecipeCompare();
@@ -82,11 +83,13 @@ public class TitleActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+
     /* if user is logged in, log out */
     public void logout(View view) {
         Utils utils = new Utils(this);
         utils.signoutOrSignUp();
     }
+
     /* goes to favorites */
     public void favorites(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);

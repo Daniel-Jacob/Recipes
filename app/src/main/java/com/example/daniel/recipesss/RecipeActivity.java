@@ -31,7 +31,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 /** activity that lets user search for general recipes */
 public class RecipeActivity extends AppCompatActivity
         implements AsyncWithInterface.AsyncResponse, OnConnectionFailedListener {
@@ -68,6 +67,7 @@ public class RecipeActivity extends AppCompatActivity
     public void processFinish(Recipes output) {
         utilities.returnRecipesToGridview(output);
     }
+
     /* signs user out */
     public void loginOrLogout(View view) {
         // allows user to go to previous activity
@@ -90,6 +90,7 @@ public class RecipeActivity extends AppCompatActivity
         Intent intentByIngredient = new Intent(this, RecipeByIngredient.class);
         startActivity(intentByIngredient);
     }
+
     /* goes to favorites */
     public void favorites(View view) {
         preferences.edit().putBoolean("recipesearch", true).commit();
@@ -115,7 +116,7 @@ public class RecipeActivity extends AppCompatActivity
     }
 
     @Override
-    /* saves query a*/
+    /* saves query */
     protected void onPause(){
         super.onPause();
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
@@ -125,6 +126,7 @@ public class RecipeActivity extends AppCompatActivity
         String query = searchView.getQuery().toString();
         preferences.edit().putString("query", query).commit();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -142,6 +144,7 @@ public class RecipeActivity extends AppCompatActivity
             recreate();
         }
     }
+
     @Override
     /* disconnects google api client */
     protected void onStop() {

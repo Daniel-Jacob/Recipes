@@ -64,6 +64,7 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
         auth = FirebaseAuth.getInstance();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
+
     /* builds googleapiclient */
     public GoogleApiClient buildApiClient() {
         if (googleApiClient == null) {
@@ -77,6 +78,7 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
         }
         return googleApiClient;
     }
+
     /* sign user in and redirects to next activity */
     public void handleSignInResult(Context context, GoogleSignInResult result) {
         this.context = (MainActivity) context;
@@ -96,6 +98,7 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
             context.startActivity(intent);
         }
     }
+
     /* authenticates google user with firebase */
     public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -119,6 +122,7 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                     }
                 });
     }
+
     /* signs user out */
     public void signOut() {
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(

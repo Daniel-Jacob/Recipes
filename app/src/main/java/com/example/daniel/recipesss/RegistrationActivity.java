@@ -63,6 +63,7 @@ public class RegistrationActivity extends AppCompatActivity {
         email.setText(emailAddress);
         passwrd.setText(password);
     }
+
     /* registers user */
     public void submit(View view) {
         // grabs text of email and password
@@ -71,9 +72,9 @@ public class RegistrationActivity extends AppCompatActivity {
         // tries to register user
         emailSignIn.createAccount(emailAddress, password);
     }
+
     /* signs user in with email and password */
     public void logMeIn(View view) {
-
         emailAddress = email.getText().toString();
         password = passwrd.getText().toString();
         emailSignIn.signInWithEmailAndPassword(emailAddress, password);
@@ -85,6 +86,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onStart();
         emailSignIn.mAuth.addAuthStateListener(emailSignIn.listener);
     }
+
     @Override
     /* saves email and password before the app is closed */
     protected void onPause() {

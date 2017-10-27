@@ -35,6 +35,7 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
     public OnQueryTextListener(Context c) {
         context = c;
     }
+
     @Override
     /* searches query when it is submitted */
     public boolean onQueryTextSubmit(String query) {
@@ -43,6 +44,7 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
         search(query);
         return false;
     }
+
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;

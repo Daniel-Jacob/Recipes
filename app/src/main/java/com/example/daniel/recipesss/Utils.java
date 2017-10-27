@@ -33,7 +33,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
 /* Utilities class that includes searches onclickeventlisteners and signout options that occur
  more than once */
 public class Utils extends Activity {
@@ -59,11 +58,13 @@ public class Utils extends Activity {
         reference = database.getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
+
     /* gets sign in type */
     public int getSignInType() {
         int signInType = preferences.getInt("signintype", 0);
         return signInType;
     }
+
     /* signs user out of facebook, email or goes to sign up screen */
     public void signoutOrSignUp() {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -86,6 +87,7 @@ public class Utils extends Activity {
             context.startActivity(intent);
         }
     }
+
     /* error handling before recipes are sent to gridview */
     public void returnRecipesToGridview(Recipes output){
         ArrayList<String> values = new ArrayList<>();
@@ -107,7 +109,8 @@ public class Utils extends Activity {
                     output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -1));
                     output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() -2));
                 }
-            }   // send elements to gridview
+            }
+            // send elements to gridview
             ToGridview(output);
         } else {
             // no recipes found so try again
@@ -115,12 +118,14 @@ public class Utils extends Activity {
             ((Activity) context).recreate();
         }
     }
+
     /* sends recipes to gridview */
     public void ToGridview(Recipes recipes) {
         Intent intent = new Intent(context, DisplayRecipes.class);
         intent.putExtra("Data", recipes);
         context.startActivity(intent);
     }
+
     /* checks if user came from a previous activity or user shut down application
       and recipes need to be retrieved */
     public Recipes addOrFetchRecipes(Recipes recipes) {
@@ -140,6 +145,7 @@ public class Utils extends Activity {
         }
         return recipes;
     }
+
     /* user shut down app before so redirect user to where app was closed */
     public void redirectUserToCorrectActivity(int activity){
         this.activity = activity;
@@ -147,7 +153,7 @@ public class Utils extends Activity {
         switch (activity){
             case 2:
                 intent = new Intent(context, RegistrationActivity.class);
-               context.startActivity(intent);
+                context.startActivity(intent);
                 break;
             case 3:
                 intent = new Intent(context, RecipeActivity.class);
@@ -175,6 +181,7 @@ public class Utils extends Activity {
                 break;
         }
     }
+
     /* sets up logout or sign up button and progressbar */
     public void setupProgressBar(Activity activity) {
         final Activity myActivity = activity;
@@ -184,7 +191,6 @@ public class Utils extends Activity {
                 myActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // inflates layout
                         myActivity.findViewById(R.id.indeterminateBar).setVisibility(View.VISIBLE);
                     }
                 });

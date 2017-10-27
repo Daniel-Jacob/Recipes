@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         // update activity
         preferences.edit().putInt("Activity", 1).commit();
     }
+
     @Override
     /* signs user into google other sign in methods handled elsewhere in utils class  */
     public void onClick(View v) {
@@ -81,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
                 break;
         }
     }
+
     /* sign in method for google */
     public void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         this.startActivityForResult(signInIntent, RESULT);
     }
+
     @Override
     /* checks result of authentication */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -104,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, "oops... something went wrong",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -114,12 +119,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         Toast.makeText(this, "An error occured... Try to sign in again or try later...",
                 Toast.LENGTH_SHORT).show();
     }
+
     @Override
     /* connects google api client */
     protected void onStart() {
         super.onStart();
         googleApiClient.connect();
     }
+
     @Override
     /* adds authentication state listener */
     protected void onResume() {
@@ -128,10 +135,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.
         auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-               user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
             }
         });
     }
+
     @Override
     /* disconnects google api client */
     protected void onStop() {

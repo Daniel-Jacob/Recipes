@@ -40,7 +40,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-
+/* class that wraps functions needed for favorites activity */
 public class FavoritesHelper {
 
     // global variables
@@ -113,8 +113,7 @@ public class FavoritesHelper {
             Gson gson = new Gson();
             // gets recipes
             String json = preferences.getString("recipeLocalUser", "");
-            Type type = new TypeToken<Recipes>() {
-            }.getType();
+            Type type = new TypeToken<Recipes>() {}.getType();
             recipes = gson.fromJson(json, type);
             if (recipes == null) {
                 recipes = new Recipes();
@@ -127,6 +126,7 @@ public class FavoritesHelper {
         }
         return recipes;
     }
+
     /* listens for click on favorites item */
     public void onItemClick(final Recipes recipess) {
         this.recipes = recipess;
@@ -144,6 +144,7 @@ public class FavoritesHelper {
 
         });
     }
+
     /* listens for long click and removes the clicked item from database and recipes object */
     public void onLongClick(Activity activity, final Recipes recipesLongClick) {
         this.recipesLongClick = recipes;
@@ -164,6 +165,7 @@ public class FavoritesHelper {
             }
         });
     }
+
     /* removes recipe from database */
     public void removeRecipeFromDB(final Recipe recipeRemoved) {
         final RecipeCompare compare = new RecipeCompare();
@@ -193,6 +195,7 @@ public class FavoritesHelper {
             }
         });
     }
+
     /* removes a given recipe from shared preferences */
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
         for (int i = 0; i < recipesLongClick.getRecipes().size(); i++) {
@@ -231,6 +234,7 @@ public class FavoritesHelper {
             }
         });
     }
+
     /* sends recipe data to detailsactivity */
     public void toDetailsActivity(int signInType, int position) {
         // authenticated user
@@ -248,6 +252,7 @@ public class FavoritesHelper {
             context.startActivity(intent);
         }
     }
+
     /* sets recipe adapter on listview and sets up progressbar */
     public void setAdapter(FavoritesActivity activity, final Recipes recipesForAdapter) {
         this.recipes = recipesForAdapter;
@@ -271,6 +276,7 @@ public class FavoritesHelper {
             }
         }).start();
     }
+
     /* displays textview when recipes list is empty */
     public void recipesIsEmpty(Recipes recipes) {
         if (recipes.getRecipes().isEmpty()) {

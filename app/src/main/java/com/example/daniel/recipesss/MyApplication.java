@@ -43,6 +43,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
         }
+        /* gets context in static environment */
         public static Context getAppContext() {
             return MyApplication.context;
         }

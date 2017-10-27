@@ -33,7 +33,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         super(context, textViewResourceId, recipes.getRecipes());
         this.recipes = recipes;
         if(recipes.getRecipes().isEmpty() || recipes.getRecipes() == null){
-           recipes = new Recipes();
+            recipes = new Recipes();
         }
     }
 

@@ -35,6 +35,7 @@ public class OnClickListener implements View.OnClickListener {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         signInType = preferences.getInt("signintype", 0);
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
