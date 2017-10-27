@@ -109,6 +109,7 @@ public class Utils extends Activity {
                     output.getRecipes().remove(output.getRecipes().get(output.getRecipes().size() - 2));
                 }
             }
+        }
             if (output.getRecipes().size() > 0) {
                 // send elements to gridview
                 ToGridview(output);
@@ -118,7 +119,6 @@ public class Utils extends Activity {
                 ((Activity) context).recreate();
             }
         }
-    }
 
     /* sends recipes to gridview */
     public void ToGridview(Recipes recipes) {
@@ -141,17 +141,18 @@ public class Utils extends Activity {
             preferences.getString("json", null);
             Gson gson = new Gson();
             String json = preferences.getString("json", "");
-            Type type = new TypeToken<Recipes>(){}.getType();
+            Type type = new TypeToken<Recipes>() {
+            }.getType();
             recipes = gson.fromJson(json, type);
         }
         return recipes;
     }
 
     /* user shut down app before so redirect user to where app was closed */
-    public void redirectUserToCorrectActivity(int activity){
+    public void redirectUserToCorrectActivity(int activity) {
         this.activity = activity;
         Intent intent;
-        switch (activity){
+        switch (activity) {
             case 2:
                 intent = new Intent(context, RegistrationActivity.class);
                 context.startActivity(intent);
@@ -169,7 +170,7 @@ public class Utils extends Activity {
                 context.startActivity(intent);
                 break;
             case 6:
-                intent = new Intent(context,TitleActivity.class);
+                intent = new Intent(context, TitleActivity.class);
                 context.startActivity(intent);
                 break;
             case 7:
@@ -184,7 +185,7 @@ public class Utils extends Activity {
     }
 
     /* sets up logout or sign up button and progressbar */
-    public void setupProgressBar(Activity activity) {
+    public void setupProgressBar(final Activity activity) {
         final Activity myActivity = activity;
         new Thread(new Runnable() {
             @Override
@@ -198,4 +199,5 @@ public class Utils extends Activity {
             }
         }).start();
     }
+
 }
