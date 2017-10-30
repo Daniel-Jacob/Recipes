@@ -209,7 +209,6 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // recipes already exist in database
-                if (dataSnapshot.getValue() != null) {
                     // user exists
                     if (user != null) {
                         RecipeCompare compare = new RecipeCompare();
@@ -231,11 +230,6 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
                             Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
                         }
                     }
-                } else {
-                    // add recipe to database
-                    reference.push().setValue(recipe);
-                    Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
-                }
                 // recipe has been added so make button clickable again
                 button.setClickable(true);
             }

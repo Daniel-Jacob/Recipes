@@ -162,4 +162,4 @@ public class TitleActivity extends AppCompatActivity implements  GoogleApiClient
         Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
         startActivity(intent);
     }
-}a
+}
