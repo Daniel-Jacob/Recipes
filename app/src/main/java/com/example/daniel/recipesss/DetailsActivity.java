@@ -64,11 +64,14 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
     int signInType;
     int comparison;
     GoogleSignIn googleUser;
+    FloatingActionButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailsactivity);
+        // initialize action button
+        button = (FloatingActionButton) findViewById(R.id.favorites);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // tracks activity
         preferences.edit().putInt("Activity", 7).commit();
@@ -200,8 +203,6 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
 
     /* adds recipe to database */
     public void addRecipeToDB() {
-        // initialize action button
-        final FloatingActionButton button = (FloatingActionButton) findViewById(R.id.favorites);
         // make it unclickable until recipe is added to database
         button.setClickable(false);
         reference = database.getReference().child("Users").child(user.getUid()).child("Recipes");
@@ -212,10 +213,9 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
                     // user exists
                     if (user != null) {
                         RecipeCompare compare = new RecipeCompare();
-                        Recipe recipeDatabase;
                         for (DataSnapshot s : dataSnapshot.getChildren()) {
                             // get recipes from database
-                            recipeDatabase = s.getValue(Recipe.class);
+                           Recipe recipeDatabase = s.getValue(Recipe.class);
                             // compare recipes from database with current clicked recipe
                             comparison = compare.compare(recipeDatabase, recipe);
                             // recipe exists so don't add
