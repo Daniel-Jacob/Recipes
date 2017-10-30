@@ -22,7 +22,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 - logMeIn: logs an e-mail user in
 - submit: creates a user account and attempt sign in
 
-RecipeActivity: In this screen there is a searchview where a general recipe query can be done. 
+<i>RecipeActivity: In this screen there is a searchview where a general recipe query can be done. </i>
 <br>
 <b>Methods</b>
 
