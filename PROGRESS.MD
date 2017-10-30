@@ -25,6 +25,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 
 <i>RegistrationActivity: Registers or logs an E-mail user in</i>
 RecipeActivity: In this screen there is a searchview where a general recipe query can be done. 
+<br>
 <b>Methods</b>
 
 - processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. Reason for this is because this function is implemented twice. 
@@ -36,6 +37,7 @@ RecipeActivity: In this screen there is a searchview where a general recipe quer
 
 <i>RegistrationActivity: Registers or logs an E-mail user in</i>
 RecipeByIngredient: In this screen there is a searchview where a query based on ingredients can be done. 
+<br>
 <b>Methods</b>
 GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
 
@@ -58,6 +60,7 @@ This class helps to log a facebook user in,  get their profile information, and 
 -submitGraphRequest:returns a Graphrequest object
 
 GoogleSignIn: This class contains methods to help with the authentication of google users. 
+<br>
 <b>Methods</b>
 - buildApiClient: Builds google api client
 - connectToApi: connect google api client
