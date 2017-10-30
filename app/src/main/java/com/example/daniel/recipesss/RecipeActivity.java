@@ -123,9 +123,7 @@ public class RecipeActivity extends AppCompatActivity
     /* saves query */
     protected void onPause(){
         super.onPause();
-        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-        // make progressbar invisible
-        progressBar.setVisibility(View.INVISIBLE);
+        utilities.setupProgressBar(this);
         String query = searchView.getQuery().toString();
         preferences.edit().putString("recipeQuery", query).commit();
         preferences.edit().putBoolean("recipeActivity", true).commit();

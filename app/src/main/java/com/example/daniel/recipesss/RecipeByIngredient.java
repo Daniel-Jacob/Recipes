@@ -116,9 +116,7 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     @Override
     protected void onPause() {
         super.onPause();
-        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-        // make progressbar invisible
-        progressBar.setVisibility(View.INVISIBLE);
+        utilities.setupProgressBar(this);
         preferences.edit().putBoolean("recipeByIngredient", true).commit();
         preferences.edit().putBoolean("recipeActivity", false).commit();
         String query = searchView.getQuery().toString();
