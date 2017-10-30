@@ -138,6 +138,10 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                     }
                 });
     }
+    public void connectToApi() {
+        googleApiClient = buildApiClient();
+        googleApiClient.connect();
+    }
 
     @Override
     // connection failed so display message

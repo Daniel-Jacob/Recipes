@@ -108,9 +108,10 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         super.onStart();
         // builds google api client
         googleUser = new GoogleSignIn(this);
-        googleUser.buildApiClient();
+       // googleUser.buildApiClient();
         // connects Google api client
-        googleUser.googleApiClient.connect();
+      //  googleUser.googleApiClient.connect();
+        googleUser.connectToApi();
     }
 
     @Override

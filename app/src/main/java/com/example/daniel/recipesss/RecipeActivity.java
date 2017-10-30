@@ -114,16 +114,20 @@ public class RecipeActivity extends AppCompatActivity
         super.onStart();
         googleUser = new GoogleSignIn(this);
         // builds Google api client
-        googleUser.buildApiClient();
+      //  googleUser.buildApiClient();
         // connects Google api client
-        googleUser.googleApiClient.connect();
+      //  googleUser.googleApiClient.connect();
+        googleUser.connectToApi();
+
     }
 
     @Override
     /* saves query */
     protected void onPause(){
         super.onPause();
-        utilities.setupProgressBar(this);
+        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+        // make progressbar invisible
+        progressBar.setVisibility(View.INVISIBLE);
         String query = searchView.getQuery().toString();
         preferences.edit().putString("recipeQuery", query).commit();
         preferences.edit().putBoolean("recipeActivity", true).commit();
