@@ -72,25 +72,7 @@ onQueryTextListener: Helper class for the queries performed in recipeActivity an
 <b>Method</b>
 - search: grabs query text, loops over characters and checks if it contains numbers, or non-alphabetical characters. If so the asynctask is not executed. The function also makes sure that the asynctask is not executed more than once, and sets up the progressbar while in the recipeActivity or recipeByIngredientActivity. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-AsyncWithInterface:
-
-This class implements an asynctask that is performed in both recipe activities. This is done by making use of an interface. This choice has been made, because with a regular asynctask a lot of code needs to be copied and put in a seperate file, because the context of a specific activity is passed. 
-
-<b>Functions</b>
+<i>AsyncWithInterface: This class implements an asynctask that is performed in both recipe activities. This is done by making use of an interface. This choice has been made, because with a regular asynctask a lot of code needs to be copied and put in a seperate file, because the context of a specific activity is passed.   </i>
 
 - onPreExecute: code that is run before the asynctask is performed. Not really used, because progressbar is set up in  onQueryTextListener class
 - doInBackground: function to download recipes from yummly api endpoint
@@ -98,3 +80,21 @@ This class implements an asynctask that is performed in both recipe activities. 
 - recipesReturned: passes json array to initializeRecipes, gets recipes object back and sends it to onPostExecute
 - initializeRecipes: converts json array into a recipes object, and sends object back to recipesReturned. 
 - formatImageLink: formats the image link, so that the image can be put in imageview.
+
+<i>HttpRequestHelper: Helper class to download recipes from yummly api endpoint </i>
+<br>
+- downloadFromServer: returns json string from yummly api endpoint
+- returnCorrectUrl: returns url based on if user is in RecipeActivity or RecipeByIngredientActivity
+- createUrlObject: creates an url object from the string of returnCorrectUrl.
+- uses url object to download json string from yummly api and pass it to downloadFromServer function
+
+<i>ImageAdapter: populates gridview with images of downloaded recipes</i>
+getView: loads every image of every recipe into the gridview
+- loadImageData: uses picasso library to load recipe images
+<br>
+<i>RecipeAdapter: An extension of arrayAdapter that makes it possible to set a Recipes object on the adapter </i>
+- getView: sets a given recipe title on a row. 
+
+<i>Utils</i>
+
+<i>FavoritesHelper</>
