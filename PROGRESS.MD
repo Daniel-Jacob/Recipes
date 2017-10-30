@@ -13,16 +13,17 @@ In both cases the user is navigated to the recipe itself when a given recipe is 
 <b>Activities</b>
 <br>
 <br>
-MainActivity:
+<i>MainActivity:</i>
 
 This is where the user can log in using Facebook, google, or to continue as a local user. Sign in functionality for the google user is implemented within the activity, because the sign in method needs to pass a google api client. This api client gets connected in onStart and is only then not null. Therefore it is better if the sign in method also is done within the activity. Both the facebook and google sign in returns a result. In onActivityResult it is checked whether this is the correct result, and if this is the case the user is fetched and is logged in. Another important aspect implemented in this activity is the redirect to the previous activity the user was in before the app was closed. This is done with the utils class, and specifically the method 'redirectUserToCorrectActivity'. 
 
-RegistrationActivity: Registers or logs an E-mail user in
+<i>RegistrationActivity: Registers or logs an E-mail user in</i>
 
 - logMeIn: logs an e-mail user in
 - submit: creates a user account and attempt sign in
 
 
+<i>RegistrationActivity: Registers or logs an E-mail user in</i>
 RecipeActivity: In this screen there is a searchview where a general recipe query can be done. 
 <b>Methods</b>
 
@@ -33,13 +34,10 @@ RecipeActivity: In this screen there is a searchview where a general recipe quer
 - recipeByIngredient: User is sent to the RecipeByIngredientActivity
 - Favorites: User is sent to FavoritesActivity
 
+<i>RegistrationActivity: Registers or logs an E-mail user in</i>
 RecipeByIngredient: In this screen there is a searchview where a query based on ingredients can be done. 
 <b>Methods</b>
 GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
-
-
-
-
 
 <b>Classes</b>
 - Recipe modelclass: this modelclass contains getters and setters for title, image, ingredients and attributes. 
