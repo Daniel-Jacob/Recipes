@@ -156,9 +156,7 @@ public class RecipeActivity extends AppCompatActivity
     /* disconnects google api client */
     protected void onStop() {
         super.onStop();
-        googleUser.googleApiClient.stopAutoManage(this);
-        // disconnects Google api client
-        googleUser.googleApiClient.disconnect();
+        googleUser.disconnectFromApi(this);
     }
 
     @Override

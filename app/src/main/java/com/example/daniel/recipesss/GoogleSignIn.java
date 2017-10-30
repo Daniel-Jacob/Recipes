@@ -143,6 +143,12 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
         googleApiClient.connect();
     }
 
+    public void disconnectFromApi(Context context){
+        this.context = context;
+        googleApiClient.stopAutoManage((FragmentActivity) context);
+        googleApiClient.disconnect();
+    }
+
     @Override
     // connection failed so display message
     public void onConnectionFailed(ConnectionResult connectionResult) {
