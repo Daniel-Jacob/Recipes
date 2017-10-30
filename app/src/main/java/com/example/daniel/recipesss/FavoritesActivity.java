@@ -49,6 +49,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     Recipes recipes;
     Utils utilities;
     GoogleSignIn googleUser;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,32 +146,25 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     /* navigate user back to last activity */
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent;
+        Intent intent = null;
         boolean recipe = preferences.getBoolean("recipeActivity", false);
         boolean recipeByIngredient = preferences.getBoolean("recipeByIngredient", false);
         boolean displayRecipes = preferences.getBoolean("displayARecipe", false);
         boolean details = preferences.getBoolean("details", false);
         boolean title = preferences.getBoolean("title", false);
         boolean titleActivity = preferences.getBoolean("titleactivity", false);
-        if(details) {
+        if (details) {
             intent = new Intent(this, DetailsActivity.class);
             startActivity(intent);
-        }
-        else if(title || titleActivity){
+        } else if (title || titleActivity) {
             intent = new Intent(this, TitleActivity.class);
-            startActivity(intent);
-        }
-        else if(displayRecipes){
+        } else if (displayRecipes) {
             intent = new Intent(this, DisplayRecipes.class);
-            startActivity(intent);
-        }
-        else if(recipeByIngredient){
-            intent = new Intent(getApplicationContext(),RecipeByIngredient.class);
-            startActivity(intent);
-        }
-        else if(recipe){
+        } else if (recipeByIngredient) {
+            intent = new Intent(getApplicationContext(), RecipeByIngredient.class);
+        } else if (recipe) {
             intent = new Intent(this, RecipeActivity.class);
-            startActivity(intent);
         }
+        startActivity(intent);
     }
 }
