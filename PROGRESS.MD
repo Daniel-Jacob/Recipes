@@ -33,7 +33,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 <i>RecipeByIngredient: In this screen there is a searchview where a query based on ingredients can be done. </i>
 <br>
 <br>
-GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
+- GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
 
 <b>Classes</b>
 - Recipe modelclass: this modelclass contains getters and setters for title, image, ingredients and attributes. 
