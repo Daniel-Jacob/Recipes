@@ -308,10 +308,7 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
     protected void onStart() {
         super.onStart();
         googleUser = new GoogleSignIn(this);
-        // builds Google api client
-        googleUser.buildApiClient();
-        // connects Google api client
-        googleUser.googleApiClient.connect();
+        googleUser.connectToApi();
     }
 
     @Override
