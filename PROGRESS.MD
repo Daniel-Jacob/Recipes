@@ -1,10 +1,8 @@
-This application is a recipe finder application. It helps users to find general recipes and recipes by ingredient. These recipes are requested from yummly api. When a user wants to save a recipe, authenticated users can store their recipes in a firebase database, whereas a local user can save their recipes locally. 
-
-helps user to search for general recipes and recipes by ingredient.Recipes are requested from yummly api. 
-The starting screen of the application looks like this:
+This application is a recipe finder application. It helps users to find general recipes and recipes by ingredient. These recipes are requested from yummly api. Authenticated users can store their recipes in a firebase database, whereas a local user can save recipes locally. The starting screen of the application looks like this:
 <div align="center">
         <img width="25%" height = "25%" align = "left" src="doc/download.png" alt="image" title="image"</img
 </div>
+
 
 The app starts off with the screen displayed above. As evident, the application supports Facebook, Google, and E-mail sign in. If a person does not want to sign in, he or she can continue as a local user. These options are provided so a user can save recipes in a favorites list. If a user is authenticated then recipes are saved in a firebase database. This has the advantage that the favorites list can also be accessed from a different device. A local user can save his or her recipes in a favorites list, but this is only accesible on the given device. 
 
