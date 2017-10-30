@@ -125,7 +125,7 @@ public class FacebookSignIn extends AppCompatActivity {
 
     /* submits a graph request for facebook user */
     public GraphRequest submitGraphRequest(final LoginResult result){
-        GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
+       final GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     // autenticates user with firebase
@@ -137,7 +137,7 @@ public class FacebookSignIn extends AppCompatActivity {
     }
 
     /* executes asynctask */
-    public void executeFacebookAsyncTask(GraphRequest request){
+    public void executeFacebookAsyncTask(GraphRequest request) {
         Bundle parameters = new Bundle();
         // put user info in bundle
         parameters.putString("fields", "id,name,link");
@@ -151,7 +151,7 @@ public class FacebookSignIn extends AppCompatActivity {
 
     /* authenticates user with firebase */
     public void handleFacebookAccessToken(AccessToken token) {
-        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         // signs facebook user in
         auth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -160,10 +160,12 @@ public class FacebookSignIn extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, get firebase user
                             user = auth.getCurrentUser();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            Log.d("Authentication failed:", task.getException().getMessage());
                         }
                     }
                 });
