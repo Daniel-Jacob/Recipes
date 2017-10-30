@@ -24,7 +24,6 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 
 <i>RecipeActivity: In this screen there is a searchview where a general recipe query can be done. </i>
 <br>
-<br>
 - processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. Reason for this is because this function is implemented twice. 
 
 - loginOrLogout:if the user is authenticated then he or she is signed out, and sent to the MainActivity. Otherwise the user is just brought to the MainActivity to sign up. 
