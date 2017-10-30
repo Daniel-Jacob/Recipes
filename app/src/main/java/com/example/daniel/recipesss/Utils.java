@@ -151,37 +151,31 @@ public class Utils extends Activity {
     /* user shut down app before so redirect user to where app was closed */
     public void redirectUserToCorrectActivity(int activity) {
         this.activity = activity;
-        Intent intent;
+        Intent intent = null;
         switch (activity) {
             case 2:
                 intent = new Intent(context, RegistrationActivity.class);
-                context.startActivity(intent);
                 break;
             case 3:
                 intent = new Intent(context, RecipeActivity.class);
-                context.startActivity(intent);
                 break;
             case 4:
                 intent = new Intent(context, RecipeByIngredient.class);
-                context.startActivity(intent);
                 break;
             case 5:
                 intent = new Intent(context, DisplayRecipes.class);
-                context.startActivity(intent);
                 break;
             case 6:
                 intent = new Intent(context, TitleActivity.class);
-                context.startActivity(intent);
                 break;
             case 7:
                 intent = new Intent(context, DetailsActivity.class);
-                context.startActivity(intent);
                 break;
             case 8:
                 intent = new Intent(context, FavoritesActivity.class);
-                context.startActivity(intent);
                 break;
         }
+        context.startActivity(intent);
     }
 
     /* sets up logout or sign up button and progressbar */
