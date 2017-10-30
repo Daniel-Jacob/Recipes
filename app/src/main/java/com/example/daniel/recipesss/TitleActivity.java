@@ -153,9 +153,7 @@ public class TitleActivity extends AppCompatActivity implements  GoogleApiClient
     @Override
     protected void onStop() {
         super.onStop();
-        googleUser.googleApiClient.stopAutoManage(this);
-        // disconnects Google api client
-        googleUser.googleApiClient.disconnect();
+        googleUser.disconnectFromApi(this);
     }
 
     @Override
@@ -164,4 +162,4 @@ public class TitleActivity extends AppCompatActivity implements  GoogleApiClient
         Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
         startActivity(intent);
     }
-}
+}a

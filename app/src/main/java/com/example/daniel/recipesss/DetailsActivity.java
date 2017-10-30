@@ -337,9 +337,7 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onStop() {
         super.onStop();
-        googleUser.googleApiClient.stopAutoManage(this);
-        // disconnects Google api client
-        googleUser.googleApiClient.disconnect();
+       googleUser.disconnectFromApi(this);
     }
 
     @Override
