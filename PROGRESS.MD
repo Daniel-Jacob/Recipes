@@ -27,3 +27,4 @@ This class implements the asynctask that is performed in both recipe activities.
 - formatImageLink
 
 </figcaption
+</figure>
