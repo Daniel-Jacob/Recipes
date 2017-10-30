@@ -237,7 +237,9 @@ public class FavoritesHelper {
 
     /* sends recipe data to detailsactivity */
     public void toDetailsActivity(int signInType, int position) {
-        // authenticated user
+        preferences.edit().putBoolean("displayARecipeFromFavorites", true).commit();
+        preferences.edit().putBoolean("displayARecipe", false).commit();
+                // authenticated user
         if (signInType != 4) {
             Intent intent = new Intent(context, DetailsActivity.class);
             intent.putExtra("Recipe", recipes.getRecipes().get(position));

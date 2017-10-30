@@ -54,7 +54,7 @@ public class RecipeActivity extends AppCompatActivity
         preferences.edit().putInt("Activity", 3).commit();
         // initialize searchview and set searchview to previous text
         searchView = (SearchView) findViewById(R.id.searchview);
-        String query = preferences.getString("query", "");
+        String query = preferences.getString("recipeQuery", "");
         searchView.setQuery(query, true);
         // initializes listener
         OnQueryTextListener onQueryTextListener = new OnQueryTextListener(this);
@@ -94,6 +94,10 @@ public class RecipeActivity extends AppCompatActivity
     /* goes to favorites */
     public void favorites(View view) {
         preferences.edit().putBoolean("recipesearch", true).commit();
+        preferences.edit().putBoolean("titleactivity", false).commit();
+        preferences.edit().putBoolean("displayARecipe", false).commit();
+        preferences.edit().putBoolean("display", false).commit();
+
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
@@ -122,10 +126,11 @@ public class RecipeActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
-        // save query
         String query = searchView.getQuery().toString();
-        preferences.edit().putString("query", query).commit();
-    }
+        preferences.edit().putString("recipeQuery", query).commit();
+        preferences.edit().putBoolean("recipeActivity", true).commit();
+        preferences.edit().putBoolean("recipeByIngredient", false).commit();
+        }
 
     @Override
     protected void onResume() {
@@ -139,7 +144,7 @@ public class RecipeActivity extends AppCompatActivity
         int activity = preferences.getInt("Activity", 0);
         // user comes from different activity so recreate so query can be submitted
         if(activity != 3){
-            String query = preferences.getString("query", "");
+            String query = preferences.getString("recipeQuery", "");
             searchView.setQuery(query, true);
             recreate();
         }

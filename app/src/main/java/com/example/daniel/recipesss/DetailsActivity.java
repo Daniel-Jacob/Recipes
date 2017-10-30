@@ -345,8 +345,20 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     /* goes to DisplayRecipes */
     public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
-        startActivity(intent);
+        boolean goToDisplayActivity = preferences.getBoolean("displayARecipe", false);
+        boolean goToFavorites = preferences.getBoolean("displayARecipeFromFavorites", false);
+        boolean titleActivity = preferences.getBoolean("titleactivity", false);
+        if(goToDisplayActivity){
+            Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
+            startActivity(intent);
+        }
+        else if(goToFavorites){
+            Intent intent = new Intent(getApplicationContext(), FavoritesActivity.class);
+            startActivity(intent);
+        }
+        else if(titleActivity){
+            Intent intent = new Intent(this, TitleActivity.class);
+            startActivity(intent);
+        }
     }
 }

@@ -109,6 +109,8 @@ public class TitleActivity extends AppCompatActivity implements  GoogleApiClient
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
         preferences.edit().putBoolean("titleactivity", true).commit();
+        preferences.edit().putBoolean("displayARecipe", false).commit();
+        preferences.edit().putBoolean("display", false).commit();
     }
 
     @Override
@@ -126,6 +128,14 @@ public class TitleActivity extends AppCompatActivity implements  GoogleApiClient
         googleUser.buildApiClient();
         // connects Google api client
         googleUser.googleApiClient.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        preferences.edit().putBoolean("titleactivity", true).commit();
+        preferences.edit().putBoolean("displayARecipe", false).commit();
+        preferences.edit().putBoolean("display", false).commit();
     }
 
     @Override

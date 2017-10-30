@@ -138,6 +138,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         preferences.edit().putBoolean("display", false).commit();
         preferences.edit().putBoolean("details", false).commit();
         preferences.edit().putBoolean("title", false).commit();
+        listView.setAdapter(null);
     }
 
     @Override
@@ -145,24 +146,30 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent;
-        boolean recipe = preferences.getBoolean("recipesearch", false);
-        boolean displayRecipes = preferences.getBoolean("display", false);
+        boolean recipe = preferences.getBoolean("recipeActivity", false);
+        boolean recipeByIngredient = preferences.getBoolean("recipeByIngredient", false);
+        boolean displayRecipes = preferences.getBoolean("displayARecipe", false);
         boolean details = preferences.getBoolean("details", false);
         boolean title = preferences.getBoolean("title", false);
-        if(recipe){
-            intent = new Intent(this, RecipeActivity.class);
+        boolean titleActivity = preferences.getBoolean("titleactivity", false);
+        if(details) {
+            intent = new Intent(this, DetailsActivity.class);
+            startActivity(intent);
+        }
+        else if(title || titleActivity){
+            intent = new Intent(this, TitleActivity.class);
             startActivity(intent);
         }
         else if(displayRecipes){
             intent = new Intent(this, DisplayRecipes.class);
             startActivity(intent);
         }
-        else if(title){
-            intent = new Intent(this, TitleActivity.class);
+        else if(recipeByIngredient){
+            intent = new Intent(getApplicationContext(),RecipeByIngredient.class);
             startActivity(intent);
         }
-        else if(details){
-            intent = new Intent(this, DetailsActivity.class);
+        else if(recipe){
+            intent = new Intent(this, RecipeActivity.class);
             startActivity(intent);
         }
     }

@@ -72,6 +72,8 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
                 // brings clicked recipe data to next activity
                 Recipe recipe = elements.get(position);
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                preferences.edit().putBoolean("displayARecipe", true).commit();
+                preferences.edit().putBoolean("titleactivity", false).commit();
                 intent.putExtra("Element", recipe);
                 // track from what activity recipe is passed
                 intent.putExtra("activity", 1);
@@ -118,6 +120,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
         preferences.edit().putBoolean("display", true).commit();
+        preferences.edit().putBoolean("displayARecipe", true).commit();
     }
 
     @Override
@@ -131,9 +134,18 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
         super.onStart();
         googleUser = new GoogleSignIn(this);
         // builds Google api client
-        googleUser.buildApiClient();
-        // connects Google api client
-        googleUser.googleApiClient.connect();
+       googleUser.buildApiClient();
+
+       googleUser.googleApiClient.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        preferences.edit().putBoolean("titleactivity", false).commit();
+        preferences.edit().putBoolean("displayARecipe", true).commit();
+        preferences.edit().putBoolean("display", false).commit();
+        preferences.edit().putBoolean("displayARecipeFromFavorites", false).commit();
     }
 
     @Override
@@ -156,7 +168,6 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     protected void onStop() {
         super.onStop();
         googleUser.googleApiClient.stopAutoManage(this);
-        // disconnects Google api client
         googleUser.googleApiClient.disconnect();
     }
 
@@ -164,7 +175,16 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     /* send user back to recipeActivity */
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
-        startActivity(intent);
+        boolean recipe = preferences.getBoolean("recipeActivity", false);
+        boolean recipeByIngredient = preferences.getBoolean("recipeByIngredient", false);
+        if(recipe) {
+            Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
+            startActivity(intent);
+        }
+        else if(recipeByIngredient){
+            Intent intent = new Intent(getApplicationContext(), RecipeByIngredient.class);
+            startActivity(intent);
+        }
+
     }
 }

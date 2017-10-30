@@ -85,8 +85,6 @@ public class HttpRequestHelper {
             urlObject = new URL(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            Toast.makeText(MyApplication.getAppContext(), "invalid url",
-                    Toast.LENGTH_SHORT).show();
         }
         return urlObject;
     }

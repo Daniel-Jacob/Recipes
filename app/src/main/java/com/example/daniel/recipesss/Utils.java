@@ -148,6 +148,11 @@ public class Utils extends Activity {
         return recipes;
     }
 
+    public void goToDisplayActivity(){
+        Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
+        startActivity(intent);
+    }
+
     /* user shut down app before so redirect user to where app was closed */
     public void redirectUserToCorrectActivity(int activity) {
         this.activity = activity;

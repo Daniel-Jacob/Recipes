@@ -17,13 +17,15 @@ package com.example.daniel.recipesss;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import xdroid.toaster.Toaster;
+
 /* creates an asynctask from yummly api and returns recipes to processfinish function */
 public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
 
@@ -75,7 +77,6 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
             recipes = initializeRecipes(object);
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(MyApplication.getAppContext(), "retrieving recipes failed", Toast.LENGTH_SHORT).show();
         }
         return recipes;
     }
@@ -109,8 +110,8 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
                 recipes.Recipes.add(recipeObject);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(MyApplication.getAppContext(), "error retrieving recipes",
-                        Toast.LENGTH_SHORT).show();
+                Toaster.toast("error retrieving recipes");
+
             }
         }
         return recipes;

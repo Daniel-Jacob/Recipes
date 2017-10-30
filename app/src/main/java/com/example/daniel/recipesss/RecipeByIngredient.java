@@ -90,6 +90,9 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
     public void favorites(View view) {
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
+        preferences.edit().putBoolean("titleactivity", false).commit();
+        preferences.edit().putBoolean("displayARecipe", false).commit();
+        preferences.edit().putBoolean("display", false).commit();
     }
 
     @Override
@@ -116,6 +119,11 @@ public class RecipeByIngredient extends AppCompatActivity implements AsyncWithIn
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
+        preferences.edit().putBoolean("recipeByIngredient", true).commit();
+        preferences.edit().putBoolean("recipeActivity", false).commit();
+        String query = searchView.getQuery().toString();
+        preferences.edit().putString("query", query).commit();
+
     }
 
     @Override
