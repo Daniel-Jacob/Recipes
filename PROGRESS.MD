@@ -24,6 +24,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 
 <i>RecipeActivity: In this screen there is a searchview where a general recipe query can be done. </i>
 <br>
+<br>
 <b>Methods</b>
 
 - processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. Reason for this is because this function is implemented twice. 
