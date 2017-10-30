@@ -80,3 +80,7 @@ day 28: vandaag duplicates bug van gisteren weggewerkt. Reden voor de bug was om
 day 29: 
 
 duplicate functie uit FavoritesHelper class gehaald. AddOrFetchRecipes in class gezet, utilities class kleiner gemaakt door aantal ui thread zaken in activity te zetten. Verder layout land folders gemaakt en deze nagelopen. 
+
+day 30: voornamelijk elke manier van naar een activity gaan langsgelopen om te kijken of er geen bugs in zitten. Dit was voor 1 situatie het geval, namelijk snel backbutton klikken als asynctask niet klaar was. Hierdoor kwam ik de app in een toast terecht, die ik aanriep vanuit een class, waar ik de context meegaf. Dit zorgde voor problemen omdat ik hem aanriep van een non activity class. Ik heb dit opgelost door gebruik te maken van de toaster library, die een toast kan weergeven zonder de context mee te geven. 
+
+day 31: nog eens alles nagelopen. Nadat ik aantal zaken had toegevoegd zoals bijvoorbeeld backbutton implementaties kreeg ik weer een 6 op better code hub. Dit heb ik terug weten te schroeven naar een 7. Ik krijg echter nog steeds een minpunt vanwege seperation of concerns. Dit komt omdat ik mijn utils class in  meerdere activities gebruik. wellicht functies opsplitsen in aparte class, zodat dit weggewerkt kan worden
