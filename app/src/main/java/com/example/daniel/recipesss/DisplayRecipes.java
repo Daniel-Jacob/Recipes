@@ -133,10 +133,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     protected void onStart() {
         super.onStart();
         googleUser = new GoogleSignIn(this);
-        // builds Google api client
-       googleUser.buildApiClient();
-
-       googleUser.googleApiClient.connect();
+        googleUser.connectToApi();
     }
 
     @Override
@@ -167,8 +164,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
     @Override
     protected void onStop() {
         super.onStop();
-        googleUser.googleApiClient.stopAutoManage(this);
-        googleUser.googleApiClient.disconnect();
+        googleUser.disconnectFromApi(this);
     }
 
     @Override
