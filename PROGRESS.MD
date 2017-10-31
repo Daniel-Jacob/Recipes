@@ -142,7 +142,8 @@ getView: loads every image of every recipe into the gridview
 - redirectUserToCorrectActivity: Redirect user to the activity the user was in before the app was closed
 - setupProgressBar: sets up progressbar. 
 <br>
-<i>FavoritesHelper: Helper class for favoritesActivity</>
+<i>FavoritesHelper: Helper class for favoritesActivity</i>
+
 - fetchFavorites: fetches favorites from firebase for an authenticated user
 - recipesUser: returns recipes of authenticated and local users
 - onItemClick: when an item is clicked a given recipe is passed to DetailsActivity
