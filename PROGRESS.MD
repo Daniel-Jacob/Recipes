@@ -1,6 +1,6 @@
 This application is a recipe finder application. It helps users to find general recipes and recipes by ingredient. These recipes are requested from yummly api. Authenticated users can store their recipes in a firebase database, whereas a local user can save recipes locally. The starting screen of the application looks like this:
 <div align="center">
-        <img width="25%" height = "25%" align = "center" src="doc/download.png" alt="image" title="image"</img>
+        <img width="25%" height = "25%" align = "center" src="doc/gridview.png" alt="image" title="image"</img>
         <br>
 </div>
 <br>
