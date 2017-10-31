@@ -20,8 +20,8 @@ import android.content.Context;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
-    /* class to get the context when in a static environment. Also helps to access googleapiclient
-    globally Code used from https://stackoverflow.com/questions/2002288/static-way-to-get-
+    /* class to get the context when in a static environment.
+    https://stackoverflow.com/questions/2002288/static-way-to-get-
     context-on-android */
     public class MyApplication extends Application {
     // google api client
