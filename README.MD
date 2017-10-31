@@ -3,6 +3,7 @@ Copyright 2017 Daniel Jacob
 
 
 <p align="center">
+  <br>
   <img src="/doc/download.png" width="200"/>
   <img src="/doc/gridview.png" width="200"/>
   <img src="/doc/titles.png" width="200"/>
