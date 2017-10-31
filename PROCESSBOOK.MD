@@ -67,9 +67,6 @@ worked on code quality. Put these days together because I lost my commits, becau
 
 day 25: worked on code quality. Further divison of long functions in smaller functions. 
 
-gewerkt aan code kwaliteit. Hierbij een aantal lange functies in kleinere functies opgedeeld. Bettercodehub grade is an eight now. Did some debugging. Made sure that an item can't get added for a second time within an activity. However because the data is not fetched yet from firebase, it still allows for duplicates. 
-
-
 day 26: partially debugged the application. Made sure that items can't be put in firebse double. I had a bug where i put the intent in onDataChange method. Took this out of the loop. Also implemented better toast messages that tells which title is added to the favorites list. A current problem is dat I cant get the right data without recreating the activity, because of firebse asynchronous nature. It therefore takes a few seconds before the user is navigated to the next activity. 
 
 
