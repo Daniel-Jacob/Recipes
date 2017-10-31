@@ -1,6 +1,6 @@
 <h1>Recipe app Recipesss</h1>
 Copyright 2017 Daniel Jacob
-<br>
+
 
 <p align="center">
   <img src="/doc/download.png" width="200"/>
