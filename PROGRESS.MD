@@ -78,7 +78,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 - Recipes modelclass:A modelclass which is in reality a list of recipe objects. it only has getters and setters for titles, because those were the only ones needed in this application. 
 - RecipeCompare:Compares two recipes objects to check if they are equal. They are only equal if all the fields match between two objects. 
 - myApplication: returns context in static environment. 
-onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
+- onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
 <br>
 <i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. </i>
 <br>
