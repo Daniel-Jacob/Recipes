@@ -1,6 +1,8 @@
 <h1>Recipe app Recipesss</h1>
-[![BCH compliance](https://bettercodehub.com/edge/badge/us3rna/Recipes?branch=master)](https://bettercodehub.com/)
+
 Copyright 2017 Daniel Jacob
+
+[![BCH compliance](https://bettercodehub.com/edge/badge/us3rna/Recipes?branch=master)](https://bettercodehub.com/)
 
 
 <p align="center">
