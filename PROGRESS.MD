@@ -34,7 +34,40 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 <br>
 <br>
 - GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
+<br>
+<i>DisplayRecipesActivity:</i>
+<br>
+- setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays them in a gridview
+- logout: Logs an authenticated user out and sends him or her back to MainActivity. A local user is just brought to MainActivity to sign up
+- listTitles: User is navigated to TitleActivity
+- goToFavoritesActivity: User is navigated to FavoritesActivity
+<br>
+<i>TitleActivity: Sets titles of recipes in a listview</i>
 
+- setAdapter: Removes duplicate recipes, and sets RecipeAdapter on listview
+- logout: logs user out
+-  favorites: goes to FavoritesActivity
+<br>
+
+<i>DetailsActivity:
+
+- recipeReturned: Returns recipe from correct activity
+- getRecipeFromPreviousUsage: Gets recipe from sharedpreference that has been saved when before the app has been closed. 
+- setupDetails: sets the title, image, ingredient and attributes of a given recipe in the textviews. 
+- initializeImage: loads image into imageview
+- goToFavorites: adds a recipe to favorites for all users
+- addRecipeToDB: adds recipe to firebase for authenticated user
+- fetchRecipesForLocalUser: grabs recipes from sharedpreferences
+- addRecipeToFavorites: adds recipe to sharedpreferences
+- logout: logs user out
+- favorites: goes to favorites
+<br>
+<i>FavoritesActivity: populates listview with favorites </i>
+
+-RecipesUser function called from FavoritesHelper, which returns the correct recipes
+- onItemClick from helper class called, which sends the clicked recipe to detailsActivity
+- onItemLongClick called, which removes a given recipe from sharedpreferences/firebase and updates the list
+<br>
 <b>Classes</b>
 - Recipe modelclass: this modelclass contains getters and setters for title, image, ingredients and attributes. 
 - Recipes modelclass:A modelclass which is in reality a list of recipe objects. it only has getters and setters for titles, because those were the only ones needed in this application. 
@@ -94,6 +127,24 @@ getView: loads every image of every recipe into the gridview
 <i>RecipeAdapter: An extension of arrayAdapter that makes it possible to set a Recipes object on the adapter </i>
 - getView: sets a given recipe title on a row. 
 
-<i>Utils</i>
-
-<i>FavoritesHelper</>
+<i>Utils: Class created to hold code that is used more than once and that isn't a listener or strictly used for favorites</i>
+<br
+- getSignInType: gets the sign in type of a user. 
+- signoutOrSignUp: signs user out if the user is authenticated, otherwise the user just goes to sign up screen
+- returnRecipesToGridview: Wraps recipes so that every row has three items, then returns recipes to toGridView function. 
+- toGridview: sends recipes to DisplayRecipesActivity
+- addOrFetchRecipes: adds recipes to shared preferences if the recipes are sent from a different activity. If this is not the case then the application has been restarted, so the recipes have been saved in sharedpreferences and need to be fetched. 
+- redirectUserToCorrectActivity: Redirect user to the activity the user was in before the app was closed
+- setupProgressBar: sets up progressbar. 
+<br>
+<i>FavoritesHelper: Helper class for favoritesActivity</>
+- fetchFavorites: fetches favorites from firebase for an authenticated user
+- recipesUser: returns recipes of authenticated and local users
+- onItemClick: when an item is clicked a given recipe is passed to DetailsActivity
+- onLongClick: Click event for removing a recipe. 
+- removeRecipeFromDB: Removes recipe from database if the user is authenticated
+- removeRecipeFromSharedPreferences: removes a given recipe from sharedpreferences for a local user
+- recipeDBbToDetailsActivity: sends recipe of an authenticated user to DetailsActivity
+- toDetailsActivity: sends recipe to detailsActivity for a local user
+- setAdapter: sets adapter on listview and sets up progressbar
+- recipesIsEmpty: displays an empty textview if the favoriteslist is empty
