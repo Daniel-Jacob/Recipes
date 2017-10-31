@@ -27,11 +27,11 @@ Sign in functionality for the google user is implemented within the activity, be
 <i>RegistrationActivity: Registers or logs an E-mail user in</i>
 
 - logMeIn: logs an e-mail user in
-- submit: creates a user account and attempt sign in
+- submit: creates a user account and attempts sign in
 
 <i>RecipeActivity: In this screen there is a searchview where a general recipe query can be done. </i>
 <br>
-- processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. The Reason for this is because this function is implemented twice. 
+- processFinish: after the asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. The Reason for this is because this function is implemented twice. 
 - loginOrLogout:if the user is authenticated then he or she is signed out, and sent to the MainActivity. Otherwise the user is just brought to the MainActivity to sign up. 
 - recipeByIngredient: User is sent to the RecipeByIngredientActivity
 - Favorites: User is sent to FavoritesActivity
@@ -47,8 +47,8 @@ Sign in functionality for the google user is implemented within the activity, be
 
 - setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays them in a gridview
 - logout: Logs an authenticated user out and sends him or her back to MainActivity. A local user is just brought to MainActivity to sign up
-- listTitles: User is navigated to TitleActivity
-- goToFavoritesActivity: User is navigated to FavoritesActivity
+- listTitles: The user is navigated to TitleActivity
+- goToFavoritesActivity: The user is navigated to FavoritesActivity
 
 <br>
 
@@ -62,13 +62,13 @@ Sign in functionality for the google user is implemented within the activity, be
 <i>DetailsActivity</i>:
 
 - recipeReturned: Returns recipe from correct activity
-- getRecipeFromPreviousUsage: Gets recipe from sharedpreference that has been saved when before the app has been closed. 
-- setupDetails: sets the title, image, ingredient and attributes of a given recipe in the textviews. 
+- getRecipeFromPreviousUsage: Gets recipe from sharedpreference that has been saved before the app has been closed. 
 - initializeImage: loads image into imageview
-- goToFavorites: adds a recipe to favorites for all users
-- addRecipeToDB: adds recipe to firebase for authenticated user
+- setupDetails: sets the title, image, ingredient and attributes of a given recipe in the textviews. 
 - fetchRecipesForLocalUser: grabs recipes from sharedpreferences
 - addRecipeToFavorites: adds recipe to sharedpreferences
+- addRecipeToDB: adds recipe to firebase for authenticated user
+- goToFavorites: adds a recipe to favorites for all users
 - logout: logs user out
 - favorites: goes to favorites
 <br>
@@ -95,11 +95,11 @@ Sign in functionality for the google user is implemented within the activity, be
 <br>
 
 - createCallBack: creates a callback, logs accesstokens, and calls registerCallBack
-- handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
-- executeFacebookAsyncTask: calls handleFacebookAccessToken to authenticate user, and then execute async task to facebook API.
 - submitGraphRequest:returns a Graphrequest object
+- handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
 - registerCallBack: registers callback, sets permissions to read facebook data and sends graphrequest object to executeFacebookAsyncTask 
--submitGraphRequest:returns a Graphrequest object<br><br>
+- executeFacebookAsyncTask: executes async task to facebook API.
+<br><br>
 
 <i>GoogleSignIn: This class contains methods to help with the authentication of google users.</i> 
 <br>
@@ -122,7 +122,7 @@ Sign in functionality for the google user is implemented within the activity, be
 
 <i>onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity </i>
 
-- search: grabs query text, loops over characters and checks if it contains numbers, or non-alphabetical characters. If so the asynctask is not executed. The function also makes sure that the asynctask is not executed more than once, and sets up the progressbar while in the recipeActivity or recipeByIngredientActivity. 
+- search: grabs query text and converts it to lowercase, loops over the characters and checks if it contains numbers, or non-alphabetical characters. If so the asynctask is not executed. The function also makes sure that the asynctask is not executed more than once, and sets up the progressbar while in the recipeActivity or recipeByIngredientActivity. 
 
 <i>AsyncWithInterface: This class implements an asynctask that is performed in both recipe activities. This is done by making use of an interface. This choice has been made, because with a regular asynctask a lot of code needs to be copied and put in a seperate file, because the context of a specific activity is passed.   </i>
 
