@@ -43,10 +43,10 @@ and stores the  registrered user in firebase
 <b>Sketches</b>
 
 <p align="center">
-  <img src="loginandregistrationscreen.jpg"/>
-  <img src="recipescreens.jpg"/>
-  <img src="gridviewanddetails.jpg" width="350"/>
-  <img src="favoritesdesign.jpg" width="350"/>
+  <img src="/doc/loginandregistrationscreen.jpg"/>
+  <img src="/doc/recipescreens.jpg"/>
+  <img src="/doc/gridviewanddetails.jpg" width="350"/>
+  <img src="/doc/favoritesdesign.jpg" width="350"/>
     
 
 </p>
