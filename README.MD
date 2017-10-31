@@ -12,7 +12,7 @@ Copyright 2017 Daniel Jacob
   
   <img src="/doc/download.png" width="200" align = "left"/>
   <img src="/doc/gridview.png" width="200" align = "middle"/>
-  <img src="/doc/titles.png" width="200" align = "middle"/>
+  <img src="/doc/titles.png" width="200" align = "right"/>
   <img src="/doc/details.png" width="200" align = "right"/>
   <img src="favorites.png" width="200" align = "right"/>
 </p>
