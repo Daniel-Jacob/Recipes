@@ -15,7 +15,12 @@ In both cases the user is navigated to the recipe itself when a given recipe is 
 <br>
 <i>MainActivity:</i>
 
-This is where the user can log in using Facebook, google, or to continue as a local user. Sign in functionality for the google user is implemented within the activity, because the sign in method needs to pass a google api client. This api client gets connected in onStart and is only then not null. Therefore it is better if the sign in method also is done within the activity. Both the facebook and google sign in returns a result. In onActivityResult it is checked whether this is the correct result, and if this is the case the user is fetched and is logged in. Another important aspect implemented in this activity is the redirect to the previous activity the user was in before the app was closed. This is done with the utils class, and specifically the method 'redirectUserToCorrectActivity'. 
+- Facebook authentication
+- Google authentication
+- continue as local user
+- redirect user to correct activity if app was closed
+<br>
+Sign in functionality for the google user is implemented within the activity, because the sign in method needs to pass a google api client. This api client gets connected in onStart and is only then not null.
 
 <i>RegistrationActivity: Registers or logs an E-mail user in</i>
 
@@ -24,17 +29,17 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 
 <i>RecipeActivity: In this screen there is a searchview where a general recipe query can be done. </i>
 <br>
-- processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. Reason for this is because this function is implemented twice. 
+- processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. The Reason for this is because this function is implemented twice. 
 - loginOrLogout:if the user is authenticated then he or she is signed out, and sent to the MainActivity. Otherwise the user is just brought to the MainActivity to sign up. 
 - recipeByIngredient: User is sent to the RecipeByIngredientActivity
 - Favorites: User is sent to FavoritesActivity
 
-
 <i>RecipeByIngredientActivity: In this screen there is a searchview where a query based on ingredients can be done. </i>
 <br>
-<br>
+
 - GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
 <br>
+
 <i>DisplayRecipesActivity:</i>
 
 - setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays them in a gridview
