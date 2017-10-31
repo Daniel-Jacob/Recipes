@@ -16,8 +16,6 @@ spoonacular api documentation is hosted on mashape which is currently experienci
 -- update --
 Chosen API for now seems like yummly, since the documentation still does not load
 
-Still problems with spoonacular
-
 <b>Classes and methods:</b>
 
 1. Facebook login class: This class proceeds with login using facebook authentication
