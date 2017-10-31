@@ -73,7 +73,7 @@ Sign in functionality for the google user is implemented within the activity, be
 - favorites: goes to favorites
 <br>
 <i>FavoritesActivity: populates listview with favorites </i>
-
+<br>
 - RecipesUser function called from FavoritesHelper, which returns the correct recipes
 - onItemClick from helper class called, which sends the clicked recipe to detailsActivity
 - onItemLongClick called, which removes a given recipe from sharedpreferences/firebase and updates the list
