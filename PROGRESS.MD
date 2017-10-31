@@ -92,6 +92,7 @@ Sign in functionality for the google user is implemented within the activity, be
 <i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity</i>
 <br>
 <br>
+
 - createCallBack: creates a callback, logs accesstokens, and calls registerCallBack
 - handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
 - executeFacebookAsyncTask: calls handleFacebookAccessToken to authenticate user, and then execute async task to facebook API.
@@ -100,6 +101,7 @@ Sign in functionality for the google user is implemented within the activity, be
 -submitGraphRequest:returns a Graphrequest object<br><br>
 <i>GoogleSignIn: This class contains methods to help with the authentication of google users.
 </i> 
+<br>
 <br>
 
 - buildApiClient: Builds google api client
