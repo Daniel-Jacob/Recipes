@@ -124,7 +124,7 @@ public class Utils extends Activity {
 
     /* sends recipes to gridview */
     public void ToGridview(Recipes recipes) {
-        Intent intent = new Intent(context, DisplayRecipes.class);
+        Intent intent = new Intent(context, DisplayRecipesActivity.class);
         intent.putExtra("Data", recipes);
         context.startActivity(intent);
     }
@@ -163,11 +163,11 @@ public class Utils extends Activity {
                 startActivity(intent);
                 break;
             case 4:
-                intent = new Intent(context, RecipeByIngredient.class);
+                intent = new Intent(context, RecipeByIngredientActivity.class);
                 startActivity(intent);
                 break;
             case 5:
-                intent = new Intent(context, DisplayRecipes.class);
+                intent = new Intent(context, DisplayRecipesActivity.class);
                 startActivity(intent);
                 break;
             case 6:

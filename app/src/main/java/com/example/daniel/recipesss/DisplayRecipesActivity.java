@@ -33,7 +33,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 /* Grabs recipes from asynctask and populates them in a gridview */
-public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener{
+public class DisplayRecipesActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener{
 
     // global variables
     ArrayList<Recipe> elements;
@@ -178,7 +178,7 @@ public class DisplayRecipes extends AppCompatActivity implements  GoogleApiClien
             startActivity(intent);
         }
         else if(recipeByIngredient){
-            Intent intent = new Intent(getApplicationContext(), RecipeByIngredient.class);
+            Intent intent = new Intent(getApplicationContext(), RecipeByIngredientActivity.class);
             startActivity(intent);
         }
 

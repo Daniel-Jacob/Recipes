@@ -338,7 +338,7 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
         boolean goToFavorites = preferences.getBoolean("displayARecipeFromFavorites", false);
         boolean titleActivity = preferences.getBoolean("titleactivity", false);
         if(goToDisplayActivity){
-            Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
+            Intent intent = new Intent(getApplicationContext(), DisplayRecipesActivity.class);
             startActivity(intent);
         }
         else if(goToFavorites){

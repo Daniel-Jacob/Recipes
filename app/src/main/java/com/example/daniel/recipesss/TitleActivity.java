@@ -159,7 +159,7 @@ public class TitleActivity extends AppCompatActivity implements  GoogleApiClient
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), DisplayRecipes.class);
+        Intent intent = new Intent(getApplicationContext(), DisplayRecipesActivity.class);
         startActivity(intent);
     }
 }

@@ -64,7 +64,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         reference = database.getReference();
         // initialize progressbar
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        // gets sign in type
+        // gets sign in types
         signInType = preferences.getInt("signintype", 0);
         // tracks activity
         preferences.edit().putInt("Activity", 8).commit();
@@ -156,9 +156,9 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         } else if (title || titleActivity) {
             intent = new Intent(this, TitleActivity.class);
         } else if (displayRecipes) {
-            intent = new Intent(this, DisplayRecipes.class);
+            intent = new Intent(this, DisplayRecipesActivity.class);
         } else if (recipeByIngredient) {
-            intent = new Intent(getApplicationContext(), RecipeByIngredient.class);
+            intent = new Intent(getApplicationContext(), RecipeByIngredientActivity.class);
         } else if (recipe) {
             intent = new Intent(this, RecipeActivity.class);
         }

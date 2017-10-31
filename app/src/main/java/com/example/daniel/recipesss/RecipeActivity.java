@@ -87,7 +87,7 @@ public class RecipeActivity extends AppCompatActivity
 
     /* goes to recipe by ingredient activity */
     public void recipeByIngredient(View view) {
-        Intent intentByIngredient = new Intent(this, RecipeByIngredient.class);
+        Intent intentByIngredient = new Intent(this, RecipeByIngredientActivity.class);
         startActivity(intentByIngredient);
     }
 

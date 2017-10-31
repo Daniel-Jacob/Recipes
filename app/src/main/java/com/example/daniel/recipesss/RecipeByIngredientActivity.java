@@ -31,7 +31,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 /* Activity that lets user search for recipes that match all the given ingredients */
-public class RecipeByIngredient extends AppCompatActivity implements AsyncWithInterface.
+public class RecipeByIngredientActivity extends AppCompatActivity implements AsyncWithInterface.
         AsyncResponse, GoogleApiClient.OnConnectionFailedListener {
 
     // global variables
