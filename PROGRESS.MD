@@ -172,6 +172,7 @@ getView: loads every image of every recipe into the gridview
 - recipesIsEmpty: displays an empty textview if the favoriteslist is empty
 <br>
 <b>Challenges</b>
+<br>
 in the design document I made the choice for Spoonacular API because this supported the most functionality, and was best documented. However they were experiencing technical difficulties, so I had to change my choice of API. I picked yummly because it was reasonably documented, albeit with less functionality (autocomplete is not supported for example). Therefore I have not implemented autocomplete functionality. Differentiation between general recipes and recipes by ingredient has not been implemented. The reason is because the async task is implemented with an interface, so there is only one async task for two activities. The only difference is the endpoint and the recipes that are returned. Therefore, it is also not necessary to have a recipesByIngredient object, because both endpoints return recipes, they are just different in which recipes are returned. There is however still a populateGridview function, which is called toGridView and is implemented in the utils class.  In the design document I had more fields that I wanted to use to display details. However I have not implemented preparation, type of food and calories. This is partially because of time constraint. 
 
 FavoritesActivity:
