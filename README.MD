@@ -7,7 +7,7 @@ Copyright 2017 Daniel Jacob
 
 <p align="center">
   
-  Recipesss is a recipe application which allows users to search general recipes and recipes by ingredient. With general recipes, the user can do a query and if this query matches anything in the recipe, then the recipe is returned. In the case of the recipe by ingredient query, a recipe is only returned if it matches the ingredients that are entered into the query. Users can add and remove recipes, and get basic information about a recipe. In order to access the recipes on a different device authentication is required. Recipess supports google, facebook and E-mail authentication. If a user does not want to authenticate then he or she can continue as a local user, and save their recipes locally.
+  Recipesss is a recipe application which allows users to search general recipes and recipes by ingredient. With general recipes, the user can do a query and if this query matches anything in the recipe, then the recipe is returned. In the case of the recipe by ingredient query, a recipe is only returned if it matches the ingredients that are entered into the query. Users can add and remove recipes, and get basic information about a recipe. In order to access the recipes on a different device authentication is required. Recipess supports google, facebook and E-mail authentication. If a user does not want to authenticate then he or she can continue as a local user, and save their recipes locally. The layout of the application looks as follows
  <h4>Screenshots</h4>
   <img src="/doc/loginscreen.png" width="300"/>
   <img src="/doc/gridview.png" width="300"/>
