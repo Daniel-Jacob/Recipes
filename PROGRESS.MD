@@ -40,7 +40,9 @@ Sign in functionality for the google user is implemented within the activity, be
 <br>
 
 - GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
+<br>
 <i>DisplayRecipesActivity:</i>
+
 
 - setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays them in a gridview
 - logout: Logs an authenticated user out and sends him or her back to MainActivity. A local user is just brought to MainActivity to sign up
