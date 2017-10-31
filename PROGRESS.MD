@@ -81,6 +81,7 @@ Sign in functionality for the google user is implemented within the activity, be
 - onItemLongClick called, which removes a given recipe from sharedpreferences/firebase and updates the list
 <br>
 <b>Classes</b>
+<br>
 
 - Recipe modelclass: this modelclass contains getters and setters for title, image, ingredients and attributes. 
 - Recipes modelclass:A modelclass which is in reality a list of recipe objects. it only has getters and setters for titles, because those were the only ones needed in this application. 
@@ -88,9 +89,9 @@ Sign in functionality for the google user is implemented within the activity, be
 - myApplication: returns context in static environment. 
 - onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
 <br>
-<i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. </i>
+<i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity</i>
 <br>
-
+<br>
 - createCallBack: creates a callback, logs accesstokens, and calls registerCallBack
 - handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
 - executeFacebookAsyncTask: calls handleFacebookAccessToken to authenticate user, and then execute async task to facebook API.
