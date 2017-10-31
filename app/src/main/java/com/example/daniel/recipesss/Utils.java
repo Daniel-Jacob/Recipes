@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -43,21 +41,14 @@ public class Utils extends Activity {
     int activity;
     SharedPreferences preferences;
     int signInType;
-    DatabaseReference reference;
-    FirebaseDatabase database;
     FirebaseUser user;
-    Recipe recipe;
-    Recipes recipes;
     Intent intent;
-    Activity myActivity;
 
     // constructor
     public Utils(Context context) {
         this.context = context;
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         signInType = getSignInType();
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
@@ -112,15 +103,15 @@ public class Utils extends Activity {
                 }
             }
         }
-            if (output.getRecipes().size() > 0) {
-                // send elements to gridview
-                ToGridview(output);
-            } else {
-                // no recipes found so try again
-                Toast.makeText(context, "No recipes found", Toast.LENGTH_LONG).show();
-                ((Activity) context).recreate();
-            }
+        if (output.getRecipes().size() > 0) {
+            // send elements to gridview
+            ToGridview(output);
+        } else {
+            // no recipes found so try again
+            Toast.makeText(context, "No recipes found", Toast.LENGTH_LONG).show();
+            ((Activity) context).recreate();
         }
+    }
 
     /* sends recipes to gridview */
     public void ToGridview(Recipes recipes) {
@@ -143,8 +134,7 @@ public class Utils extends Activity {
             preferences.getString("json", null);
             Gson gson = new Gson();
             String json = preferences.getString("json", "");
-            Type type = new TypeToken<Recipes>() {
-            }.getType();
+            Type type = new TypeToken<Recipes>() {}.getType();
             recipes = gson.fromJson(json, type);
         }
         return recipes;
@@ -156,31 +146,31 @@ public class Utils extends Activity {
         switch (activity) {
             case 2:
                 intent = new Intent(context, RegistrationActivity.class);
-                startActivity(intent);
+                context.startActivity(intent);
                 break;
             case 3:
                 intent = new Intent(context, RecipeActivity.class);
-                startActivity(intent);
+                context.startActivity(intent);
                 break;
             case 4:
                 intent = new Intent(context, RecipeByIngredientActivity.class);
-                startActivity(intent);
+                context.startActivity(intent);
                 break;
             case 5:
                 intent = new Intent(context, DisplayRecipesActivity.class);
-                startActivity(intent);
+                context.startActivity(intent);
                 break;
             case 6:
                 intent = new Intent(context, TitleActivity.class);
-                startActivity(intent);
+                context.startActivity(intent);
                 break;
             case 7:
                 intent = new Intent(context, DetailsActivity.class);
-                startActivity(intent);
+                context.startActivity(intent);
                 break;
             case 8:
                 intent = new Intent(context, FavoritesActivity.class);
-                startActivity(intent);
+                context.startActivity(intent);
                 break;
         }
     }
@@ -200,5 +190,4 @@ public class Utils extends Activity {
             }
         }).start();
     }
-
 }

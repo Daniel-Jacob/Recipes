@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,19 +76,18 @@ public class ImageAdapter extends BaseAdapter {
     /* loads image data into imageview */
     public void loadImageData(String url, ImageView imageView){
         if (url != null) {
-            Picasso.with(context)
-                    .load(url)
-                    .into(imageView, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            Log.d("Succes", "image succesfully loaded");
-                        }
-                        @Override
-                        public void onError() {
-                            Log.d("Error:", "Error loading image");
-                            Toast.makeText(context, "image could not be loaded", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            Picasso.with(context).load(url).into(imageView, new com.squareup.picasso.Callback() {
+                @Override
+                public void onSuccess() {
+                    Log.d("Succes","image succesfully loaded");
+                }
+                @Override
+                public void onError() {
+                    Log.d("Error:", "Error loading image");
+                    Toast.makeText(context, "image could not be loaded", Toast.LENGTH_SHORT).
+                            show();
+                }
+            });
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,13 +87,11 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     /* adds authentication state listener */
     protected void onStart() {
         super.onStart();
-        emailSignIn.mAuth.addAuthStateListener(emailSignIn.listener);
+        emailSignIn.auth.addAuthStateListener(emailSignIn.listener);
     }
 
     @Override
@@ -111,7 +109,7 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if(emailSignIn.listener != null){
-            emailSignIn.mAuth.removeAuthStateListener(emailSignIn.listener);
+            emailSignIn.auth.removeAuthStateListener(emailSignIn.listener);
         }
     }
 

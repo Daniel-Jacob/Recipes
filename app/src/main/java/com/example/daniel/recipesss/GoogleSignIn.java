@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -52,23 +51,21 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
     DatabaseReference reference = database.getReference();
     GoogleApiClient googleApiClient;
     SharedPreferences preferences;
-    GoogleSignInOptions gso;
     Context context;
     FirebaseAuth auth;
-    FirebaseUser user;
-    String googleClientId = "818367032142-kjv7mqeb242bdvq35jg3v5cnblelke7r.apps.googleusercontent.com";
 
     // constructor
     public GoogleSignIn(Context c) {
         this.context = c;
-        auth = FirebaseAuth.getInstance();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        auth = FirebaseAuth.getInstance();
     }
 
     /* builds googleapiclient */
     public GoogleApiClient buildApiClient() {
+        String googleClientId = "818367032142-kjv7mqeb242bdvq35jg3v5cnblelke7r.apps.googleusercontent.com";
         if (googleApiClient == null) {
-            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail().requestIdToken(googleClientId)
                     .build();
             googleApiClient = new GoogleApiClient.Builder(context)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 /* listener for queries done in searchview */
@@ -29,7 +28,6 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
     SharedPreferences preferences;
     int counter;
     Context context;
-    View view;
 
     // constructor
     public OnQueryTextListener(Context c) {
@@ -52,6 +50,7 @@ public class OnQueryTextListener implements SearchView.OnQueryTextListener {
 
     /* method to do error checking on query and execute asynctask */
     public boolean search(String query){
+        query = query.toLowerCase();
         // convert query to array of characters
         char[] characters = query.toCharArray();
         // loop over characters

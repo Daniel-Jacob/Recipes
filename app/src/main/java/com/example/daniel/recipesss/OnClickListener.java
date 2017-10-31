@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +27,11 @@ public class OnClickListener implements View.OnClickListener {
     // global variables
     MainActivity context;
     SharedPreferences preferences;
-    int signInType;
 
     // constuctor
     public OnClickListener(MainActivity context) {
         this.context = context;
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        signInType = preferences.getInt("signintype", 0);
     }
 
     @Override

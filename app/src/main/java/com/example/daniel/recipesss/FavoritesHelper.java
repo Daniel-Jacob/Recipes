@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -46,12 +45,10 @@ public class FavoritesHelper {
     // global variables
     Context context;
     Utils utils;
-    View view;
     FirebaseDatabase database;
     DatabaseReference reference;
     Recipe recipe;
     FirebaseUser user;
-    RecipeAdapter adapter;
     Recipes recipes;
     SharedPreferences preferences;
     int signInType;
@@ -63,7 +60,6 @@ public class FavoritesHelper {
     public FavoritesHelper(Context context) {
         this.context = context;
         utils = new Utils(context);
-        view = LayoutInflater.from(context).inflate(R.layout.activity_favorites, null);
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -148,8 +144,8 @@ public class FavoritesHelper {
     /* listens for long click and removes the clicked item from database and recipes object */
     public void onLongClick(Activity activity, final Recipes recipesLongClick) {
         this.recipesLongClick = recipes;
-        Activity myActivity = activity;
-        ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
+        myActivity = activity;
+        listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -214,6 +210,7 @@ public class FavoritesHelper {
         setAdapter((FavoritesActivity) context, recipesLongClick);
         return false;
     }
+
     /* grabs a recipe from the database and sends it to detailsActivity */
     public void recipeDBbToDetailsActivity(final int position) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -239,7 +236,7 @@ public class FavoritesHelper {
     public void toDetailsActivity(int signInType, int position) {
         preferences.edit().putBoolean("displayARecipeFromFavorites", true).commit();
         preferences.edit().putBoolean("displayARecipe", false).commit();
-                // authenticated user
+        // authenticated user
         if (signInType != 4) {
             Intent intent = new Intent(context, DetailsActivity.class);
             intent.putExtra("Recipe", recipes.getRecipes().get(position));
@@ -265,10 +262,10 @@ public class FavoritesHelper {
                 myActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ListView listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
+                        listView = (ListView) myActivity.findViewById(R.id.listviewwwww);
                         ProgressBar progressBar = (ProgressBar) myActivity.findViewById(R.id.indeterminateBar);
                         progressBar.setVisibility(View.VISIBLE);
-                        adapter = new RecipeAdapter(context, R.layout.simple_list_itemmm, recipes);
+                        RecipeAdapter adapter = new RecipeAdapter(context, R.layout.simple_list_itemmm, recipes);
                         listView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                         recipesIsEmpty(recipesForAdapter);

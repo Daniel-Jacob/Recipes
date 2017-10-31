@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.example.daniel.recipesss;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +25,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import xdroid.toaster.Toaster;
+
 /* gathers data from yummly api endpoint */
 public class HttpRequestHelper {
     /* downloads recipes from yummly api */
@@ -73,7 +75,8 @@ public class HttpRequestHelper {
             }
             // full url for recipes by ingredient search
             url = "http://api.yummly.com/v1/api/recipes?_app_id=6e1ce2e1&" +
-                    "_app_key=63ef2eaf3a8986a3a1e3d5872857c2fa&q=" + query + onComplete + "&maxResult=40" + "&requirePictures=true";
+                    "_app_key=63ef2eaf3a8986a3a1e3d5872857c2fa&q=" + query + onComplete +
+                    "&maxResult=40" + "&requirePictures=true";
         }
         return url;
     }
@@ -111,8 +114,7 @@ public class HttpRequestHelper {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(MyApplication.getAppContext(), "Error connecting to server",
-                        Toast.LENGTH_SHORT).show();
+                Toaster.toast("Error connecting to server");
             }
         }
         return result;

@@ -36,7 +36,7 @@ public class EmailSignIn extends Activity {
 
     // global variables
     Context context;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     SharedPreferences preferences;
     FirebaseUser user;
 
@@ -64,7 +64,7 @@ public class EmailSignIn extends Activity {
     /* creates user account with emailaddress and password */
     public void createAccount(final String email, final String password) {
         if (!email.isEmpty() && !password.isEmpty()) {
-            mAuth.createUserWithEmailAndPassword(email, password)
+            auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -92,7 +92,7 @@ public class EmailSignIn extends Activity {
         // get current user
         user = FirebaseAuth.getInstance().getCurrentUser();
             // if user is authenticated sign in
-            mAuth.signInWithEmailAndPassword(email, password)
+            auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener((Activity) this.context, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {

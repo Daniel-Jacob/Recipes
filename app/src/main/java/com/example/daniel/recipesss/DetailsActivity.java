@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,9 @@ import com.squareup.picasso.Picasso;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import xdroid.toaster.Toaster;
+
 /* grabs title, ingredients, attributes and image of a given recipe and adds these to the activity */
 public class DetailsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -126,8 +129,7 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
             preferences.edit().putString("recipe", json).commit();
         } else {
             // gets type
-            Type type = new TypeToken<Recipe>() {
-            }.getType();
+            Type type = new TypeToken<Recipe>() {}.getType();
             // gets recipe
             String json = preferences.getString("recipe", "");
             recipe = gson.fromJson(json, type);
@@ -157,7 +159,8 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
         }
         // formatting attribute data
         attributeView.setText(attributes.toString().replaceAll("\"", " ").
-                replace("[", " ").replace("]", " ").replace("{", " ").replace("}", " "));
+                replace("[", " ").replace("]", " ").
+                replace("{", " ").replace("}", " "));
         // further formatting of ingredient data and setting it to the textview
         ingredientView.setText("Ingredients: " + Arrays.toString(ingredientsArray).replace("[", "")
                 .replace("]", "").replace("\"", ""));
@@ -195,8 +198,8 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
                 // authenticated user has not been loaded yet
                 recreate();
             }
-            // local user, so add recipe to shared preferences
         } else {
+            // local user, so add recipe to shared preferences
             fetchRecipesForLocalUser();
         }
     }
@@ -209,25 +212,26 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // recipes already exist in database
-                    // user exists
-                    if (user != null) {
-                        RecipeCompare compare = new RecipeCompare();
-                        for (DataSnapshot s : dataSnapshot.getChildren()) {
-                            // get recipes from database
-                           Recipe recipeDatabase = s.getValue(Recipe.class);
-                            // compare recipes from database with current clicked recipe
-                            comparison = compare.compare(recipeDatabase, recipe);
-                            // recipe exists so don't add
-                            if (comparison == 1) {
-                                Toast.makeText(getApplicationContext(), recipeDatabase.getTitle() + " " + "exists", Toast.LENGTH_SHORT).show();
-                                break;
-                            }
+                // user exists
+                if (user != null) {
+                    RecipeCompare compare = new RecipeCompare();
+                    for (DataSnapshot s : dataSnapshot.getChildren()) {
+                        // get recipes from database
+                        Recipe recipeDatabase = s.getValue(Recipe.class);
+                        // compare recipes from database with current clicked recipe
+                        comparison = compare.compare(recipeDatabase, recipe);
+                        // recipe exists so don't add
+                        if (comparison == 1) {
+                            Toast.makeText(getApplicationContext(), recipeDatabase.getTitle()
+                                    + " " + "exists", Toast.LENGTH_SHORT).show();
+                            break;
                         }
-                        // recipe doesn't exist, so add
-                        if (comparison == 0) {
-                            reference.push().setValue(recipe);
-                            Toast.makeText(getApplicationContext(), recipe.getTitle() + " " + "added", Toast.LENGTH_SHORT).show();
+                    }
+                    // recipe doesn't exist, so add
+                    if (comparison == 0) {
+                        reference.push().setValue(recipe);
+                        Toast.makeText(getApplicationContext(), recipe.getTitle() + " " +
+                                "added", Toast.LENGTH_SHORT).show();
                         }
                     }
                 // recipe has been added so make button clickable again
@@ -238,6 +242,7 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
             /* adding to database failed */
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("Tag", "An error of type" + databaseError + "occured");
+                Toaster.toast("Could not add recipe. Please try again");
             }
         });
     }
@@ -248,14 +253,14 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
         // if recipes exist get them first
         if (!json.isEmpty()) {
             Gson gson = new Gson();
-            Type type = new TypeToken<Recipes>() {
-            }.getType();
+            Type type = new TypeToken<Recipes>() {}.getType();
             recipes = gson.fromJson(json, type);
         }
         // otherwise make net instance of recipes
         else {
             recipes = new Recipes();
         }
+        // add given recipe to shared preferences
         addRecipeToFavorites();
     }
 
@@ -328,11 +333,11 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onStop() {
         super.onStop();
-       googleUser.disconnectFromApi(this);
+        googleUser.disconnectFromApi(this);
     }
 
     @Override
-    /* goes to DisplayRecipes */
+    /* goes to correct activity */
     public void onBackPressed() {
         boolean goToDisplayActivity = preferences.getBoolean("displayARecipe", false);
         boolean goToFavorites = preferences.getBoolean("displayARecipeFromFavorites", false);

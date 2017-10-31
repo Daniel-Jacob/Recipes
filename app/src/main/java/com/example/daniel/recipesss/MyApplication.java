@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.example.daniel.recipesss;
 import android.app.Application;
 import android.content.Context;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 
     /* class to get the context when in a static environment. Also helps to access googleapiclient
@@ -34,14 +32,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
             super.onCreate();
             // gets context in static environment
             MyApplication.context = getApplicationContext();
-            String googleClientId = "818367032142-kjv7mqeb242bdvq35jg3v5cnblelke7r.apps.googleusercontent.com";
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail().requestIdToken(googleClientId)
-                    .build();
-            // builds google api client
-            googleApiClient = new GoogleApiClient.Builder(context)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
         }
         /* gets context in static environment */
         public static Context getAppContext() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.example.daniel.recipesss;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -29,8 +28,7 @@ import xdroid.toaster.Toaster;
 /* creates an asynctask from yummly api and returns recipes to processfinish function */
 public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
 
-    // global variables
-    Context context;
+    // global variable
     Recipes recipes;
 
     /* interface for asynctask */
@@ -111,7 +109,6 @@ public class AsyncWithInterface extends AsyncTask<String, Integer, String > {
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toaster.toast("error retrieving recipes");
-
             }
         }
         return recipes;

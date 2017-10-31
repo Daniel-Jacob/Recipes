@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 /* Populates listview with titles */
-public class TitleActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener {
+public class TitleActivity extends AppCompatActivity implements  GoogleApiClient.
+        OnConnectionFailedListener {
 
     // global variables
     ListView listView;

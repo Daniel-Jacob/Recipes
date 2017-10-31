@@ -45,8 +45,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONObject;
 
@@ -63,8 +61,6 @@ public class FacebookSignIn extends AppCompatActivity {
     int activity;
     FirebaseAuth auth;
     FirebaseUser user;
-    DatabaseReference reference;
-    FirebaseDatabase database;
 
     // constructor
     public FacebookSignIn(Context c) {
@@ -75,8 +71,6 @@ public class FacebookSignIn extends AppCompatActivity {
         facebookLogin = (LoginButton) view.findViewById(R.id.loginButton);
         // gets authentication instance
         auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
     }
 
     /* logs user in */
@@ -125,7 +119,7 @@ public class FacebookSignIn extends AppCompatActivity {
 
     /* submits a graph request for facebook user */
     public GraphRequest submitGraphRequest(final LoginResult result){
-       final GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
+        final GraphRequest request = GraphRequest.newMeRequest(result.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     // autenticates user with firebase
@@ -160,7 +154,6 @@ public class FacebookSignIn extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, get firebase user
                             user = auth.getCurrentUser();
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(context, "Authentication failed.",

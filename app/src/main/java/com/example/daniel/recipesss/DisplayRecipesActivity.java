@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,7 +37,6 @@ public class DisplayRecipesActivity extends AppCompatActivity implements  Google
     // global variables
     ArrayList<Recipe> elements;
     Recipes recipes;
-    ListView listView;
     GridView gv;
     SharedPreferences preferences;
     Utils utilities;
@@ -58,9 +56,8 @@ public class DisplayRecipesActivity extends AppCompatActivity implements  Google
         // query has been completed so make query variable empty
         preferences.edit().putString("query", "").commit();
         elements = new ArrayList<>();
-        // initializes gridview and listview
+        // initializes gridview
         gv = (GridView) findViewById(R.id.gridview);
-        listView = (ListView) findViewById(R.id.listt);
         // sets adapter on image data
         setImageAdapter(recipes);
         // makes gridview clickable
@@ -139,6 +136,7 @@ public class DisplayRecipesActivity extends AppCompatActivity implements  Google
     @Override
     protected void onPause() {
         super.onPause();
+        // update booleans for back button logic
         preferences.edit().putBoolean("titleactivity", false).commit();
         preferences.edit().putBoolean("displayARecipe", true).commit();
         preferences.edit().putBoolean("display", false).commit();
@@ -168,7 +166,7 @@ public class DisplayRecipesActivity extends AppCompatActivity implements  Google
     }
 
     @Override
-    /* send user back to recipeActivity */
+    /* send user back to recipeActivity or recipeByIngredientActivity */
     public void onBackPressed() {
         super.onBackPressed();
         boolean recipe = preferences.getBoolean("recipeActivity", false);
@@ -181,6 +179,5 @@ public class DisplayRecipesActivity extends AppCompatActivity implements  Google
             Intent intent = new Intent(getApplicationContext(), RecipeByIngredientActivity.class);
             startActivity(intent);
         }
-
     }
 }

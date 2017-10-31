@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,9 @@ public class RecipeActivity extends AppCompatActivity
     // global variables
     SearchView searchView;
     SharedPreferences preferences;
-    FirebaseUser user;
-    ProgressBar progressBar;
     Utils utilities;
     GoogleSignIn googleUser;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -97,7 +96,6 @@ public class RecipeActivity extends AppCompatActivity
         preferences.edit().putBoolean("titleactivity", false).commit();
         preferences.edit().putBoolean("displayARecipe", false).commit();
         preferences.edit().putBoolean("display", false).commit();
-
         Intent intent = new Intent(this, FavoritesActivity.class);
         startActivity(intent);
     }
@@ -113,26 +111,21 @@ public class RecipeActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         googleUser = new GoogleSignIn(this);
-        // builds Google api client
-      //  googleUser.buildApiClient();
-        // connects Google api client
-      //  googleUser.googleApiClient.connect();
         googleUser.connectToApi();
-
     }
 
     @Override
     /* saves query */
     protected void onPause(){
         super.onPause();
-        progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
         // make progressbar invisible
         progressBar.setVisibility(View.INVISIBLE);
         String query = searchView.getQuery().toString();
         preferences.edit().putString("recipeQuery", query).commit();
         preferences.edit().putBoolean("recipeActivity", true).commit();
         preferences.edit().putBoolean("recipeByIngredient", false).commit();
-        }
+    }
 
     @Override
     protected void onResume() {
@@ -164,7 +157,7 @@ public class RecipeActivity extends AppCompatActivity
     public void onBackPressed() {
         // gets firebase user
         user = FirebaseAuth.getInstance().getCurrentUser();
-       // gets sign in type
+        // gets sign in type
         int signInType = utilities.getSignInType();
         // authenticated user
         if (user != null || signInType != 4) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,9 +106,6 @@ public class RecipeByIngredientActivity extends AppCompatActivity implements Asy
         super.onStart();
         // builds google api client
         googleUser = new GoogleSignIn(this);
-       // googleUser.buildApiClient();
-        // connects Google api client
-      //  googleUser.googleApiClient.connect();
         googleUser.connectToApi();
     }
 
@@ -120,7 +117,6 @@ public class RecipeByIngredientActivity extends AppCompatActivity implements Asy
         preferences.edit().putBoolean("recipeActivity", false).commit();
         String query = searchView.getQuery().toString();
         preferences.edit().putString("query", query).commit();
-
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 Daniel Jacob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,25 +31,18 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 /* Sets up the favorites of a given user */
 public class FavoritesActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     // global variables
     SharedPreferences preferences;
-    FirebaseDatabase database;
-    DatabaseReference reference;
-    Recipe recipe;
     ListView listView;
     FirebaseUser user;
     FirebaseAuth auth;
     int signInType;
     ProgressBar progressBar;
-    Recipes recipes;
     Utils utilities;
     GoogleSignIn googleUser;
-    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +53,13 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         // get current user
         user = auth.getCurrentUser();
         progressBar = (ProgressBar) findViewById(R.id.indeterminateBar);
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
         // initialize progressbar
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // gets sign in types
         signInType = preferences.getInt("signintype", 0);
         // tracks activity
         preferences.edit().putInt("Activity", 8).commit();
-        recipes = new Recipes();
+        Recipes recipes = new Recipes();
         // authenticated user, but has not been loaded yet
         if(user == null && signInType != 4){
             recreate();
