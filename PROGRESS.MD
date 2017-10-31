@@ -41,6 +41,7 @@ Sign in functionality for the google user is implemented within the activity, be
 
 - GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
 <br>
+
 <i>DisplayRecipesActivity:</i>
 
 
