@@ -1,6 +1,5 @@
-Copyright 2017 Daniel Jacob
 Recipe app Recipesss
-
+Copyright 2017 Daniel Jacob
 
 
 <p align="center">
