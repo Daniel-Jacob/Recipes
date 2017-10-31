@@ -15,7 +15,14 @@ In both cases the user is navigated to the recipe itself when a given recipe is 
 <br>
 <i>MainActivity:</i>
 
-This is where the user can log in using Facebook, google, or to continue as a local user. Sign in functionality for the google user is implemented within the activity, because the sign in method needs to pass a google api client. This api client gets connected in onStart and is only then not null. Therefore it is better if the sign in method also is done within the activity. Both the facebook and google sign in returns a result. In onActivityResult it is checked whether this is the correct result, and if this is the case the user is fetched and is logged in. Another important aspect implemented in this activity is the redirect to the previous activity the user was in before the app was closed. This is done with the utils class, and specifically the method 'redirectUserToCorrectActivity'. 
+- Facebook authentication
+- Google authentication
+- continue as local user
+- redirect user to correct activity if app was closed
+<br>
+
+Sign in functionality for the google user is implemented within the activity, because the sign in method needs to pass a google api client. This api client gets connected in onStart and is only then not null.
+<br>
 
 <i>RegistrationActivity: Registers or logs an E-mail user in</i>
 
@@ -24,52 +31,97 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 
 <i>RecipeActivity: In this screen there is a searchview where a general recipe query can be done. </i>
 <br>
-- processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. Reason for this is because this function is implemented twice. 
+- processFinish: after asynctask is done the recipes are sent to this function. This function in turn sends it to the returnRecipesToGridview function within the utils class. The Reason for this is because this function is implemented twice. 
 - loginOrLogout:if the user is authenticated then he or she is signed out, and sent to the MainActivity. Otherwise the user is just brought to the MainActivity to sign up. 
 - recipeByIngredient: User is sent to the RecipeByIngredientActivity
 - Favorites: User is sent to FavoritesActivity
 
+<i>RecipeByIngredientActivity: In this screen there is a searchview where a query based on ingredients can be done. </i>
+<br>
 
-<i>RecipeByIngredient: In this screen there is a searchview where a query based on ingredients can be done. </i>
-<br>
-<br>
 - GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
+<br>
 
+<i>DisplayRecipesActivity:</i>
+
+
+- setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays them in a gridview
+- logout: Logs an authenticated user out and sends him or her back to MainActivity. A local user is just brought to MainActivity to sign up
+- listTitles: User is navigated to TitleActivity
+- goToFavoritesActivity: User is navigated to FavoritesActivity
+
+<br>
+
+<i>TitleActivity: Sets titles of recipes in a listview</i>
+
+- setAdapter: Removes duplicate recipes, and sets RecipeAdapter on listview
+- logout: logs user out
+-  favorites: goes to FavoritesActivity
+<br>
+
+<i>DetailsActivity</i>:
+
+- recipeReturned: Returns recipe from correct activity
+- getRecipeFromPreviousUsage: Gets recipe from sharedpreference that has been saved when before the app has been closed. 
+- setupDetails: sets the title, image, ingredient and attributes of a given recipe in the textviews. 
+- initializeImage: loads image into imageview
+- goToFavorites: adds a recipe to favorites for all users
+- addRecipeToDB: adds recipe to firebase for authenticated user
+- fetchRecipesForLocalUser: grabs recipes from sharedpreferences
+- addRecipeToFavorites: adds recipe to sharedpreferences
+- logout: logs user out
+- favorites: goes to favorites
+<br>
+
+<i>FavoritesActivity: populates listview with favorites </i>
+<br>
+
+- RecipesUser function called from FavoritesHelper, which returns the correct recipes
+- onItemClick from helper class called, which sends the clicked recipe to detailsActivity
+- onItemLongClick called, which removes a given recipe from sharedpreferences/firebase and updates the list
+<br>
 <b>Classes</b>
+<br>
+<br>
+
 - Recipe modelclass: this modelclass contains getters and setters for title, image, ingredients and attributes. 
 - Recipes modelclass:A modelclass which is in reality a list of recipe objects. it only has getters and setters for titles, because those were the only ones needed in this application. 
 - RecipeCompare:Compares two recipes objects to check if they are equal. They are only equal if all the fields match between two objects. 
 - myApplication: returns context in static environment. 
-onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
+- onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
+<br>
+<i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity</i>
+<br>
+<br>
 
-FacebookSignIn: 
-
-This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. 
-<b>Methods</b>
 - createCallBack: creates a callback, logs accesstokens, and calls registerCallBack
 - handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
 - executeFacebookAsyncTask: calls handleFacebookAccessToken to authenticate user, and then execute async task to facebook API.
--submitGraphRequest:returns a Graphrequest object
+- submitGraphRequest:returns a Graphrequest object
 - registerCallBack: registers callback, sets permissions to read facebook data and sends graphrequest object to executeFacebookAsyncTask 
--submitGraphRequest:returns a Graphrequest object
+-submitGraphRequest:returns a Graphrequest object<br><br>
 
-GoogleSignIn: This class contains methods to help with the authentication of google users. 
+<i>GoogleSignIn: This class contains methods to help with the authentication of google users.</i> 
 <br>
-<b>Methods</b>
+<br>
+
 - buildApiClient: Builds google api client
 - connectToApi: connect google api client
 - disconnectFromApi:disconnects google api client
 - firebaseAuthWithGoogle: authenticates google user with firebase
 - handleSignInResult: gets user data and sends user to next activity if sign in is succesful
 - signOut: signs google user out
+<br>
 
+<i>EmailSignIn: Helper class to create user accounts and log users in.</i> 
+<br>
 
-EmailSignIn: Helper class to create user accounts and log users in. 
 - createAccount: tries to create user account with information given in edittexts in registrationActivity, and sign user in
 - signInWithEmailAndPassword: signs user in with email and password given in edittexts. If it is succesful go to the next activity.
+<br>
 
-onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity
-<b>Method</b>
+<i>onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity </i>
+
 - search: grabs query text, loops over characters and checks if it contains numbers, or non-alphabetical characters. If so the asynctask is not executed. The function also makes sure that the asynctask is not executed more than once, and sets up the progressbar while in the recipeActivity or recipeByIngredientActivity. 
 
 <i>AsyncWithInterface: This class implements an asynctask that is performed in both recipe activities. This is done by making use of an interface. This choice has been made, because with a regular asynctask a lot of code needs to be copied and put in a seperate file, because the context of a specific activity is passed.   </i>
@@ -93,8 +145,37 @@ getView: loads every image of every recipe into the gridview
 - loadImageData: uses picasso library to load recipe images
 <br>
 <i>RecipeAdapter: An extension of arrayAdapter that makes it possible to set a Recipes object on the adapter </i>
+
 - getView: sets a given recipe title on a row. 
+<br>
+<i>Utils: Class created to hold code that is used more than once and that isn't a listener or strictly used for favorites</i>
+<br>
 
-<i>Utils</i>
+- getSignInType: gets the sign in type of a user. 
+- signoutOrSignUp: signs user out if the user is authenticated, otherwise the user just goes to sign up screen
+- returnRecipesToGridview: Wraps recipes so that every row has three items, then returns recipes to toGridView function. 
+- toGridview: sends recipes to DisplayRecipesActivity
+- addOrFetchRecipes: adds recipes to shared preferences if the recipes are sent from a different activity. If this is not the case then the application has been restarted, so the recipes have been saved in sharedpreferences and need to be fetched. 
+- redirectUserToCorrectActivity: Redirect user to the activity the user was in before the app was closed
+- setupProgressBar: sets up progressbar. 
+<br>
+<i>FavoritesHelper: Helper class for favoritesActivity</i>
 
-<i>FavoritesHelper</>
+- fetchFavorites: fetches favorites from firebase for an authenticated user
+- recipesUser: returns recipes of authenticated and local users
+- onItemClick: when an item is clicked a given recipe is passed to DetailsActivity
+- onLongClick: Click event for removing a recipe. 
+- removeRecipeFromDB: Removes recipe from database if the user is authenticated
+- removeRecipeFromSharedPreferences: removes a given recipe from sharedpreferences for a local user
+- recipeDBbToDetailsActivity: sends recipe of an authenticated use r to DetailsActivity
+- toDetailsActivity: sends recipe to detailsActivity for a local user
+- setAdapter: sets adapter on listview and sets up progressbar
+- recipesIsEmpty: displays an empty textview if the favoriteslist is empty
+<br>
+<b>Challenges</b>
+<br>
+in the design document I made the choice for Spoonacular API because this supported the most functionality, and was best documented. However they were experiencing technical difficulties, so I had to change my choice of API. I picked yummly because it was reasonably documented, albeit with less functionality (autocomplete is not supported for example). Therefore I have not implemented autocomplete functionality. Differentiation between general recipes and recipes by ingredient has not been implemented. The reason is because the async task is implemented with an interface, so there is only one async task for two activities. The only difference is the endpoint and the recipes that are returned. Therefore, it is also not necessary to have a recipesByIngredient object, because both endpoints return recipes, they are just different in which recipes are returned. There is however still a populateGridview function, which is called toGridView and is implemented in the utils class.  In the design document I had more fields that I wanted to use to display details. However I have not implemented preparation, type of food and calories. This is partially because of time constraint. 
+
+The main part that I have noticed during this process is that when starting to code up the application everything seems to go smoothly, and it seems like I am almost done. Then because of the decisions I have made, I need to practically rebuild the entire backend, because of an important detail I did not think about at the beginning of development. This detail was not allowing a duplicate entry to enter the favorites list. Since I added only titles in the database I could not check if a given object was equal to another object. (it is possible that two objects have the same title but this doesn't mean it is the same recipe). I therefore needed to store the entire object in firebase instead of just the titles. After that was done, I would also need to create a custom adapter instead of the arrayAdapter I was using because at this point I now get objects back instead of an Arraylist of strings, so this also needed to be redone. Something else I have learned is that in the process of getting a better grade on better code hub I have wrapped lots of code in functions, but during this process the code has become considerabely more complicated. Next time I would like to find a better balance between keeping the code simple and writing short units of code. I think it is more important that the code is understandable, than writing units of 15 lines. 
+
+
