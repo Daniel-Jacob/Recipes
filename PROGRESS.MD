@@ -41,35 +41,28 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 - RecipeCompare:Compares two recipes objects to check if they are equal. They are only equal if all the fields match between two objects. 
 - myApplication: returns context in static environment. 
 onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
-
-FacebookSignIn: 
-
-This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. 
-<b>Methods</b>
+<br>
+<i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. </i>
 - createCallBack: creates a callback, logs accesstokens, and calls registerCallBack
 - handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
 - executeFacebookAsyncTask: calls handleFacebookAccessToken to authenticate user, and then execute async task to facebook API.
 -submitGraphRequest:returns a Graphrequest object
 - registerCallBack: registers callback, sets permissions to read facebook data and sends graphrequest object to executeFacebookAsyncTask 
 -submitGraphRequest:returns a Graphrequest object
-
-GoogleSignIn: This class contains methods to help with the authentication of google users. 
 <br>
-<b>Methods</b>
+<i>GoogleSignIn: This class contains methods to help with the authentication of google users.</i> 
 - buildApiClient: Builds google api client
 - connectToApi: connect google api client
 - disconnectFromApi:disconnects google api client
 - firebaseAuthWithGoogle: authenticates google user with firebase
 - handleSignInResult: gets user data and sends user to next activity if sign in is succesful
 - signOut: signs google user out
+<br>
 
-
-EmailSignIn: Helper class to create user accounts and log users in. 
+<i>EmailSignIn: Helper class to create user accounts and log users in.</i> 
 - createAccount: tries to create user account with information given in edittexts in registrationActivity, and sign user in
 - signInWithEmailAndPassword: signs user in with email and password given in edittexts. If it is succesful go to the next activity.
-
-onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity
-<b>Method</b>
+<i>onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity </i>
 - search: grabs query text, loops over characters and checks if it contains numbers, or non-alphabetical characters. If so the asynctask is not executed. The function also makes sure that the asynctask is not executed more than once, and sets up the progressbar while in the recipeActivity or recipeByIngredientActivity. 
 
 <i>AsyncWithInterface: This class implements an asynctask that is performed in both recipe activities. This is done by making use of an interface. This choice has been made, because with a regular asynctask a lot of code needs to be copied and put in a seperate file, because the context of a specific activity is passed.   </i>
