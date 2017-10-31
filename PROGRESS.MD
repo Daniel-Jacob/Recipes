@@ -42,7 +42,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 - myApplication: returns context in static environment. 
 onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
 <br>
-<i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. </i>
+<i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. </i><br>
 - createCallBack: creates a callback, logs accesstokens, and calls registerCallBack
 - handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
 - executeFacebookAsyncTask: calls handleFacebookAccessToken to authenticate user, and then execute async task to facebook API.
