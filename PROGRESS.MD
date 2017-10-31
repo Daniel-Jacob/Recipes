@@ -106,7 +106,10 @@ onClickListener: class that is triggered when user signs out. Put in class, beca
 
 - createAccount: tries to create user account with information given in edittexts in registrationActivity, and sign user in
 - signInWithEmailAndPassword: signs user in with email and password given in edittexts. If it is succesful go to the next activity.
+<br>
+
 <i>onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity </i>
+
 - search: grabs query text, loops over characters and checks if it contains numbers, or non-alphabetical characters. If so the asynctask is not executed. The function also makes sure that the asynctask is not executed more than once, and sets up the progressbar while in the recipeActivity or recipeByIngredientActivity. 
 
 <i>AsyncWithInterface: This class implements an asynctask that is performed in both recipe activities. This is done by making use of an interface. This choice has been made, because with a regular asynctask a lot of code needs to be copied and put in a seperate file, because the context of a specific activity is passed.   </i>
