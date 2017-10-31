@@ -134,9 +134,10 @@ getView: loads every image of every recipe into the gridview
 <br>
 <i>RecipeAdapter: An extension of arrayAdapter that makes it possible to set a Recipes object on the adapter </i>
 - getView: sets a given recipe title on a row. 
-
+<br>
 <i>Utils: Class created to hold code that is used more than once and that isn't a listener or strictly used for favorites</i>
-<br
+<br>
+
 - getSignInType: gets the sign in type of a user. 
 - signoutOrSignUp: signs user out if the user is authenticated, otherwise the user just goes to sign up screen
 - returnRecipesToGridview: Wraps recipes so that every row has three items, then returns recipes to toGridView function. 
