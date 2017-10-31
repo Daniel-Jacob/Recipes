@@ -68,7 +68,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 <br>
 <i>FavoritesActivity: populates listview with favorites </i>
 
--RecipesUser function called from FavoritesHelper, which returns the correct recipes
+- RecipesUser function called from FavoritesHelper, which returns the correct recipes
 - onItemClick from helper class called, which sends the clicked recipe to detailsActivity
 - onItemLongClick called, which removes a given recipe from sharedpreferences/firebase and updates the list
 <br>
