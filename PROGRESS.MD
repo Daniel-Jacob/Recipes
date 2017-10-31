@@ -20,7 +20,9 @@ In both cases the user is navigated to the recipe itself when a given recipe is 
 - continue as local user
 - redirect user to correct activity if app was closed
 <br>
+
 Sign in functionality for the google user is implemented within the activity, because the sign in method needs to pass a google api client. This api client gets connected in onStart and is only then not null.
+<br>
 
 <i>RegistrationActivity: Registers or logs an E-mail user in</i>
 
