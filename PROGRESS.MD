@@ -30,20 +30,22 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 - Favorites: User is sent to FavoritesActivity
 
 
-<i>RecipeByIngredient: In this screen there is a searchview where a query based on ingredients can be done. </i>
+<i>RecipeByIngredientActivity: In this screen there is a searchview where a query based on ingredients can be done. </i>
 <br>
 <br>
 - GeneralRecipes: this is the only method different from the last activity. This method navigates the user back to RecipeActivity. 
 <br>
 <i>DisplayRecipesActivity:</i>
 
-
+<br>
 - setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays them in a gridview
 - logout: Logs an authenticated user out and sends him or her back to MainActivity. A local user is just brought to MainActivity to sign up
 - listTitles: User is navigated to TitleActivity
 - goToFavoritesActivity: User is navigated to FavoritesActivity
 <br>
 <i>TitleActivity: Sets titles of recipes in a listview</i>
+
+<br>
 
 - setAdapter: Removes duplicate recipes, and sets RecipeAdapter on listview
 - logout: logs user out
