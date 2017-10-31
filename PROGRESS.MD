@@ -53,7 +53,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 -  favorites: goes to FavoritesActivity
 <br>
 
-<i>DetailsActivity:
+<i>DetailsActivity</i>:
 
 - recipeReturned: Returns recipe from correct activity
 - getRecipeFromPreviousUsage: Gets recipe from sharedpreference that has been saved when before the app has been closed. 
