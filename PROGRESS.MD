@@ -53,8 +53,6 @@ Sign in functionality for the google user is implemented within the activity, be
 
 <i>TitleActivity: Sets titles of recipes in a listview</i>
 
-<br>
-
 - setAdapter: Removes duplicate recipes, and sets RecipeAdapter on listview
 - logout: logs user out
 -  favorites: goes to FavoritesActivity
