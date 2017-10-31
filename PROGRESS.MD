@@ -43,6 +43,7 @@ This is where the user can log in using Facebook, google, or to continue as a lo
 onClickListener: class that is triggered when user signs out. Put in class, because application offers sign out buttons in multiple activities. 
 <br>
 <i>FacebookSignIn: This class helps to log a facebook user in,  get their profile information, and navigate them to the next activity. </i>
+<br>
 - createCallBack: creates a callback, logs accesstokens, and calls registerCallBack
 - handleFacebookAccessToken: uses accesstoken to authenticate user with firebase
 - executeFacebookAsyncTask: calls handleFacebookAccessToken to authenticate user, and then execute async task to facebook API.
@@ -51,6 +52,7 @@ onClickListener: class that is triggered when user signs out. Put in class, beca
 -submitGraphRequest:returns a Graphrequest object
 <br>
 <i>GoogleSignIn: This class contains methods to help with the authentication of google users.</i> 
+<br>
 - buildApiClient: Builds google api client
 - connectToApi: connect google api client
 - disconnectFromApi:disconnects google api client
@@ -60,6 +62,7 @@ onClickListener: class that is triggered when user signs out. Put in class, beca
 <br>
 
 <i>EmailSignIn: Helper class to create user accounts and log users in.</i> 
+<br>
 - createAccount: tries to create user account with information given in edittexts in registrationActivity, and sign user in
 - signInWithEmailAndPassword: signs user in with email and password given in edittexts. If it is succesful go to the next activity.
 <i>onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity </i>
