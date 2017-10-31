@@ -49,7 +49,6 @@ onClickListener: class that is triggered when user signs out. Put in class, beca
 - submitGraphRequest:returns a Graphrequest object
 - registerCallBack: registers callback, sets permissions to read facebook data and sends graphrequest object to executeFacebookAsyncTask 
   -submitGraphRequest:returns a Graphrequest object
-<br>
 <i>GoogleSignIn: This class contains methods to help with the authentication of google users.</i> 
 <br>
 - buildApiClient: Builds google api client
