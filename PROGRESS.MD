@@ -82,7 +82,7 @@ Sign in functionality for the google user is implemented within the activity, be
 <br>
 <b>Classes</b>
 <br>
-
+<br>
 - Recipe modelclass: this modelclass contains getters and setters for title, image, ingredients and attributes. 
 - Recipes modelclass:A modelclass which is in reality a list of recipe objects. it only has getters and setters for titles, because those were the only ones needed in this application. 
 - RecipeCompare:Compares two recipes objects to check if they are equal. They are only equal if all the fields match between two objects. 
