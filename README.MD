@@ -15,3 +15,7 @@ Copyright 2017 Daniel Jacob
   <img src="/doc/details.png" width="300"/>
   <img src="favorites.png" width="300"/>
 </p>
+<h3>Acknowledgements</h3>
+- Rohit Ghatol: getting context from static environment https://stackoverflow.com/questions/2002288/static-way-to-get-context-on-android
+- HelmiB: https://stackoverflow.com/questions/12575068/how-to-get-the-result-of-onpostexecute-to-main-activity-because-asynctask-is-a
+- image for loginscreen:  http://www.bbc.co.uk/food/recipes/ras_el_hanout_baked_06088
