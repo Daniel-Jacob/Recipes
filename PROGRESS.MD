@@ -55,6 +55,7 @@ onClickListener: class that is triggered when user signs out. Put in class, beca
   <br>
 <i>GoogleSignIn: This class contains methods to help with the authentication of google users.</i> 
 <br>
+
 - buildApiClient: Builds google api client
 - connectToApi: connect google api client
 - disconnectFromApi:disconnects google api client
@@ -65,6 +66,7 @@ onClickListener: class that is triggered when user signs out. Put in class, beca
 
 <i>EmailSignIn: Helper class to create user accounts and log users in.</i> 
 <br>
+
 - createAccount: tries to create user account with information given in edittexts in registrationActivity, and sign user in
 - signInWithEmailAndPassword: signs user in with email and password given in edittexts. If it is succesful go to the next activity.
 <i>onQueryTextListener: Helper class for the queries performed in recipeActivity and recipeByIngredientActivity </i>
