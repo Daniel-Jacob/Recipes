@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -59,7 +60,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         signInType = preferences.getInt("signintype", 0);
         // tracks activity
         preferences.edit().putInt("Activity", 8).commit();
-        Recipes recipes = new Recipes();
+        Recipes recipes;
         // authenticated user, but has not been loaded yet
         if(user == null && signInType != 4){
             recreate();
@@ -79,13 +80,14 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
     @Override
     /* connection with google api client has failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("Connection failed:", connectionResult.getErrorMessage());
         Toast.makeText(getApplicationContext(), "Connection failed...", Toast.LENGTH_SHORT).show();
     }
 
     /* logs user out if authenticated */
     public void logout(View view) {
         Utils utils = new Utils(this);
-        int signInType = utils.getSignInType();
+        signInType = utils.getSignInType();
         // google user
         if(signInType == 1){
             googleUser.signOut();
@@ -110,7 +112,7 @@ public class FavoritesActivity extends AppCompatActivity implements GoogleApiCli
         // sets button text according to sign in type
         Button button = (Button)findViewById(R.id.Loginandlogout);
         utilities = new Utils(this);
-        int signInType = utilities.getSignInType();
+        signInType = utilities.getSignInType();
         if(signInType == 4){
             button.setText("Sign up");
         }

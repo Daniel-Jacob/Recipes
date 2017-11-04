@@ -31,6 +31,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+
+import xdroid.toaster.Toaster;
+
 /* Grabs recipes from asynctask and populates them in a gridview */
 public class DisplayRecipesActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener{
 
@@ -55,6 +58,7 @@ public class DisplayRecipesActivity extends AppCompatActivity implements  Google
         preferences.edit().putInt("Activity", 5).commit();
         // query has been completed so make query variable empty
         preferences.edit().putString("query", "").commit();
+        preferences.edit().putString("recipeQuery", "").commit();
         elements = new ArrayList<>();
         // initializes gridview
         gv = (GridView) findViewById(R.id.gridview);
@@ -124,6 +128,7 @@ public class DisplayRecipesActivity extends AppCompatActivity implements  Google
     /* google connection failed */
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("Connection failed: ", connectionResult.getErrorMessage());
+        Toaster.toast("Connection has failed...");
     }
 
     @Override

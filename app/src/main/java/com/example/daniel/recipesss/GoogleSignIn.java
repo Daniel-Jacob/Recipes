@@ -84,9 +84,6 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
             // Signed in successfully.
             GoogleSignInAccount acct = result.getSignInAccount();
             firebaseAuthWithGoogle(acct);
-            // here the user data is put in firebase database
-            String user = acct.getId();
-            reference.child("Users").child(user).push().setValue(user);
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             // tracks sign in type
             preferences.edit().putInt("signintype", 1).commit();
@@ -111,7 +108,8 @@ public class GoogleSignIn extends MainActivity implements GoogleApiClient.OnConn
                             user = auth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithCredential:failure", task.getException());
+                            Log.w("TAG", "signInWithCredential:failure",
+                                    task.getException());
                             Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             preferences.edit().putInt("Activity", 1).commit();

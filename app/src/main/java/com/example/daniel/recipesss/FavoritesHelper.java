@@ -79,7 +79,8 @@ public class FavoritesHelper {
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
+                    for (DataSnapshot snapshot : dataSnapshot.child("Users").child(user.getUid()).
+                            child("Recipes").getChildren()) {
                         // puts recipe in recipes object
                         recipe = snapshot.getValue(Recipe.class);
                         recipes.getRecipes().add(recipe);
@@ -124,8 +125,8 @@ public class FavoritesHelper {
     }
 
     /* listens for click on favorites item */
-    public void onItemClick(final Recipes recipess) {
-        this.recipes = recipess;
+    public void onItemClick(final Recipes recipes) {
+        this.recipes = recipes;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -168,12 +169,14 @@ public class FavoritesHelper {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
+                for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).
+                        child("Recipes").getChildren()) {
                     Recipe recipe = s.getValue(Recipe.class);
                     // double check if two recipes are equal
                     int compareRecipes = compare.compare(recipe, recipeRemoved);
                     if (compareRecipes == 1) {
-                        Toast.makeText(context, recipe.getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, recipe.getTitle() + " " + "removed",
+                                Toast.LENGTH_SHORT).show();
                         // remove value
                         s.getRef().removeValue();
                     }
@@ -196,8 +199,10 @@ public class FavoritesHelper {
     public boolean removeRecipeFromSharedPreferences(Recipes recipesLongClick, int position) {
         for (int i = 0; i < recipesLongClick.getRecipes().size(); i++) {
             // element found
-            if (recipesLongClick.getRecipes().get(i).equals(recipesLongClick.getRecipes().get(position))) {
-                Toast.makeText(context, recipesLongClick.getRecipes().get(i).getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
+            if (recipesLongClick.getRecipes().get(i).equals(recipesLongClick.getRecipes().
+                    get(position))) {
+                Toast.makeText(context, recipesLongClick.getRecipes().
+                        get(i).getTitle() + " " + "removed", Toast.LENGTH_SHORT).show();
                 // element removed
                 recipesLongClick.getRecipes().remove(i);
             }
@@ -216,7 +221,8 @@ public class FavoritesHelper {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).child("Recipes").getChildren()) {
+                for (DataSnapshot s : dataSnapshot.child("Users").child(user.getUid()).
+                        child("Recipes").getChildren()) {
                     recipe = s.getValue(Recipe.class);
                 }
                 toDetailsActivity(signInType, position);
@@ -236,6 +242,7 @@ public class FavoritesHelper {
     public void toDetailsActivity(int signInType, int position) {
         preferences.edit().putBoolean("displayARecipeFromFavorites", true).commit();
         preferences.edit().putBoolean("displayARecipe", false).commit();
+        preferences.edit().putBoolean("details", true).commit();
         // authenticated user
         if (signInType != 4) {
             Intent intent = new Intent(context, DetailsActivity.class);

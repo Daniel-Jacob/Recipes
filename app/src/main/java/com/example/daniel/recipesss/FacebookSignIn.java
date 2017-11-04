@@ -86,7 +86,7 @@ public class FacebookSignIn extends AppCompatActivity {
         registerCallBack();
     }
 
-    /* executes asynctask to facebook api */
+    /* registers callback */
     public void registerCallBack() {
         facebookLogin.registerCallback(manager, new FacebookCallback<LoginResult>() {
             @Override

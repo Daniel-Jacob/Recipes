@@ -43,7 +43,8 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         View v = convertView;
         // inflate view
         if (v == null) {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.
+                    LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.simple_list_itemmm, null);
         }
         // get recipe

@@ -18,14 +18,11 @@ package com.example.daniel.recipesss;
 import android.app.Application;
 import android.content.Context;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
     /* class to get the context when in a static environment.
     https://stackoverflow.com/questions/2002288/static-way-to-get-
     context-on-android */
     public class MyApplication extends Application {
-    // google api client
-    GoogleApiClient googleApiClient;
+
         private static Context context;
 
         public void onCreate() {

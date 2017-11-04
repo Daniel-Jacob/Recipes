@@ -179,7 +179,8 @@ public class DetailsActivity extends AppCompatActivity implements GoogleApiClien
             /* load failed */
             public void onError() {
                 Log.d("Error", "Error loading image");
-                Toast.makeText(getApplicationContext(), "Error loading image...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error loading image...",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
