@@ -1,4 +1,4 @@
-This application is a recipe finder application. It helps users to find general recipes and recipes by ingredient. These recipes are requested from yummly api. Authenticated users can store their recipes in a firebase database, whereas a local user can save recipes locally. When a query is done the recipes are initially viewed like this:
+recipesss is a recipe finder application. It helps users to find general recipes and recipes by ingredient. These recipes are requested from yummly api. Authenticated users can store their recipes in a firebase database, whereas a local user can save recipes locally. When a query is done the recipes are initially viewed like this:
 <div align="center">
         <img width="25%" height = "25%" align = "center" src="doc/gridview.png" alt="image" title="image"</img>
         <br>
@@ -8,7 +8,7 @@ The app starts off with a login screen. The application supports Facebook, Googl
 
 After this, the user is navigated to the general recipes activity. Here a user can do a general recipe query. The query can match anything in the recipe: a title, ingredient, or attributes. If the user clicks on ingredient-based recipes then the user is sent to a similar looking screen, but with one key difference: The query needs to completely match the ingredients of a given recipe. In both cases (if there are any recipes) the images of these recipes are displayed in a gridview (in the next activity). If the user would prefer to see the titles of recipes, then the 'list titles' button can be clicked. 
         
-In both cases the user is navigated to the recipe itself when a given recipe is clicked. Here the specifics of a recipe are given, like the title, image, ingredients and attributes. The recipe can be added by clicking the plus button. This can only be done once, since the application does not allow duplicate entries. To view the favorites, the user can click the favorites button. These favorites are displayed in a listview.  
+In these two scenarios the user is navigated to the recipe itself when a given recipe is clicked. Here the specifics of a recipe are given, like the title, image, ingredients and attributes. The recipe can be added by clicking the plus button. This can only be done once, since the application does not allow duplicate entries. To view the favorites, the user can click the favorites button. These favorites are displayed in a listview.  
 
 <b>Activities</b>
 <br>
@@ -44,8 +44,7 @@ Sign in functionality for the google user is implemented within the activity, be
 
 <i>DisplayRecipesActivity:</i>
 
-
-- setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays them in a gridview
+- setImageAdapter: Sets an imageAdapter on the recipe data passed from RecipeActivity or RecipeByIngredientActivity and displays the data in a gridview
 - logout: Logs an authenticated user out and sends him or her back to MainActivity. A local user is just brought to MainActivity to sign up
 - listTitles: The user is navigated to TitleActivity
 - goToFavoritesActivity: The user is navigated to FavoritesActivity
@@ -56,7 +55,7 @@ Sign in functionality for the google user is implemented within the activity, be
 
 - setAdapter: Removes duplicate recipes, and sets RecipeAdapter on listview
 - logout: logs user out
--  favorites: goes to FavoritesActivity
+- favorites: goes to FavoritesActivity
 <br>
 
 <i>DetailsActivity</i>:
@@ -66,7 +65,7 @@ Sign in functionality for the google user is implemented within the activity, be
 - initializeImage: loads image into imageview
 - setupDetails: sets the title, image, ingredient and attributes of a given recipe in the textviews. 
 - fetchRecipesForLocalUser: grabs recipes from sharedpreferences
-- addRecipeToFavorites: adds recipe to sharedpreferences
+- addRecipeToFavorites: adds a saved recipe to sharedpreferences
 - addRecipeToDB: adds recipe to firebase for authenticated user
 - goToFavorites: adds a recipe to favorites for all users
 - logout: logs user out
@@ -174,13 +173,10 @@ getView: loads every image of every recipe into the gridview
 <br>
 <b>Challenges</b>
 <br>
-in the design document I made the choice for Spoonacular API because this supported the most functionality, and was best documented. However they were experiencing technical difficulties, so I had to change my choice of API. I picked yummly because it was reasonably documented, albeit with less functionality (autocomplete is not supported for example). Therefore I have not implemented autocomplete functionality. Differentiation between general recipes and recipes by ingredient has not been implemented. The reason is because the async task is implemented with an interface, so there is only one async task for two activities. The only difference is the endpoint and the recipes that are returned. Therefore, it is also not necessary to have a recipesByIngredient object, because both endpoints return recipes, they are just different in which recipes are returned. There is however still a populateGridview function, which is called toGridView and is implemented in the utils class.  In the design document I had more fields that I wanted to use to display details. However I have not implemented preparation, type of food and calories. 
+in the design document I made the choice for Spoonacular API because this supported the most functionality, and was best documented. However they were experiencing technical difficulties, so I had to change my choice of API. I picked yummly because it was reasonably documented, albeit with less functionality (autocomplete is not supported for example). Therefore I have not implemented autocomplete functionality. Differentiation between general recipes and recipes by ingredient has also not been implemented. The reason for this is because both general recipes and recipes by ingredient are both recipes, and don't differ in their respective fields. The only difference is the endpoint from which the recipes are returned. Lastly,I had the ambition to display details like preparation, food type and calories. I have not implemented these, because most of them were not available with yummly api. 
 
-An important change that I have made compared to the design document is storing complete objects in firebase instead of just the titles. 
-The reason for this change was that I needed to compare the objects in the database with an item that is being clicked to check if it is a duplicate or not. If I would have kept the data as titles, then it would only check if the titles are equal, and hence not allowing different elements which have the same title in the favorites list. Another change which is related to the former change is replacing the built in arrayadapter with a recipe adapter. Otherwise I would need to first grab the object, and just grab the titles of those objects and add them to an arraylist of strings. This seems like a detour, so I decided to implement a recipe adapter. From these two points I have learned that is best to not go for the easy way, even though in the beginning it seems like it is possible. It can be just little details with which you need to rebuild a big part of the application. Furthermore I have made two important additions compared to the design document. A local user now has the option to sign up with an authentication method if he or she wants to later on in the application. Also, if a user wants their recipes displayed as titles this is also possible. 
+positive additions that I have made in comparison to the design document is storing complete objects in firebase instead of just the titles.  The reason for this change was that I needed to compare the objects in the database with an item that is being clicked to check if it is a duplicate or not. If I would have kept the data as titles, then it would only check if the titles are equal, and hence not allowing different elements which have the same title in the favorites list. Another change which is related to the former change is replacing the built in arrayadapter with a recipe adapter. Otherwise I would need to first grab the object, and just grab the titles of those objects and add them to an arraylist of strings. This seems like a detour, so I decided to implement a recipe adapter. From these two points I have learned that is best to not go for the easy way, even though in the beginning it seems like it is possible. It can be a little detail which causes you to rebuild a huge part of the backend. Furthermore I have implemented a sign up button for local users throughout the entire application. Also, if a user wants their recipes displayed as titles this is also possible. Lastly, I also implemented a recipes modelclass which was not documented in the design document. Lastly to compensate for the fact that certain features are missing, I have implemented support for landscape screen, and also start the application where the user left off after the app has been closed off.  
 
 <i>Trade-offs</i>
 
-As mentioned, it is positive that I have made the changes listed above, because it reduces buggyness of the program and provides extra functionality to the user. However, there are things I would like to do different next time. I would like to make my recipes modelclass more readable, because now (mainly in favoritesHelper class) the code for removing recipes for example is very long. Also, maybe next time I would use composition to create a recipe by ingredient object, to differetiate between the two. This makes the program more readable. Also, in spirit of bettercodehub and getting a good grade I have gone too extreme in refactoring code in functions. The result is that functions are being called by other functions, which complicates the code. Even though I have a 7 on bettercodehub I think my previous state was better, where the code is longer, but yet more understandable. For the next time I would like to find a better balance. 
-
-
+As mentioned, it is positive that I have changed the structure of the database and created an option to provide the recipes as titles. However, I also had to let certain functionality go because of time constraint. In an ideal world I would have tried to implement an autocomplete function myself. Furthermore I would have created shopping list functionality and make the user interface more neat. For this I was thinking about a hamburger button. Another important change I would make is to change the structure of the recipes modelclass. As it stands now the modelclass has a complicated  structure. For example, grabbing a recipe from the recipes modelclass results in the following query: recipes.getRecipes().get(position). This is too long and I would have liked to shorten it to make the code more simple. Also, if I had more time I would probably redo a large part of the favoriteshelper, FavoritesActivity and DetailsActivity. In my opinion, I have wrapped the functionality in too much functions, which makes it hard to understand the code. I have learned that I should not go too extreme in refactoring my code just to get a better grade on bettercodehub. Now functions are considerabely small, but I call functions inside functions, which makes the program hard to follow. Next time I would like to try to find a better balance between short units of code and readability.  
