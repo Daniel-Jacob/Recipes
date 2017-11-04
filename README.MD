@@ -7,7 +7,7 @@ Copyright 2017 Daniel Jacob
 
 <p align="center">
   
-  Recipesss is a recipe application which allows users to search general recipes and recipes by ingredient. A general recipe is returned if any field in the recipe matches the query. A recipe by ingredient is returned if the entire query matches elements in the ingredient list of a given recipe. 
+  Recipesss is a recipe application which allows users to search for general recipes and recipes by ingredient. A general recipe is returned if any field in the recipe matches the query. A recipe by ingredient is returned if the query matches the ingredients of a given recipe. 
   
 Users can see the returned recipes as images or as titles. A user can add and remove recipes to their favorites list and get basic information about a recipe. This basic information includes the title, image, ingredients and attributes of a recipe. 
 
