@@ -1,4 +1,4 @@
-# Design Recipes4you
+# Design Recipesss
 
 The Recipes4you application has 3 methods of authentication: E-mail, Facebook, and google. However authentication is not mandatory,
 therefore a user can choose not to authenticate. If the user authenticates, then favorites will be stored in Firebase. 
