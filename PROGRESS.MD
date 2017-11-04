@@ -1,4 +1,4 @@
-This application is a recipe finder application. It helps users to find general recipes and recipes by ingredient. These recipes are requested from yummly api. Authenticated users can store their recipes in a firebase database, whereas a local user can save recipes locally. When a query is done the recipes are initially viewed like this:
+recipesss is a recipe finder application. It helps users to find general recipes and recipes by ingredient. These recipes are requested from yummly api. Authenticated users can store their recipes in a firebase database, whereas a local user can save recipes locally. When a query is done the recipes are initially viewed like this:
 <div align="center">
         <img width="25%" height = "25%" align = "center" src="doc/gridview.png" alt="image" title="image"</img>
         <br>
