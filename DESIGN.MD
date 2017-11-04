@@ -1,6 +1,6 @@
 # Design Recipesss
 
-The Recipes4you application has 3 methods of authentication: E-mail, Facebook, and google. However authentication is not mandatory,
+The recipesssapplication has 3 methods of authentication: E-mail, Facebook, and google. However authentication is not mandatory,
 therefore a user can choose not to authenticate. If the user authenticates, then favorites will be stored in Firebase. 
 This means the user can access his or her favorites from another device. If the user doesn't choose to authenticate then the favorites
 will only be available locally (i.e. just on the given device).
